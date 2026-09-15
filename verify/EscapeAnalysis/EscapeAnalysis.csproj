@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Three runtimes, one source file. The whole point is the A/B/C comparison. -->
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>EscapeAnalysis</AssemblyName>
+    <RootNamespace>EscapeAnalysis</RootNamespace>
+    <!-- Release is not optional here: the JIT does not do this work in Debug. -->
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+</Project>

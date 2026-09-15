@@ -132,8 +132,33 @@ a useful day. Several teams in the room should conclude they will **skip .NET 11
 
 ### Timing
 
-Day 1 is 5 modules / 29 slides, Day 2 is 6 modules / 37 slides. Both run about 6 hours of content
-plus breaks. Full timings are on `index.html`.
+Day 1 is **6 modules / 87 slides** (83 content + 4 lab markers): **4 hours of content** plus 2 h 10
+of labs. Day 2 is 6 modules / 37 slides, about 6 hours including labs. Full timings are on
+`index.html`.
+
+Day 1 module budget:
+
+| Module | Slides | Minutes |
+|---|---|---|
+| 1 · Platform, runtime & tooling | 13 | 40 |
+| 2 · C# 14 | 18 | 50 |
+| 3 · .NET 10 libraries | 16 | 45 |
+| 4 · ASP.NET Core 10 | 17 | 50 |
+| 5 · EF Core 10 | 16 | 45 |
+| 6 · Wrap-up | 3 | 10 |
+
+That is roughly **three minutes per slide**, which is the pace the material is written for. If you
+are running faster than that you are reading the slides out rather than working them.
+
+**If Day 1 runs late**, cut in this order:
+
+1. Lab 02 — becomes a demo; the PQC measurements are on the slides anyway.
+2. The breadth slides at the end of module 3, not the PQC or `Strict` ones.
+3. Module 1's measuring-it-yourself slide, if the room is not performance-minded.
+
+Do **not** cut the span overload-resolution slides (3.11), the `field` shadowing slide (3.12), or
+the OpenAPI before/after diff. Those are the ones attendees cannot get from the release notes, and
+they are the reason the day is worth attending.
 
 **Day 2 is heavier and the C# 15 module is 85 minutes.** If you are running late, the safe cuts
 are, in order:
@@ -163,14 +188,20 @@ say is speculation. Say that plainly; it lands better than hedging.
 
 ## 3. Corrections we found by testing
 
-Every code sample here was compiled and run on the machine that built this workshop. Ten findings
-came out of that, and they fall into three groups:
+Every code sample here was compiled and run on the machine that built this workshop. Fifteen
+findings came out of that, and they fall into four groups:
 
 - **Widely-repeated claims that are wrong** — runtime async being on by default (3.1), the cleaner
-  stack traces demo (3.2), and the OpenAPI version string (3.6).
+  stack traces demo (3.2), the OpenAPI version string (3.6), and the panic about `Reverse()`
+  silently becoming a span call (3.11).
 - **Things the docs state correctly but nobody reads carefully** — `CS8509` being only a warning
-  (3.3), the per-member PQC experimental boundary (3.4), the support arithmetic (3.5), and unions
-  serializing happily while never deserializing (3.9).
+  (3.3), the per-member PQC experimental boundary (3.4), the support arithmetic (3.5), unions
+  serializing happily while never deserializing (3.9), `CS9258` also being only a warning (3.12),
+  and exactly what `JsonSerializerDefaults.Strict` does and does not change (3.13).
+- **Silent behaviour changes that produce no diagnostic at all** — overload resolution moving to
+  spans, which can turn a thrown exception into a silent no-op (3.11), enums disappearing from
+  OpenAPI documents (3.14), and an allocation optimisation that comes and goes between runs of the
+  same binary (3.15).
 - **Slides we got wrong ourselves and fixed by measuring** — collection-expression capacity (3.7),
   the extension-operator receiver and instance `operator +=` (3.8), and placeholder text shipping
   as expected output (3.10).
@@ -410,6 +441,144 @@ for a label is a claim about the *outer* loop, not the inner one.
 
 `IDE0410` ("Use labeled jump statement") is the analyser rule that suggests this over bool-flag and
 `goto` workarounds — verified against the rule page, and in the source registry under `day2-m2`.
+
+---
+
+### 3.11 Upgrading to C# 14 can turn "throws" into "silently does nothing"
+
+This is the most dangerous finding in the workshop, and it produces no diagnostic at all.
+
+C# 14 makes spans first-class in overload resolution. Given a type that offers both
+`IEnumerable<T>` and `ReadOnlySpan<T>` overloads, passing an array changes which one you call:
+
+| Language version | `M(someArray)` binds to |
+|---|---|
+| 13.0 | `M(IEnumerable<int>)` |
+| 14.0 | `M(ReadOnlySpan<int>)` |
+
+No warning. No error. Verified for both direct calls and extension-method calls.
+
+Now pass `null`:
+
+| Language version | What the callee sees |
+|---|---|
+| 13.0 | `IEnumerable<int>` parameter is `null`, so the `ArgumentNullException` guard fires |
+| 14.0 | `ReadOnlySpan<int>` with `Length 0`, `IsEmpty True` — the guard never fires |
+
+A null array used to throw. After the upgrade it is an empty span, and the method quietly does
+nothing. If that method was "delete the records I give you" the failure mode is loud; if it was
+"validate these", it is silent and wrong.
+
+**Two reassurances, also measured**, because the internet is confidently wrong about both:
+
+- `int[].Reverse()` does **not** silently switch to a span overload. It still binds to
+  `Enumerable.Reverse` and still returns a lazy `ReverseIterator`; the array is not mutated in
+  place. The widely repeated fear is unfounded.
+- An exact `T[]` overload still beats `ReadOnlySpan<T>` under **both** language versions. Only the
+  `IEnumerable<T>` case moves.
+
+So the search you actually want, before upgrading, is for API pairs that offer `IEnumerable<T>`
+*and* `ReadOnlySpan<T>` — not for every call to a span-capable method.
+
+### 3.12 The `field` keyword can shadow a real member — and it is only a warning
+
+If a type already has a member literally named `field`, C# 14's new contextual keyword wins inside
+property bodies. The same source produces different values:
+
+```text
+LangVersion 13.0 ->  100, 100, then 7, 7
+LangVersion 14.0 ->    0,   0, then 7, 0
+```
+
+The compiler does tell you, with `CS9258`:
+
+> In language version 14.0, the 'field' keyword binds to a synthesized backing field for the
+> property. To avoid generating a synthesized backing field, and to refer to the existing member,
+> use 'this.field' or '@field' instead.
+
+`CS9258` is a **warning**. A build with `TreatWarningsAsErrors` off will ship this, and the symptom
+is reads returning `0` instead of the stored value — a data-corruption-class bug from a
+warning-level diagnostic.
+
+Writing `@field` or `this.field` restores the C# 13 behaviour exactly and clears the warning
+(verified). `Day1.sln` in this workshop deliberately carries two `CS9258` warnings so you can show
+a real build emitting them.
+
+### 3.13 `JsonSerializerDefaults.Strict` changes exactly four things
+
+Useful because "strict" invites speculation about what else it might tighten. Measured by diffing
+the two options objects:
+
+| Property | `General` | `Strict` |
+|---|---|---|
+| `AllowDuplicateProperties` | `True` | `False` |
+| `RespectNullableAnnotations` | `False` | `True` |
+| `RespectRequiredConstructorParameters` | `False` | `True` |
+| `UnmappedMemberHandling` | `Skip` | `Disallow` |
+
+Nothing else differs.
+
+The first row is the one to demo. Deserialising `{"A":1,"A":2}` with the default options **silently
+succeeds with `A = 2`** — last one wins, no error, no warning. Under `Strict`:
+
+```text
+JsonException: Duplicate property 'A' encountered during deserialization of type 'Item'.
+```
+
+Duplicate keys are a real request-smuggling and policy-bypass vector, so this is a security slide
+as much as a serialisation one. Note that both `JsonSerializerOptions.Strict` (a ready-made static
+instance) and `JsonSerializerDefaults.Strict` (the enum member you pass to the constructor) exist.
+
+### 3.14 Your enums are invisible in the OpenAPI document by default
+
+With no converter configured, an enum parameter or property emits as exactly this — in **both**
+OpenAPI 3.0 and 3.1:
+
+```json
+{ "type": "integer" }
+```
+
+No names, no values, no `enum` array. Every generated client gets a bare integer and loses the
+type entirely. Adding a `JsonStringEnumConverter` through `ConfigureHttpJsonOptions` changes it to:
+
+```json
+{ "enum": ["Low", "High"] }
+```
+
+This is not a .NET 10 regression — it is long-standing behaviour that the move to 3.1 does not fix,
+which is precisely why it is worth saying out loud while everyone is looking at their documents.
+
+### 3.15 Stack allocation of small arrays is real, and not deterministic
+
+.NET 10's JIT can prove a small array never escapes its method and skip the heap allocation. The
+same source, run on three runtimes, measuring `GC.GetAllocatedBytesForCurrentThread()` over two
+million calls:
+
+| Runtime | non-escaping `int[4]` | array returned (escapes) |
+|---|---|---|
+| 8.0.31 | 40.00 bytes/call | 40.00 bytes/call |
+| 9.0.20 | 40.00 bytes/call | 40.00 bytes/call |
+| 10.0.12 | **0.00 bytes/call** | 40.00 bytes/call |
+
+Then the same binary, three consecutive runs, nothing changed:
+
+```text
+run 1   0.00 bytes/call
+run 2  40.00 bytes/call
+run 3   0.00 bytes/call
+```
+
+Whether the optimisation applies depends on tiered compilation having promoted the method to
+optimised code before the measured loop runs. Nothing in the source decides it.
+
+Present both halves. The win is real and worth having; the non-determinism is what stops someone
+going home, writing a micro-benchmark, seeing 40 bytes and concluding the workshop was wrong.
+
+> **Run it in the room.** The harness ships in [`verify/EscapeAnalysis`](verify/README.md):
+> `cd verify/EscapeAnalysis; ./run.ps1 -Repeat 3`. It builds one source file against all three
+> runtimes and prints the table above live. Doing this on the projector is worth more than the
+> slide, and it re-validates the claim against whatever SDK you are standing on — which is the
+> whole argument of section 3.
 
 ---
 

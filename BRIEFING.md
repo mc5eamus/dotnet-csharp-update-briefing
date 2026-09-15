@@ -17,10 +17,12 @@ Version-based, one release per day. The split maps onto a *decision*, not onto a
 | Covers | .NET 10 / C# 14 | .NET 11 / C# 15 |
 | Status | **GA, LTS** — supported to 14 Nov 2028 | **RC 1**, GA Nov 2026 — **STS** to ~Nov 2028 |
 | The question | "How do we adopt this?" | "*Should* we take this at all?" |
-| Content | 5 modules, 29 slides | 6 modules, 37 slides |
+| Content | 6 modules, 83 slides (4 h) | 6 modules, 37 slides (~3 h 45) |
 | Labs | 4 (130 min) | 5 (135 min) |
 
-Each day is about six hours of content plus breaks.
+Day 1 runs **four hours of content plus two hours ten of labs** — a full day with breaks. Day 2 is
+comparable. Day 1 is the deeper of the two because it is the one the customer will act on: .NET 10
+is GA and LTS, so every minute spent there converts into work they can schedule.
 
 The two days are deliberately coupled: **Labs 08 and 09 migrate the exact applications attendees
 build in Labs 03 and 04.** The upgrade is experienced rather than described, which is the only way

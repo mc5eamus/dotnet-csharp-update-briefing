@@ -17,7 +17,8 @@ if you are deciding whether to schedule this rather than preparing to deliver it
 |---|---|---|
 | **Covers** | .NET 10 / C# 14 | .NET 11 / C# 15 |
 | **Status** | GA, **LTS** to 14 Nov 2028 | **RC 1**, GA ~Nov 2026, **STS** (24 months, so also ~Nov 2028) |
-| **Modules** | Release strategy → C# 14 → Libraries (PQC, System.Text.Json) → ASP.NET Core 10 (OpenAPI 3.1) → EF Core 10 | Runtime-native async → C# 15 (unions, closed hierarchies) → Libraries → ASP.NET Core 11 (OpenAPI 3.2) → EF Core 11 → .NET 12 outlook |
+| **Modules** | Platform &amp; runtime → C# 14 → Libraries (PQC, System.Text.Json) → ASP.NET Core 10 (OpenAPI 3.1) → EF Core 10 → Wrap-up | Runtime-native async → C# 15 (unions, closed hierarchies) → Libraries → ASP.NET Core 11 (OpenAPI 3.2) → EF Core 11 → .NET 12 outlook |
+| **Length** | 83 slides, **4 h** content + 2 h 10 labs | 37 slides, ~3 h 45 content + 2 h 15 labs |
 
 Day 2's ASP.NET Core and EF Core labs are **upgrades of the Day 1 labs**, so attendees migrate
 their own application from .NET 10 to .NET 11 and hit the OpenAPI 3.1 → 3.2 breaking change
@@ -114,6 +115,7 @@ site/         Presentation site (open index.html)
 labs/         Nine labs, each with README + start/ + solution/
 content/      Sources pipeline — inbox/, cache/, sources.json + schema
 tools/        Page checks, source intake/validation, solution generation, dotnet helper
+verify/       Runnable harnesses behind the "verified by measurement" claims
 dist/         Generated single-file pages
 FACILITATOR.md
 ```
@@ -147,7 +149,7 @@ and all of it has been filtered out here.
 
 ## Sources
 
-Every module links its own *Further reading*, drawn from `content/sources.json` (36 entries).
+Every module links its own *Further reading*, drawn from `content/sources.json` (76 entries).
 Each is tagged with how far it has been verified, what build it was written against, and how far
 we are allowed to reuse it under copyright.
 
@@ -165,8 +167,19 @@ copyright rules that govern how it's used.
 Every marquee claim in this package was verified by compiling and running it, not by reading
 about it. That process found errors in published documentation, in community posts, and in our
 own early drafts — including the runtime-async default, the OpenAPI version strings, collection
-expression capacity, and the STS support window. Those corrections are collected in
-**[`FACILITATOR.md`](FACILITATOR.md) § 3** and flagged in the deck with a ✓ *verified* callout.
+expression capacity, overload resolution silently moving from `IEnumerable<T>` to
+`ReadOnlySpan<T>`, and the STS support window. Those corrections are collected in
+**[`FACILITATOR.md`](FACILITATOR.md) § 3** (fifteen findings) and flagged in the deck with a
+✓ *verified* callout.
+
+Where a finding is worth re-running rather than just reading, the harness ships too — see
+**[`verify/`](verify/README.md)**. The escape-analysis benchmark builds one source file against
+.NET 8, 9 and 10 and reproduces the headline result live:
+
+```powershell
+cd verify/EscapeAnalysis
+./run.ps1 -Repeat 3
+```
 
 Re-run them after .NET 11 GA. The method matters more than any individual finding.
 

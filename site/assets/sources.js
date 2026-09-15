@@ -10,7 +10,7 @@ window.WORKSHOP_SOURCES ={
     {
       "id": "day1-m1",
       "day": 1,
-      "title": "Orientation & release strategy"
+      "title": "Platform, runtime & tooling"
     },
     {
       "id": "day1-m2",
@@ -31,6 +31,11 @@ window.WORKSHOP_SOURCES ={
       "id": "day1-m5",
       "day": 1,
       "title": "EF Core 10"
+    },
+    {
+      "id": "day1-m6",
+      "day": 1,
+      "title": "Wrap-up & adoption checklist"
     },
     {
       "id": "day2-m1",
@@ -815,6 +820,672 @@ window.WORKSHOP_SOURCES ={
       "verification": "verified",
       "usageTier": 1,
       "summary": "Frames C# 15 unions against the years of library workarounds (OneOf and friends) and is honest about what the language version does and does not replace. The right piece for a team that already has a hand-rolled result type and wants to know whether to migrate."
+    },
+    {
+      "id": "learn-core-porting-upgrade-assistant-overview",
+      "title": ".NET Upgrade Assistant Overview - .NET Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1",
+        "day1-m6"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "The Upgrade Assistant tool: what it automates when retargeting, and what it leaves for you."
+    },
+    {
+      "id": "learn-breaking-changes-10-withopenapi-deprecated",
+      "title": "Breaking change: Deprecation of WithOpenApi extension method",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/10/withopenapi-deprecated?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Migration guidance for replacing WithOpenApi with AddOpenApiOperationTransformer or tool-specific equivalents."
+    },
+    {
+      "id": "learn-core-compatibility-10-0",
+      "title": "Breaking changes in .NET 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/compatibility/10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1",
+        "day1-m6"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "The complete list of .NET 10 breaking changes, grouped by area. Work through it once during your upgrade rather than discovering entries one incident at a time."
+    },
+    {
+      "id": "learn-breaking-changes-10-overview",
+      "title": "Breaking changes in ASP.NET Core 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/10/overview?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "ASP.NET Core 10 breaking-change index for behavioural changes and ASPDEPR migration warnings."
+    },
+    {
+      "id": "learn-what-is-new-ef-core-10-0-breaking-changes",
+      "title": "Breaking changes in EF Core 10 (EF10) - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/breaking-changes",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Use this as the upgrade checklist for EF Core 10 behavioural changes, migrations, tooling and provider-specific breaks."
+    },
+    {
+      "id": "learn-language-reference-builtin-types-built-in-types",
+      "title": "Built-in types - C# reference",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Language-reference list of implicit span conversions involving arrays, strings, Span<T>, and ReadOnlySpan<T>."
+    },
+    {
+      "id": "learn-core-modeling-complex-types",
+      "title": "Complex Types - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/modeling/complex-types",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Deep reference for complex types, including value semantics, owned-type differences, optional values, collections and limitations."
+    },
+    {
+      "id": "learn-dotnet-api-system-security-cryptography-compositemldsa",
+      "title": "CompositeMLDsa Class (System.Security.Cryptography)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.compositemldsa?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for composite ML-DSA migration-signature support."
+    },
+    {
+      "id": "learn-core-host-and-deploy-proxy-load-balancer",
+      "title": "Configure ASP.NET Core to work with proxy servers and load balancers",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "How to configure Forwarded Headers middleware with trusted proxies and known IP networks behind reverse proxies."
+    },
+    {
+      "id": "learn-breaking-changes-10-cookie-authentication-api-endpoint",
+      "title": "Cookie login redirects are disabled for known API endpoints",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/10/cookie-authentication-api-endpoints?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Why cookie authentication now returns 401 or 403 for known API endpoints and how to restore redirect behaviour."
+    },
+    {
+      "id": "github-proposals-csharp-13-0-partial-properties",
+      "title": "csharplang/proposals/csharp-13.0/partial-properties.md at main · dotnet/csharplang · GitHub",
+      "publisher": "Microsoft",
+      "url": "https://github.com/dotnet/csharplang/blob/main/proposals/csharp-13.0/partial-properties.md",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "C# language design proposal documenting partial properties and their defining versus implementing declarations."
+    },
+    {
+      "id": "learn-fundamentals-openapi-customize-openapi",
+      "title": "Customize OpenAPI documents",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/customize-openapi?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "How document, operation and schema transformers work, including execution order and endpoint-scoped operation transformers."
+    },
+    {
+      "id": "learn-security-authentication-passkeys",
+      "title": "Enable Web Authentication API (WebAuthn) passkeys",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Identity passkey APIs, relying-party domain configuration and attestation-state security responsibilities."
+    },
+    {
+      "id": "learn-core-saving-execute-insert-update-delete",
+      "title": "ExecuteUpdate and ExecuteDelete - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/saving/execute-insert-update-delete",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Explains set-based ExecuteUpdate and ExecuteDelete semantics, limitations, transactions and change-tracker behaviour."
+    },
+    {
+      "id": "learn-language-reference-keywords-extension",
+      "title": "Extension member declarations - C# reference",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/extension",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Language-reference syntax and constraints for the new extension member declaration form."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-extensions",
+      "title": "Extension members - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/extensions",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for extension blocks, receiver forms, member kinds, and limitations."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-first-class-span-types",
+      "title": "First-class span types - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/first-class-span-types",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for first-class span conversions and their role in overload resolution."
+    },
+    {
+      "id": "learn-providers-cosmos-full-text-search",
+      "title": "Full-Text Search - Azure Cosmos DB Provider - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/providers/cosmos/full-text-search",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Cosmos DB provider guide for configuring full-text search and using score-based queries."
+    },
+    {
+      "id": "learn-fundamentals-openapi-aspnetcore-openapi",
+      "title": "Generate OpenAPI documents",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "How to generate OpenAPI documents, pin OpenAPI versions, serve YAML, secure endpoints and generate documents at build time."
+    },
+    {
+      "id": "learn-core-querying-filters",
+      "title": "Global Query Filters - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/querying/filters",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Shows how global query filters work, including named filters, selective disabling and required-navigation pitfalls."
+    },
+    {
+      "id": "learn-dotnet-api-system-text-json-jsonserializerdefaults",
+      "title": "JsonSerializerDefaults Enum (System.Text.Json)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializerdefaults?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for the JsonSerializerDefaults enum, including the Strict preset."
+    },
+    {
+      "id": "learn-dotnet-api-system-text-json-jsonserializeroptions-allo",
+      "title": "JsonSerializerOptions.AllowDuplicateProperties Property (System.Text.Json)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializeroptions.allowduplicateproperties?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for rejecting duplicate JSON properties during deserialization."
+    },
+    {
+      "id": "learn-dotnet-api-system-text-json-jsonserializeroptions-stri",
+      "title": "JsonSerializerOptions.Strict Property (System.Text.Json)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonserializeroptions.strict?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for the shared JsonSerializerOptions.Strict instance."
+    },
+    {
+      "id": "learn-language-reference-operators-lambda-expressions",
+      "title": "Lambda expressions - Lambda expressions and anonymous functions - C# reference",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Language-reference rules for lambda parameters, including C# 14 modifier inference and the remaining params limitation."
+    },
+    {
+      "id": "learn-core-providers-sql-server",
+      "title": "Microsoft SQL Server Database Provider - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/providers/sql-server/",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "SQL Server provider reference for compatibility level behaviour and provider-specific configuration choices."
+    },
+    {
+      "id": "learn-providers-sql-server-vector-search",
+      "title": "Microsoft SQL Server Database Provider - Vector Search - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/providers/sql-server/vector-search",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "SQL Server vector-search reference for the EF Core vector type and distance-function query shape."
+    },
+    {
+      "id": "learn-dotnet-api-system-security-cryptography-2",
+      "title": "MLDsa Class (System.Security.Cryptography)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.mldsa?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for the MLDsa type used for ML-DSA digital signatures in .NET."
+    },
+    {
+      "id": "learn-dotnet-api-system-security-cryptography",
+      "title": "MLKem Class (System.Security.Cryptography)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.mlkem?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for the MLKem type used for ML-KEM key encapsulation in .NET."
+    },
+    {
+      "id": "learn-core-performance-nativeaot-and-precompiled-queries",
+      "title": "NativeAOT Support and Precompiled Queries (Experimental) - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/performance/nativeaot-and-precompiled-queries",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Clarifies the experimental status and current workflow for NativeAOT support and precompiled queries."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-null-conditional-assignment",
+      "title": "Null conditional assignment - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/null-conditional-assignment",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for null-conditional assignment, compound assignment support, and unsupported increment/decrement forms."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-partial-events-and-constructors",
+      "title": "Partial events and constructors - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/partial-events-and-constructors",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for partial events and constructors, including defining and implementing declarations."
+    },
+    {
+      "id": "learn-dotnet-api-system-security-cryptography-slhdsa",
+      "title": "SlhDsa Class (System.Security.Cryptography)",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.slhdsa?view=net-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "API reference for the SlhDsa type and its platform-dependent availability."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-field-keyword",
+      "title": "The `field` contextual keyword - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/field-keyword",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for the field contextual keyword and field-backed properties."
+    },
+    {
+      "id": "learn-language-reference-operators-nameof",
+      "title": "The nameof expression - evaluate the text name of a symbol - C# reference",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/nameof",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Language-reference update showing nameof on unbound generic types such as List<> and Dictionary<,>."
+    },
+    {
+      "id": "learn-fundamentals-openapi-using-openapi-documents",
+      "title": "Use the generated OpenAPI documents",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/using-openapi-documents?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "How to consume built-in OpenAPI documents with UI tools, linting and document providers."
+    },
+    {
+      "id": "learn-proposals-csharp-14-0-user-defined-compound-assignment",
+      "title": "User-defined compound assignment - C# feature specifications",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-14.0/user-defined-compound-assignment",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Feature specification for user-defined compound assignment operators and their in-place mutation model."
+    },
+    {
+      "id": "learn-core-fundamentals-validation",
+      "title": "Validation in ASP.NET Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/validation?view=aspnetcore-10.0",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Minimal API validation setup, validation ordering, opt-outs and multi-assembly discovery caveats."
+    },
+    {
+      "id": "learn-providers-cosmos-vector-search",
+      "title": "Vector Search - Azure Cosmos DB Provider - EF Core",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/providers/cosmos/vector-search",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "Cosmos DB provider guide for vector-property and vector-index modelling in EF Core."
+    },
+    {
+      "id": "learn-whats-new-dotnet-10-sdk",
+      "title": "What's new in the SDK and tooling for .NET 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/sdk",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1",
+        "day1-m6"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "SDK and CLI changes in .NET 10, including the new command verbs and file-based app support."
     },
     {
       "id": "learn-code-analysis-style-rules-ide0410",
