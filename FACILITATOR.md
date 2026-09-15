@@ -54,6 +54,8 @@ framework in each `.csproj` does the work instead — that is also the honest wa
 ```powershell
 cd <repo-root>
 
+npm install --prefix tools                        # once per clone (jsdom, page tests)
+
 pwsh -NoProfile -File tools/make-solutions.ps1     # regenerate the .sln files
 
 # --no-incremental matters: MSBuild does not replay warnings for an

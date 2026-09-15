@@ -11,12 +11,30 @@
  * jsdom is a tools-only dependency. Nothing shipped to attendees needs it.
  */
 
-import { JSDOM, VirtualConsole } from "jsdom";
 import { readdirSync, readFileSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+/* jsdom is a tools-only dependency and node_modules is not committed, so a
+   fresh clone hits this first. A raw ERR_MODULE_NOT_FOUND stack trace is a
+   poor thing to hand someone who just wants to build the handout. */
+let JSDOM, VirtualConsole;
+try {
+  ({ JSDOM, VirtualConsole } = await import("jsdom"));
+} catch (err) {
+  if (err?.code !== "ERR_MODULE_NOT_FOUND") throw err;
+  console.error("");
+  console.error("  jsdom is not installed, so the page tests cannot run.");
+  console.error("");
+  console.error("  It is a tools-only dependency and node_modules is not committed.");
+  console.error("  Install it once, from the repository root:");
+  console.error("");
+  console.error("      npm install --prefix tools");
+  console.error("");
+  process.exit(2);
+}
 
 /* Defaults to site/, but takes a directory so the standalone bundle in dist/
    can be held to exactly the same standard as the source pages. */

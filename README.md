@@ -31,8 +31,13 @@ is fully self-contained and works from `file://`.
 For a single-file version to hand to attendees:
 
 ```powershell
+npm install --prefix tools        # once per clone — jsdom, for the page tests
 pwsh tools/build-standalone.ps1   # emits dist/*.html with CSS and JS inlined
 ```
+
+`node_modules` is not committed, so the `npm install` is needed once after cloning. It is a
+tools-only dependency — nothing shipped to attendees depends on it, and the presentation site
+itself needs no build at all.
 
 The build refuses to publish pages that fail the headless checks, so a green run means the
 bundled files were actually booted and verified, not just concatenated.

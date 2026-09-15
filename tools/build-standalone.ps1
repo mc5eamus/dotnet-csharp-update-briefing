@@ -110,6 +110,12 @@ Write-Host "Booting bundled pages..." -ForegroundColor DarkGray
 Push-Location $repo
 try {
     & node (Join-Path $PSScriptRoot 'test-pages.mjs') $OutDir
+    # Exit code 2 means the test harness could not run at all (missing jsdom),
+    # which is a different problem from a page that boots badly. Saying
+    # "not shippable" there sends the reader hunting a bug that isn't theirs.
+    if ($LASTEXITCODE -eq 2) {
+        throw "cannot verify dist/: the page-test harness could not start (see above)"
+    }
     if ($LASTEXITCODE -ne 0) {
         throw "bundled pages failed their headless tests; dist/ is not shippable"
     }
