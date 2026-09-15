@@ -346,6 +346,25 @@ window.WORKSHOP_SOURCES ={
       "recommended": true
     },
     {
+      "id": "learn-core-tools-dotnet-tool-exec",
+      "title": "dotnet tool exec command - .NET CLI",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-tool-exec",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Verified by running on SDK 10.0.300: dnx ships as a real executable at C:\\Program Files\\dotnet\\dnx.cmd, 'dnx dotnetsay' executed the tool, and 'dotnet tool list --global' was empty afterwards.",
+      "usageTier": 2,
+      "summary": "One-shot tool execution: dotnet tool exec and its short form dnx, which runs a tool from a package without installing it.",
+      "recommended": true
+    },
+    {
       "id": "learn-core-porting-github-copilot-upgrade-overview",
       "title": "GitHub Copilot upgrade overview",
       "publisher": "Microsoft",
@@ -1069,6 +1088,24 @@ window.WORKSHOP_SOURCES ={
       "verification": "verified",
       "usageTier": 2,
       "summary": "How document, operation and schema transformers work, including execution order and endpoint-scoped operation transformers."
+    },
+    {
+      "id": "learn-core-diagnostics-dotnet-counters",
+      "title": "dotnet-counters diagnostic tool - .NET CLI",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Current, not deprecated. Worth noting as evidence that dnx is the direction of travel: this page now lists 'dnx dotnet-counters' as the recommended install-free option, ahead of installing it as a global tool.",
+      "usageTier": 2,
+      "summary": "Live-process counter monitoring, and a good example of Microsoft's own docs switching their recommended invocation to dnx."
     },
     {
       "id": "learn-security-authentication-passkeys",

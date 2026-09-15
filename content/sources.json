@@ -1452,6 +1452,46 @@
       "writtenAgainst": ".NET 10 GA"
     },
     {
+      "id": "learn-core-tools-dotnet-tool-exec",
+      "title": "dotnet tool exec command - .NET CLI",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-tool-exec",
+      "kind": "docs",
+      "origin": "discovered",
+      "modules": [
+        "day1-m1"
+      ],
+      "covers": [],
+      "retrieved": "2026-09-15",
+      "verification": "verified",
+      "verificationNotes": "Verified by running on SDK 10.0.300: dnx ships as a real executable at C:\\Program Files\\dotnet\\dnx.cmd, 'dnx dotnetsay' executed the tool, and 'dotnet tool list --global' was empty afterwards.",
+      "usageTier": 2,
+      "summary": "One-shot tool execution: dotnet tool exec and its short form dnx, which runs a tool from a package without installing it.",
+      "recommended": true,
+      "publisher": "Microsoft",
+      "previewDrift": "none",
+      "writtenAgainst": ".NET 10 GA"
+    },
+    {
+      "id": "learn-core-diagnostics-dotnet-counters",
+      "title": "dotnet-counters diagnostic tool - .NET CLI",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters",
+      "kind": "docs",
+      "origin": "discovered",
+      "modules": [
+        "day1-m1"
+      ],
+      "covers": [],
+      "retrieved": "2026-09-15",
+      "verification": "verified",
+      "verificationNotes": "Current, not deprecated. Worth noting as evidence that dnx is the direction of travel: this page now lists 'dnx dotnet-counters' as the recommended install-free option, ahead of installing it as a global tool.",
+      "usageTier": 2,
+      "summary": "Live-process counter monitoring, and a good example of Microsoft's own docs switching their recommended invocation to dnx.",
+      "recommended": false,
+      "publisher": "Microsoft",
+      "previewDrift": "none",
+      "writtenAgainst": ".NET 10 GA"
+    },
+    {
       "id": "learn-core-porting-github-copilot-upgrade-overview",
       "title": "GitHub Copilot upgrade overview",
       "url": "https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-upgrade/overview",

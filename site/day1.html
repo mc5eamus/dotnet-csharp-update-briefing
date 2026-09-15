@@ -402,6 +402,7 @@ app\app.csproj</code></pre>
         <tbody>
           <tr><td><code>dotnet package add</code></td><td>Adds a NuGet package reference. The noun-first sibling of <code>dotnet add package</code>.</td></tr>
           <tr><td><code>dotnet tool exec</code></td><td>Runs a tool <em>without permanently installing it</em>.</td></tr>
+          <tr><td><code>dnx</code></td><td>The short form of the same thing &mdash; .NET's answer to <code>npx</code>.</td></tr>
           <tr><td><code>dotnet --cli-schema</code></td><td>Emits the entire CLI surface as JSON.</td></tr>
         </tbody>
       </table>
@@ -409,22 +410,36 @@ app\app.csproj</code></pre>
 
       <div class="callout callout-verified">
         <div class="callout-title">Confirmed on this machine</div>
-        <p>All three exist on SDK 10.0.300. <code>dotnet tool exec --help</code> describes itself as
-        "Executes a tool from source without permanently installing it", and
-        <code>dotnet --cli-schema</code> exits successfully with roughly 335,000 characters of JSON.</p>
+        <p>All four exist on SDK 10.0.300. <code>dotnet tool exec --help</code> describes itself as
+        "Executes a tool from source without permanently installing it",
+        <code>dotnet --cli-schema</code> exits successfully with roughly 335,000 characters of JSON,
+        and <code>dnx</code> ships as a real executable next to <code>dotnet</code>
+        (<code>C:\Program Files\dotnet\dnx.cmd</code>).</p>
+        <p>Running a tool through it leaves nothing behind &mdash; this is the whole point:</p>
+<pre><code class="language-output">dnx dotnetsay "Hello from dnx" --yes     # the tool runs
+
+dotnet tool list --global
+Package Id      Version      Commands     # still empty</code></pre>
       </div>
 
       <div class="callout callout-focus">
         <div class="callout-title">The one that changes a habit</div>
-        <p><code>dotnet tool exec</code> removes the reason to globally install one-shot tools onto
-        build agents. Anything you currently <code>tool install</code> in CI purely to run once is a
-        candidate, and it stops tool versions leaking between jobs.</p>
+        <p><code>dnx</code> removes the reason to globally install one-shot tools onto build agents.
+        Anything you currently <code>tool install</code> in CI purely to run once is a candidate, and
+        it stops tool versions leaking between jobs.</p>
+        <p>Microsoft Learn has already switched its own guidance: the install instructions for
+        <code>dotnet-counters</code> now list <code>dnx dotnet-counters</code> as the
+        <em>recommended</em> option, ahead of installing it as a global tool.</p>
       </div>
 
       <div class="notes">
         <p><code>--cli-schema</code> sounds like trivia but it is how you build reliable tab
         completion and how an agent or script discovers options without scraping help text. Mention
         it if the room has platform engineers in it.</p>
+        <p><code>dnx</code> is the name people will remember, so lead with it. <code>dotnet tool
+        exec</code> is the same feature spelled out; mention it once so nobody is confused when they
+        meet it in docs. If the room writes CI pipelines, this is the most immediately useful thing
+        in the module &mdash; ask how many tools they install on agents just to invoke once.</p>
       </div>
     </section>
 
