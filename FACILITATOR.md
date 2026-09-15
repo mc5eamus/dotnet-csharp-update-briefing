@@ -102,6 +102,13 @@ zero-dependency and restore instantly; the ASP.NET Core and EF Core labs are not
 Everything is relative-path and offline. If you need a single-file handout, run
 `tools\build-standalone.ps1` to inline the CSS and JS into `dist\`.
 
+To keep the deck permanently to hand, run `tools\publish-local.ps1` once. It installs the
+single-file pages to `%LOCALAPPDATA%\dotnet-csharp-update-briefing\` and adds a
+**.NET 10-11 Workshop** Start Menu entry, so you can open it on the morning of the workshop
+without the repo, a build or a network. It is a snapshot — re-run it if you edit a slide.
+For a machine that has never seen the repo, take `workshop-deck.zip` from the repository's
+releases page, unzip it anywhere and open `index.html`.
+
 ---
 
 ## 2. Shape of the two days

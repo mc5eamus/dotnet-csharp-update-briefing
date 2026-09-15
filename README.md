@@ -42,6 +42,31 @@ itself needs no build at all.
 The build refuses to publish pages that fail the headless checks, so a green run means the
 bundled files were actually booted and verified, not just concatenated.
 
+## Opening the deck any time
+
+To keep the deck one click away without the repo, a build step or a network:
+
+```powershell
+pwsh tools/publish-local.ps1
+```
+
+That runs the gated build, installs the single-file pages to
+`%LOCALAPPDATA%\dotnet-csharp-update-briefing\` and adds a **.NET 10-11 Workshop** entry to the
+Start Menu. Bookmark the printed `file://` URL, or just search the Start Menu for *workshop*.
+Pass `-Destination` for a different folder, `-NoShortcut` to skip the Start Menu entry.
+
+The installed copy is a **snapshot**, not a live view — re-run the script after editing slides.
+It records `installed.json` with the commit it came from, so a copy found later can be traced
+back. Removing it is a matter of deleting that folder and the shortcut.
+
+On a machine without the repo, download `workshop-deck.zip` from the
+[latest release](https://github.com/magro_microsoft/dotnet-csharp-update-briefing/releases/latest),
+unzip anywhere and open `index.html`.
+
+There is deliberately no hosted version. GitHub Pages is not offered for private repositories on
+this account's plan, and the repository stays private because this is customer engagement
+material. The deck was built to work from `file://` precisely so that hosting is not required.
+
 ## Prerequisites for running the labs
 
 | | Why |
