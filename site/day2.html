@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 &mdash; .NET 11 &amp; C# 15</title>
+<meta name="description" content="Day 2 of the What's New in .NET workshop: .NET 11 RC and C# 15 — runtime async, unions, libraries, ASP.NET Core, EF Core and the upgrade decision.">
+<link rel="stylesheet" href="assets/workshop.css">
+</head>
+<body class="mode-handout">
+
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="dot"></span> What's New in .NET <small>&mdash; Day 2</small></a>
+  <nav class="navlinks">
+    <a href="index.html">Overview</a>
+    <a href="day1.html">Day 1</a>
+    <a href="day2.html" aria-current="page">Day 2</a>
+    <a href="sources.html">Sources</a>
+  </nav>
+  <button class="btn" data-action="notes" type="button" aria-pressed="false">Notes</button>
+  <button class="btn" data-action="mode" type="button" aria-pressed="false">Present</button>
+  <button class="btn" data-action="theme" type="button">Light</button>
+</header>
+
+<div class="layout">
+  <nav class="toc" data-title="Day 2"></nav>
+
+  <main class="deck">
+  
+    <section class="slide" id="d2-runtime-orientation" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="Day 2 overview">.NET 11 RC 1 <span class="badge badge-net11">STS</span> <span class="badge badge-preview">RC</span></h2>
+      <p class="slide-lead">Day 1 was the adoption story: .NET 10 is LTS and ready now. Day 2 is
+      a decision story: whether .NET 11 is worth taking before the next LTS.</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-kicker">Status</div>
+          <p>.NET 11 and C# 15 are at <strong>Release Candidate 1</strong>. General availability is
+          expected in November 2026.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Support</div>
+          <p>.NET 11 is <strong>STS</strong> &mdash; which since the .NET 9 change means
+          <strong>24 months</strong>, not eighteen. That lands it at roughly the same date as
+          .NET 10 LTS.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Today's question</div>
+          <p>Which changes create enough value, or enough risk, to justify an annual upgrade
+          cadence in your environment?</p>
+        </div>
+      </div>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">RC means close, not frozen</div>
+        <p>Use the hands-on labs to learn the shape of the release, but treat preview-era blog
+        posts and samples carefully. Several C# 15 details changed during the preview train, and
+        we found three widely-repeated claims that do not survive contact with RC 1.</p>
+        <p>RC 1 carries a <strong>go-live licence</strong>, supported to 13 October 2026 &mdash;
+        i.e. it is bridged until GA rather than left stranded.</p>
+      </div>
+
+      <div class="notes">
+        <p>Set expectations early: this is not a sales day. Ask who can realistically take an STS
+        release in production. If the answer is "only LTS", the value is still in planning for
+        .NET 12 and spotting migration risks before they become urgent.</p>
+        <p>Do not repeat the "eighteen months" figure even in passing &mdash; it was true until the
+        .NET 9 announcement and is now the single most common stale fact about .NET support. The
+        end-of-day decision slide depends on getting this right.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-runtime-async" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="Runtime Async">Runtime Async <span class="badge badge-net11">.NET 11</span></h2>
+      <p>Runtime-native async is the headline runtime change: the async state machine moves out of
+      compiler-generated types and into the runtime. Your <code>async</code>/<code>await</code>
+      source does not change at all.</p>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">Measured on RC 1: it is opt-in, not default</div>
+        <p>Despite what most preview-era write-ups say, targeting <code>net11.0</code> is
+        <strong>not</strong> enough. On <code>11.0.100-rc.1.26425.128</code> the compiler still
+        emits ordinary state machines unless you turn the feature on explicitly.</p>
+      </div>
+
+      <div class="code-wrap" data-label="Lab05.csproj">
+<pre><code class="language-xml">&lt;PropertyGroup&gt;
+  &lt;TargetFramework&gt;net11.0&lt;/TargetFramework&gt;
+  &lt;!-- Required on RC 1. Without it you get the classic compiler state machine. --&gt;
+  &lt;Features&gt;$(Features);runtime-async=on&lt;/Features&gt;
+&lt;/PropertyGroup&gt;</code></pre>
+      </div>
+
+      <p>The difference is directly observable by reflection &mdash; count the types in your own
+      assembly that implement <code>IAsyncStateMachine</code>:</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Default <code>net11.0</code></div>
+          <pre><code class="language-output">state machines: 4
+Deep3 has AsyncStateMachineAttribute: True</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">With <code>runtime-async=on</code></div>
+          <pre><code class="language-output">state machines: 0
+Deep3 has AsyncStateMachineAttribute: False</code></pre>
+        </div>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">The stack-trace demo does not work &mdash; don't try it</div>
+        <p>Preview-era posts promise dramatically cleaner stack traces. We measured the same
+        four-deep failing async chain on .NET 10, on default .NET 11, and on .NET 11 with runtime
+        async on. <strong>All three produced byte-identical traces</strong>: four frames, real
+        method names, no <code>MoveNext()</code> and no builder noise.</p>
+        <p>That is because the runtime has reconstructed async frames for years &mdash; the ugly
+        <code>&lt;LoadAsync&gt;d__4.MoveNext()</code> traces people remember are .NET Framework
+        era. If you demo this expecting a difference, you will be standing in front of two
+        identical screens.</p>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">So why should architects care?</div>
+        <p>Not debugging aesthetics &mdash; <strong>cost</strong>. Removing the state machine removes
+        per-call allocation and indirection, gives the JIT a shape it can tier and inline more
+        aggressively, and lets the shared framework libraries themselves be compiled runtime-async.
+        This is a throughput and allocation story, and it is the reason the whole platform is
+        moving, not a developer-experience one.</p>
+      </div>
+
+      <div class="notes">
+        <p>This slide is a credibility moment. Much of the room will have read that runtime async
+        is default in .NET 11 and that it cleans up stack traces; both claims are false on RC 1 and
+        we can prove it. Lab 05 has them count the state machine types themselves.</p>
+        <p>If asked whether it will be default at GA: likely, but say you don't know rather than
+        guessing. The flag is the safe thing to teach either way, because it is explicit.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-runtime-hardware" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="Hardware baseline">Raised minimum hardware requirements</h2>
+      <p>.NET 11 raises baseline instruction-set requirements for x86/x64 and Arm64. That is a
+      runtime improvement, but it is also a real deployment question.</p>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Migration risk: old and virtual hardware</div>
+        <p>Very old machines, emulated environments, virtualised deployment targets and some CI
+        runners may no longer be supported. Verify every production and build target early,
+        before the upgrade is entangled with language or library changes.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Where to check</div>
+          <ul>
+            <li>Production VM images and base container hosts</li>
+            <li>Self-hosted CI agents and disaster-recovery runners</li>
+            <li>Edge, kiosk, factory-floor and long-lived appliance hardware</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">How to keep the risk small</div>
+          <ul>
+            <li>Run a tiny <code>net11.0</code> smoke app on each target class</li>
+            <li>Record unsupported target types explicitly</li>
+            <li>Keep .NET 10 LTS as the safe baseline if hardware cannot move</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>This is a good place to ask whether anyone still has 32-bit processes or unusual CI
+        images. The aim is not to scare them; it is to make hardware verification an early
+        checklist item rather than a late release-blocker.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-runtime-jit-simd" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="JIT and SIMD">JIT and SIMD: more work reaches the hardware</h2>
+      <p>The runtime work is not only async. .NET 11 also broadens the vector surface and the
+      hardware paths the JIT can use.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>What changed</th><th>How to teach it</th></tr></thead>
+        <tbody>
+          <tr><td>Vector construction</td><td><code>CreateGeometricSequence</code></td><td>Useful for generated numeric sequences without scalar setup loops</td></tr>
+          <tr><td>Vector rearrangement</td><td><code>Zip</code>, <code>Unzip</code>, <code>Concat</code> family</td><td>Show as data-shaping operations, not hand-written intrinsics</td></tr>
+          <tr><td>Arm</td><td>SVE2 support</td><td>Relevant for Arm64 server and cloud capacity planning</td></tr>
+          <tr><td>x64</td><td>AVX-VNNI-512</td><td>Relevant where numeric or ML-style kernels dominate</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Keep this evidence-led</div>
+        <p>Do not promise a universal speed-up. These APIs and codegen paths matter when your
+        workload reaches them; measure hot paths before making them part of the upgrade case.</p>
+      </div>
+
+      <div class="notes">
+        <p>If the customer has analytics, image processing or model-scoring code, ask for one hot
+        loop they recognise. Otherwise keep this short and move back to the broadly visible async
+        and tooling changes.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-runtime-sdk" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="SDK wins">SDK and tooling wins worth showing</h2>
+      <p>These are the small things that make a workshop feel current: faster demos, less project
+      scaffolding, and better defaults.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Command-line quality of life</div>
+          <pre><code class="language-powershell">dotnet run -e FeatureFlag=RuntimeAsync -e Customer=workshop
+
+# File-based apps can now include another file.
+dotnet run app.cs</code></pre>
+          <p><code>#:include</code> closes a gap in file-based apps: shared helpers no longer force
+          you into a project file just to keep one script readable.</p>
+        </div>
+        <div>
+          <div class="card-kicker">Build and test surface</div>
+          <ul>
+            <li>Solution filters are supported through <code>dotnet sln</code>.</li>
+            <li>NativeAOT CLI and the MSBuild server are on by default.</li>
+            <li><code>dotnet test</code> has a larger surface for test workflows.</li>
+            <li>Podman multi-arch support improves container demos.</li>
+            <li>CLI telemetry moves from Application Insights to OpenTelemetry.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Use <code>dotnet run -e</code> live if possible. It is tiny, visible, and prevents a
+        detour into shell-specific environment variable syntax on Windows versus Bash.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-runtime-lab05" data-module-title="1 &middot; Runtime">
+      <h2 data-toc="Lab 05">Lab 05 &mdash; Runtime Async <span class="badge">20 min</span></h2>
+      <p class="slide-lead">Make async failure boring to diagnose.</p>
+
+      <pre><code class="language-powershell">cd labs/Day2/05-RuntimeAsync/start
+dotnet run</code></pre>
+
+      <p>The starter project deliberately throws from deep inside a chain of async calls. Your tasks:</p>
+      <ol>
+        <li>Run it on default <code>net11.0</code> and count the types in your own assembly that
+        implement <code>IAsyncStateMachine</code>.</li>
+        <li>Add <code>&lt;Features&gt;$(Features);runtime-async=on&lt;/Features&gt;</code> and count again.</li>
+        <li>Capture the stack trace in both configurations and on <code>net10.0</code>, and compare
+        them honestly &mdash; you should find no difference at all.</li>
+        <li>Explain why none of the application <code>async</code>/<code>await</code> source code
+        changed, and where the cost saving actually comes from.</li>
+      </ol>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The point of the lab</div>
+        <p>You are not microbenchmarking. You are training your eye to recognise the runtime
+        representation change in the first artefact developers actually use: the exception stack.</p>
+      </div>
+
+      <div class="notes">
+        <p>If the lab machine has multiple SDK roots, remind attendees to use the workshop helper
+        scripts rather than whichever <code>dotnet</code> happens to be first on <code>PATH</code>.</p>
+      </div>
+      <div data-further="day2-m1"></div>
+    </section>
+
+    <section class="slide" id="d2-cs15-overview" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="C# 15 overview">C# 15 <span class="badge badge-cs15">C# 15</span></h2>
+      <p class="slide-lead">C# 14 let you add members to types you do not own. C# 15 turns to
+      modelling: closed choices, exhaustive switches, and fewer ceremony patterns around collections,
+      loops and low-level code.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>What it replaces</th><th>Status in RC 1</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Union types</strong></td><td>Nullable bags, exception-as-flow, ad-hoc result hierarchies</td><td>Default for <code>net11.0</code></td></tr>
+          <tr><td><strong><code>closed</code> hierarchies</strong></td><td>Open inheritance with defensive defaults</td><td>Default for <code>net11.0</code></td></tr>
+          <tr><td>Collection expression arguments</td><td>Manual constructors before collection expressions</td><td>Default for <code>net11.0</code></td></tr>
+          <tr><td>Extension indexers</td><td>Helper methods such as <code>At(index)</code></td><td>Default for <code>net11.0</code></td></tr>
+          <tr><td>Labeled <code>break</code>/<code>continue</code></td><td>Boolean flags and small <code>goto</code> workarounds</td><td>Default for <code>net11.0</code></td></tr>
+          <tr><td>Memory-safety work</td><td>Over-broad <code>unsafe</code> regions</td><td>Preview opt-in still required</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Important default</div>
+        <p>On this machine, every feature above except memory-safety compiled and ran for
+        <code>net11.0</code> with no <code>LangVersion</code> setting. C# 15 is not a separate opt-in
+        for normal .NET 11 projects.</p>
+      </div>
+
+      <div class="notes">
+        <p>Connect back to Day 1 explicitly. Extension indexers are much easier to explain once the
+        room already understands C# 14 extension blocks.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-unions" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Union types"><code>union</code> types <span class="badge badge-cs15">C# 15</span></h2>
+      <p>A union models a value that is exactly one of a fixed set of case types. The cases do not
+      need to share a base class or an interface.</p>
+
+      <pre><code class="language-csharp">public sealed record Cat(string Name);
+public sealed record Dog(string Name);
+public sealed record Bird(string Name);
+
+public union Pet(Cat, Dog, Bird);
+
+Pet pet = new Dog("Rex");       // implicit conversion from a case type
+
+string message = pet switch
+{
+    Cat cat =&gt; $"cat {cat.Name}",
+    Dog dog =&gt; $"dog {dog.Name}",
+    Bird bird =&gt; $"bird {bird.Name}"
+};</code></pre>
+
+      <pre><code class="language-output">union: dog Rex</code></pre>
+
+      <p>The compiler knows the complete case set, so the switch is exhaustive without a default
+      arm. That turns "did we handle every result?" from a code-review habit into a compile-time
+      check &mdash; though only a <em>warning-level</em> one until you promote CS8509, which we come
+      back to shortly.</p>
+
+      <p>Use this for "one of N" results: success, validation failure, not found. It avoids an
+      inheritance hierarchy you only created for matching, a bag of nullable properties, or expected
+      control flow expressed as exceptions. At runtime, unions are backed by .NET 11 support including
+      <code>UnionAttribute</code> and <code>IUnion</code>.</p>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">RC 1 reality check</div>
+        <p>Some features in the original union proposal are not implemented in RC 1. Treat samples
+        written for early previews as suspect unless you have compiled them on the current SDK.</p>
+      </div>
+
+      <div class="notes">
+        <p>Use the result-type example verbally: success, validation failure, not found. That is
+        where unions feel immediately useful to application teams without a type-system lecture.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-closed" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Closed hierarchies"><code>closed</code> hierarchies <span class="badge badge-cs15">C# 15</span></h2>
+      <p><code>closed</code> is for the other modelling case: you own the hierarchy and want shared
+      members or behaviour, but you still want the compiler to know the set of descendants.</p>
+
+      <pre><code class="language-csharp">public closed class Discount
+{
+    public required string Code { get; init; }
+}
+
+public sealed class Percentage(decimal Rate) : Discount;
+public sealed class FixedAmount(decimal Amount) : Discount;
+
+string label = discount switch
+{
+    Percentage p =&gt; $"{p.Rate:P1} off",
+    FixedAmount f =&gt; $"{f.Amount:C} off"
+};</code></pre>
+
+      <pre><code class="language-output">closed: 42.5% open</code></pre>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title"><code>closed</code> is not transitive</div>
+        <p>An intermediate descendant must itself be marked <code>closed</code> or the compiler loses
+        exhaustiveness at that level. Also note the shape rules: a <code>closed</code> type is
+        implicitly abstract and cannot be combined with <code>sealed</code>, <code>static</code> or an
+        explicit <code>abstract</code>.</p>
+      </div>
+
+      <div class="notes">
+        <p>Draw a two-level hierarchy on the whiteboard. The non-transitive rule is the one people
+        forget, especially when they split a base hierarchy into subfamilies later.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-union-vs-closed" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Union or closed">Union or closed hierarchy?</h2>
+      <p>Both features buy exhaustive matching. Choose based on ownership and whether the cases
+      need shared behaviour.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Reach for</th><th>When</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>union</code></td><td>The case types are unrelated, or you do not own all of them</td><td>API result can be success, validation failure or not found</td></tr>
+          <tr><td><code>closed</code></td><td>You own the hierarchy and want common members, constructors or behaviour</td><td>Domain event family, discount rule family, workflow step family</td></tr>
+          <tr><td>Neither yet</td><td>The set is not actually closed, or plugin authors must add cases</td><td>Extensibility points, external provider models</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">The safety net is off by default &mdash; turn it on</div>
+        <p>Adding a case does <strong>not</strong> break your build. Every non-exhaustive switch
+        raises <strong>CS8509</strong>, and CS8509 is a <em>warning</em>. The project still
+        compiles, and the unmatched case throws
+        <code>SwitchExpressionException</code> at runtime instead &mdash; in production, on the one
+        input you did not think about.</p>
+        <p>Verified on RC 1: a union switch missing an arm builds with
+        <code>0 Error(s)</code> and runs happily until it meets the missing case.</p>
+      </div>
+
+      <div class="code-wrap" data-label="Directory.Build.props">
+<pre><code class="language-xml">&lt;!-- Without this, "exhaustive matching" is a suggestion, not a guarantee. --&gt;
+&lt;PropertyGroup&gt;
+  &lt;WarningsAsErrors&gt;$(WarningsAsErrors);CS8509&lt;/WarningsAsErrors&gt;
+&lt;/PropertyGroup&gt;</code></pre>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Then the compile error is the feature</div>
+        <p>Once CS8509 is an error, adding a case makes every stale call site fail to compile. That
+        is not friction &mdash; that is the maintenance point, forcing each call site to make the
+        new business decision explicitly. This one line is the difference between unions being a
+        type-safety feature and unions being a nicer-looking runtime exception.</p>
+      </div>
+
+      <div class="notes">
+        <p>This slide should be interactive. Ask for one domain type from the room and classify it
+        together. If they argue, that usually reveals the real design constraint.</p>
+        <p>Do not skip the CS8509 point &mdash; it is the single most useful thing on this slide.
+        Most teams will adopt unions, never set the flag, and conclude the feature does not do what
+        it was sold as doing. If they already run <code>TreatWarningsAsErrors</code>, they get this
+        for free; ask who does.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-collections" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Collection args">Collection expression arguments <span class="badge badge-cs15">C# 15</span></h2>
+      <p>Collection expressions are concise, but before C# 15 they could not pass constructor
+      arguments such as capacity or a comparer. <code>with(...)</code> fills that gap.</p>
+
+      <pre><code class="language-csharp">int[] values = [1, 2, 3];
+
+List&lt;int&gt; list = [with(capacity: 4), .. values];
+
+HashSet&lt;string&gt; names = [
+    with(StringComparer.OrdinalIgnoreCase),
+    "Hello",
+    "hello"
+];</code></pre>
+
+      <pre><code class="language-output">list.Count    = 3
+list.Capacity = 4
+names.Count   = 1</code></pre>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">Measured on RC 1 &mdash; the capacity is exact</div>
+        <p>The set count is <code>1</code> because the case-insensitive comparer deduplicated
+        <code>"Hello"</code> and <code>"hello"</code>. That is the headline: <code>with(...)</code>
+        genuinely reaches the constructor, so the comparer is in effect <em>during</em>
+        construction rather than applied afterwards.</p>
+        <p>The capacity is <code>4</code> &mdash; exactly what we asked for, not rounded up to a
+        power of two and not shrunk to the element count. We also measured the neighbouring cases:</p>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Expression (3 elements)</th><th><code>Capacity</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>[with(capacity: 4), .. values]</code></td><td><code>4</code></td></tr>
+            <tr><td><code>[with(capacity: 8), .. values]</code></td><td><code>8</code></td></tr>
+            <tr><td><code>[.. values]</code> &mdash; no arguments</td><td><code>3</code></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>So the no-argument form gives you a list with <strong>zero slack</strong>: the very next
+        <code>Add</code> reallocates. That is the practical reason to use <code>with(capacity:)</code>
+        when you know the list will keep growing.</p>
+      </div>
+
+      <div class="notes">
+        <p>An earlier draft of this slide claimed the capacity came back as <code>6</code> and used it
+        as a "the runtime does what it likes" humility moment. We compiled it: it is <code>4</code>.
+        The honest lesson is the opposite one &mdash; the argument is passed through precisely, which
+        is exactly what makes the feature worth using.</p>
+        <p>If someone asks why the no-argument case is <code>3</code> and not larger: the compiler knows
+        the length of the spread source, so it can size the list exactly once. Helpful for a
+        build-and-discard list, unhelpful for one you will append to.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-extension-indexers" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Extension indexers"><code>extension</code> indexers <span class="badge badge-cs15">C# 15</span></h2>
+      <p>C# 14 introduced extension blocks. C# 15 lets those blocks declare indexers too, which
+      removes another reason to invent helper methods on types you do not own.</p>
+
+      <pre><code class="language-csharp">public static class EnumerableIndexers
+{
+    extension(IEnumerable&lt;int&gt; numbers)
+    {
+        public int this[int index] =&gt; numbers.ElementAt(index);
+    }
+}
+
+IEnumerable&lt;int&gt; values = [1, 2, 3, 4];
+Console.WriteLine(values[2]);</code></pre>
+
+      <pre><code class="language-output">extension indexer: 3</code></pre>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Do not hide expensive access</div>
+        <p>An indexer reads like constant-time access. If the receiver is an <code>IEnumerable&lt;T&gt;</code>,
+        the implementation may still enumerate. Use this where the abstraction matches the cost.</p>
+      </div>
+
+      <div class="notes">
+        <p>Relate this to extension properties from Day 1. The design question is the same: are you
+        improving the type's natural surface, or disguising a helper as a member?</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-labeled-loops" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Labeled loops">Labeled <code>break</code> and <code>continue</code></h2>
+      <p>Nested loops often grow boolean flags or tiny <code>goto</code> exits. C# 15 lets
+      <code>break</code> and <code>continue</code> target a specific enclosing loop by label.</p>
+
+      <pre><code class="language-csharp">Customer[] customers =
+[
+    new Customer("A", [new Order(false, "a1"), new Order(true, "a2"), new Order(false, "a3")]),
+    new Customer("B", [new Order(false, "b1")]),
+];
+
+outer:
+foreach (var customer in customers)
+{
+    Console.WriteLine(customer.Name);
+
+    foreach (var order in customer.Orders)
+    {
+        if (order.IsFraudulent)
+            continue outer;
+
+        Process(order);
+    }
+}</code></pre>
+
+      <pre><code class="language-output">A
+  processed a1
+B
+  processed b1</code></pre>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">Read that output again &mdash; a3 never ran</div>
+        <p><code>continue outer</code> abandons the <em>whole remaining inner loop</em> and advances
+        the outer one. Customer A had a third, perfectly good order (<code>a3</code>) that was never
+        processed. That is the correct meaning of the feature, and it is the single easiest thing to
+        get wrong when reaching for it: if you wanted to skip just the bad order you still want a
+        plain unlabelled <code>continue</code>.</p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">The analyser nudge</div>
+        <p>IDE0410 flags older bool-flag and <code>goto</code> workarounds where the new labelled
+        control flow is clearer. That makes this both a language feature and a style clean-up.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask the room what this prints before you reveal the output. A good proportion will expect
+        <code>a3</code> to be processed. It isn't &mdash; <code>continue outer</code> abandons the
+        whole inner loop, not just the current iteration. That miss is the entire teaching point,
+        and it lands much harder as a wrong prediction than as a bullet.</p>
+        <p>Keep the example boring. The feature is not about clever control flow; it is about making
+        the intended loop target visible without extra mutable state. See FACILITATOR.md 3.10 &mdash;
+        this slide shipped with placeholder output until we compiled it.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-memory-safety" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Memory safety"><code>safe</code>, <code>unsafe</code> and pointer relaxations</h2>
+      <p>The memory-safety work is deliberately multi-release. It narrows where <code>unsafe</code>
+      is needed, but it does not make pointer code safe.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Relaxed outside unsafe context</div>
+          <ul>
+            <li>Declaring pointer types</li>
+            <li>Taking an address with <code>&amp;</code></li>
+            <li><code>fixed</code></li>
+            <li><code>stackalloc</code> to a pointer</li>
+            <li><code>sizeof</code></li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-kicker">Still constrained</div>
+          <ul>
+            <li>Dereferencing still requires <code>unsafe</code>.</li>
+            <li><code>unsafe(expr)</code> can be used in field initializers, constructor initializers and catch filters.</li>
+            <li><code>safe</code> is recognised, but has no effect on callers yet.</li>
+          </ul>
+        </div>
+      </div>
+
+      <pre><code class="language-xml">&lt;PropertyGroup&gt;
+  &lt;TargetFramework&gt;net11.0&lt;/TargetFramework&gt;
+  &lt;LangVersion&gt;preview&lt;/LangVersion&gt;
+  &lt;AllowUnsafeBlocks&gt;true&lt;/AllowUnsafeBlocks&gt;
+&lt;/PropertyGroup&gt;</code></pre>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">This is the exception to the default-language rule</div>
+        <p>On this machine, the memory-safety features were the only C# 15 area that still needed
+        <code>&lt;LangVersion&gt;preview&lt;/LangVersion&gt;</code> plus <code>&lt;AllowUnsafeBlocks&gt;true&lt;/AllowUnsafeBlocks&gt;</code>.
+        Unions, closed hierarchies, collection arguments, extension indexers and labelled loops did not.</p>
+      </div>
+
+      <div class="notes">
+        <p>Do not present this as a general-purpose application feature. It matters to library,
+        interop and performance code, and its biggest workshop value is clearing up the misconception
+        that all C# 15 features require preview.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-cs15-lab06" data-module-title="2 &middot; C# 15">
+      <h2 data-toc="Lab 06">Lab 06 &mdash; Unions and closed hierarchies <span class="badge">40 min</span></h2>
+      <p class="slide-lead">Model one domain result two ways, then let the compiler police the future.</p>
+
+      <pre><code class="language-powershell">cd labs/Day2/06-CSharp15-Unions/start
+dotnet test</code></pre>
+
+      <p>Your tasks:</p>
+      <ol>
+        <li>Model the starter domain result as a <code>union</code>.</li>
+        <li>Model the same choices as a <code>closed</code> hierarchy.</li>
+        <li>Use exhaustive <code>switch</code> expressions with no default arm.</li>
+        <li>Add a new case and watch every incomplete switch fail to compile.</li>
+        <li>Decide which model better fits the domain and write down why.</li>
+      </ol>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">That red build is intentional</div>
+        <p>The moment you add a new case, the compiler becomes your change-impact report. Fixing
+        each switch is the exercise.</p>
+      </div>
+
+      <div class="notes">
+        <p>If attendees instinctively add a default arm, stop them. The default arm throws away the
+        most valuable part of the feature: the compiler knowing the case set.</p>
+      </div>
+      <div data-further="day2-m2"></div>
+    </section>
+
+    <section class="slide" id="d2-libraries-overview" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="Libraries overview">.NET 11 libraries <span class="badge badge-net11">.NET 11</span></h2>
+      <p class="slide-lead">The library story is broad rather than single-theme: JSON catches up
+      with language features, LINQ gains missing joins, compression expands, and validation finally
+      has an async path.</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-kicker">Application code</div>
+          <p>System.Text.Json, LINQ joins, async validation and HTTP body compression are the most
+          likely to show up in everyday services.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Platform code</div>
+          <p>Zstandard, decimal floating point, generic complex numbers and zero-copy streams
+          matter where libraries sit close to data movement.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Security and networking</div>
+          <p>X25519, AES Key Wrap changes, TLS hardening, DNS records and connection eviction are
+          mostly adoption-by-need.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>This module is intentionally selective. Do not read the list. Anchor each area to a real
+        customer pain: JSON contract control, sequence reconciliation, validation with I/O.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-libraries-stj" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="System.Text.Json">System.Text.Json: naming, streams and unions</h2>
+      <p>System.Text.Json continues to move from "fast serializer" towards "default platform JSON
+      stack". In .NET 11, the most teachable changes are contract control and streaming shapes.</p>
+
+      <pre><code class="language-csharp">var options = new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.PascalCase
+};
+
+string json = JsonSerializer.Serialize(new Person("Ada"), options);</code></pre>
+
+      <pre><code class="language-output">STJ PascalCase: {"FirstName":"Ada"}</code></pre>
+
+      <ul>
+        <li><code>JsonNamingPolicy.PascalCase</code> for built-in PascalCase output.</li>
+        <li>Per-member naming policy overrides and type-level ignore conditions.</li>
+        <li>NDJSON and top-level <code>SerializeAsyncEnumerable</code>.</li>
+        <li>PipeWriter targets and <code>Utf8JsonWriter.Reset</code>.</li>
+        <li>C# 15 union serialization through <code>JsonUnionTypeStructuralClassifier</code>.</li>
+      </ul>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">Unions serialize by default. They do not deserialize.</div>
+        <p>This asymmetry is the one to remember. With a plain <code>JsonSerializerOptions</code>,
+        writing a union succeeds and emits the case's own shape &mdash; <strong>no discriminator of
+        any kind</strong>. Reading it back throws:</p>
+        <pre><code class="language-output">Serialize   -&gt; {"Isbn":"978-0","Title":"Compilers"}     // fine
+Deserialize -&gt; JsonException: JSON value type 'Object' is ambiguous for
+               union type 'CatalogItem' because multiple case types can use
+               this value type. Specify a custom type classifier to support
+               deserialization.</code></pre>
+        <p>So a union written to a queue, a cache or a <code>jsonb</code> column looks healthy at
+        write time and fails at the consumer &mdash; possibly a different service, possibly weeks
+        later. Register the classifier on <em>both</em> sides:</p>
+        <pre><code class="language-csharp">var options = new JsonSerializerOptions();
+options.TypeClassifiers.Add(new JsonUnionTypeStructuralClassifier());</code></pre>
+        <p>It infers the case from the object's <em>shape</em>, so the JSON is byte-identical either
+        way. Nothing is added to the payload &mdash; which is also why it has limits.</p>
+      </div>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">It refuses to guess &mdash; and it tells you early</div>
+        <p>Give it two cases that are structurally indistinguishable and it does not fall back or
+        pick one. It throws <code>NotSupportedException</code> when the contract is built, on your
+        <em>first serialize</em>, not at some later read:</p>
+        <pre><code class="language-output">The JsonUnionTypeStructuralClassifier cannot classify union type 'Shape'
+because the case type 'Circle' can never be selected uniquely. The case type
+'Square' recognizes every property name recognized by 'Circle' and has no
+stricter required-property or unmapped-member constraints.</code></pre>
+        <p>Good failure mode, real design constraint: <strong>structural classification only works
+        when your cases differ in shape.</strong> If two cases carry the same fields, you need a
+        discriminator and a custom classifier. Unions over a primitive and an object
+        (<code>union Payload(int, Note)</code>) disambiguate cleanly, because JSON value types
+        already differ.</p>
+      </div>
+
+      <div class="notes">
+        <p>Point out that PascalCase is not exciting by itself. It is a good smoke test that proves
+        the .NET 11 library surface is actually running on the machine.</p>
+        <p>The union JSON asymmetry is worth slowing down for &mdash; it is the kind of thing that
+        passes every unit test that round-trips through one process and then breaks in integration.
+        Ask the room where they serialize domain types today; anyone using a message bus or a JSON
+        column has a migration question to take home. Both callouts here were measured on RC 1 in
+        Lab 07, not taken from documentation.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-libraries-linq" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="LINQ FullJoin">LINQ <code>FullJoin</code> and tuple joins</h2>
+      <p>LINQ gains <code>FullJoin</code>, plus tuple-returning <code>Join</code> and
+      <code>GroupJoin</code>, across <code>Enumerable</code>, <code>Queryable</code> and
+      <code>AsyncEnumerable</code>.</p>
+
+      <pre><code class="language-output">FullJoin: 1/0, 2/0, 3/3, 0/4</code></pre>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Unmatched value types surface as <code>default(T)</code></div>
+        <p>The observed output is not nullable: missing right-side integers printed as <code>0</code>,
+        and a missing left-side integer printed as <code>0</code>. If zero is a valid value in your
+        domain, project to a nullable or reference type before the ambiguity matters.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Good fit</div>
+          <p>Reconciling two sequences where missing-on-left and missing-on-right are both business
+          outcomes: imports, account lists, inventory snapshots.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Careful with</div>
+          <p>Value-type keys or values where <code>default(T)</code> is also meaningful. The join is
+          useful; the projection needs to be explicit.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>This is the best gotcha in the module because it came from the probe. Ask what value in
+        their domain would be dangerous as a default: zero quantity, zero price, default date.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-libraries-compression-numerics" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="Compression and numerics">Compression and numerics</h2>
+      <p>Several .NET 11 library additions are not everyday web-app features, but they matter when
+      you are building infrastructure or numeric libraries.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Compression</div>
+          <ul>
+            <li>Zstandard support in <code>System.IO.Compression</code>.</li>
+            <li>CRC32 validation on ZIP reads.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Numerics</div>
+          <ul>
+            <li>IEEE 754 decimal floating point: <code>Decimal32</code>, <code>Decimal64</code>, <code>Decimal128</code>.</li>
+            <li>Generic <code>Complex&lt;T&gt;</code>.</li>
+            <li><code>TryParsePartial</code> for parser-style flows.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Adoption is workload-specific</div>
+        <p>These APIs are worth knowing because they remove third-party or custom code in specific
+        places. They are not a reason, by themselves, for every service to jump from .NET 10 LTS.</p>
+      </div>
+
+      <div class="notes">
+        <p>Keep this slide short unless the customer has compression or financial/numeric code in
+        scope. The point is awareness, not a deep API walkthrough.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-libraries-validation-crypto" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="Validation and crypto">Async validation, crypto and networking</h2>
+      <p>Validation finally gets an async path in the platform, and the lower-level networking and
+      crypto surface continues to move forward.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Async validation</div>
+          <ul>
+            <li><code>AsyncValidationAttribute</code></li>
+            <li><code>IAsyncValidatableObject</code></li>
+            <li><code>Validator.ValidateObjectAsync</code></li>
+            <li><code>IAsyncStartupValidator</code></li>
+          </ul>
+          <p>This matters when validation needs I/O: uniqueness checks, remote lookups, policy
+          services or startup probes that used to block or live outside the validation pipeline.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Crypto and networking</div>
+          <ul>
+            <li>X25519 Diffie-Hellman.</li>
+            <li>Unpadded AES Key Wrap.</li>
+            <li>TLS handshake hardening.</li>
+            <li>Channel-binding validation on Unix.</li>
+            <li><code>DnsResolver</code> typed DNS record resolution.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>If someone asks for exact validation signatures, defer to the lab or docs. The important
+        architecture point is that validation no longer has to choose between blocking and being
+        outside the standard pipeline.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-libraries-lab07" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="Lab 07">Lab 07 &mdash; Libraries in .NET 11 <span class="badge">25 min</span></h2>
+      <p class="slide-lead">Connect the language and library stories in one small reconciliation flow.</p>
+
+      <pre><code class="language-powershell">cd labs/Day2/07-Libraries11/start
+dotnet test</code></pre>
+
+      <p>Your tasks:</p>
+      <ol>
+        <li>Round-trip a C# 15 <code>union</code> through System.Text.Json.</li>
+        <li>Use PascalCase naming and verify the JSON contract.</li>
+        <li>Use <code>FullJoin</code> to reconcile two sequences.</li>
+        <li>Deliberately hit the <code>default(T)</code> ambiguity with integers.</li>
+        <li>Fix the projection so missing values are unambiguous.</li>
+      </ol>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">What success looks like</div>
+        <p>The final code should make both closed-choice modelling and missing-side joins visible
+        in tests. If a future maintainer adds a union case or mistakes a missing value for zero,
+        the build should tell them.</p>
+      </div>
+
+      <h3>Also know exists</h3>
+      <p>HTTP body compression, connection eviction, four new zero-copy <code>Stream</code> types,
+      <code>EqualityComparer&lt;T&gt;.Create</code> and generic <code>Random</code> overloads are all part
+      of the broader .NET 11 library surface.</p>
+
+      <div class="notes">
+        <p>Use the lab to make the FullJoin warning concrete. Most attendees understand it only
+        after they see a legitimate zero collide with a missing value.</p>
+      </div>
+      <div data-further="day2-m3"></div>
+    </section>
+
+    <section class="slide" id="d2-m4-aspnet-overview" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="ASP.NET Core 11">ASP.NET Core 11 <span class="badge badge-net11">RC 1</span></h2>
+      <p class="slide-lead">The ASP.NET Core story is practical rather than flashy: better contracts,
+      better validation, better observability, and one breaking OpenAPI default you should hit in a lab before it hits CI.</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-kicker">Contracts</div>
+          <p>OpenAPI 3.2 by default, C# union result shapes, SSE described in the document,
+          binary file response descriptions and obsolete API reflection.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Endpoints</div>
+          <p>HTTP QUERY, async Minimal API validation, localization, non-experimental validation attributes,
+          and attribute-based short-circuiting.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Operations</div>
+          <p>Native OpenTelemetry tracing, Kestrel TLS handshake observability, Zstandard compression,
+          and more accurate rate-limiting headers.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">RC 1 means verify, then decide</div>
+        <p>.NET 11 is Release Candidate 1, with GA expected November 2026. Treat these APIs as close to final,
+        but keep preview-sensitive behaviour isolated until the final SDK lands.</p>
+      </div>
+
+      <div class="notes">
+        <p>This module is a customer-interest peak. Keep it anchored in their API estate: contract generation,
+        client generation, gateway import and validation pipelines. Avoid the Blazor material in the release notes.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m4-openapi32" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="OpenAPI 3.2">OpenAPI 3.2 is now the default <span class="badge badge-breaking">Breaking</span></h2>
+      <p>.NET 10 generated OpenAPI 3.1 by default. ASP.NET Core 11 moves that default to OpenAPI 3.2.</p>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">This is a real upgrade break</div>
+        <p>The generated document's OpenAPI version changes. Client generators, API-management imports,
+        governance scanners and contract tests that only understand 3.1 may reject the document or fail assertions.</p>
+      </div>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">Measured on this machine, not quoted</div>
+        <p>We registered three OpenAPI documents in one minimal API on
+        <code>Microsoft.AspNetCore.OpenApi</code> 11.0.0-rc.1 and read back the <code>openapi</code>
+        field each one actually served:</p>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Registration</th><th>Emitted <code>openapi</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>AddOpenApi("v1")</code> &mdash; default</td><td><code>3.2.0</code></td></tr>
+            <tr><td><code>o.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1</code></td><td><code>3.1.2</code></td></tr>
+            <tr><td><code>o.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0</code></td><td><code>3.0.4</code></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p><strong>Note every patch number.</strong> .NET 10 emits <code>3.1.1</code>; pinning .NET 11
+        back to &ldquo;3.1&rdquo; gives you <code>3.1.2</code>, not <code>3.1.1</code> and never
+        <code>3.1.0</code>. If anything in your pipeline compares that string exactly, it breaks on
+        upgrade <em>even when you pin</em>. Compare on the major.minor prefix, or not at all.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">What changes first</div>
+          <ul>
+            <li>The <code>openapi</code> value in generated documents moves from 3.1 to 3.2.</li>
+            <li>SSE endpoints can be represented properly in the 3.2 document.</li>
+            <li>Downstream tooling may lag the framework default.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">How to handle it</div>
+          <p>Let the app generate 3.2 in a branch and run your real toolchain against it. If any required tool
+          is not ready, pin the generated document version deliberately and track the pin as technical debt.</p>
+          <pre><code class="language-csharp">using Microsoft.OpenApi;
+
+builder.Services.AddOpenApi(o =&gt;
+    o.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1);</code></pre>
+          <p>Verified to compile and emit on RC 1. It is one line &mdash; which is exactly why it should
+          carry a comment saying when you intend to remove it.</p>
+        </div>
+      </div>
+
+      <p>Do not treat this as a cosmetic diff. OpenAPI documents are build artefacts, deployment inputs and external contracts.</p>
+
+      <div class="notes">
+        <p>Ask who imports OpenAPI into an API gateway or uses generated clients. Those hands identify the people who
+        need to run Lab 08 carefully rather than just watching the demo.</p>
+        <p>The patch-number table is the part that lands. Several people in any room will have a contract
+        test asserting <code>"3.1.0"</code> somewhere, and that string has never been correct on .NET 10
+        either &mdash; it has been <code>3.1.1</code> since GA. The bug is already in their repo; the
+        upgrade just reveals it.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m4-contract-shapes" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="Result shapes">Union result shapes and SSE documentation <span class="badge badge-cs15">C# 15</span></h2>
+      <p>C# 15 union types are not just language trivia. Minimal APIs can return a union of result shapes,
+      and ASP.NET Core can reflect that shape into the OpenAPI document.</p>
+
+      <pre><code class="language-csharp">public union LookupResult(Ok&lt;CustomerDto&gt;, NotFound, ValidationProblem);
+
+app.MapGet("/customers/{id}", Lookup);
+
+static async Task&lt;LookupResult&gt; Lookup(CustomerId id, CustomerDb db)
+    =&gt; await db.FindAsync(id) is { } customer
+        ? TypedResults.Ok(customer.ToDto())
+        : TypedResults.NotFound();</code></pre>
+
+      <p>That ties directly back to module 2: unions make the endpoint contract explicit in code,
+      then OpenAPI makes it visible to callers.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">SSE catches up with the contract</div>
+        <p>.NET 10 added Server-Sent Events support. OpenAPI 3.2 gives ASP.NET Core a document shape that can describe
+        SSE endpoints instead of leaving them as prose beside the contract.</p>
+      </div>
+
+      <div class="notes">
+        <p>Do not over-specify exact OpenAPI output. The important teaching point is traceability from C# union to API contract,
+        not the precise schema shape emitted by RC tooling.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m4-minimal-api-validation" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="Minimal APIs">Minimal APIs grow up</h2>
+      <p>The endpoint layer gets a set of small but useful pieces that remove custom plumbing from production APIs.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Validation</div>
+          <ul>
+            <li>Async validation for Minimal APIs, building on <code>IAsyncValidatableObject</code>.</li>
+            <li>Validation localization is built in.</li>
+            <li>Validation attributes are no longer experimental.</li>
+            <li>Endpoints can short-circuit via attribute.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">HTTP surface</div>
+          <ul>
+            <li>HTTP QUERY method support.</li>
+            <li>Accurate <code>Retry-After</code> from rate limiting.</li>
+            <li>HTTP/3 starts request processing earlier.</li>
+            <li><code>dotnet user-jwts</code> works for file-based apps.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Why async validation matters</div>
+        <p>Real validation often checks a database, cache or remote policy service. Moving that path into the supported
+        Minimal API validation model is cleaner than hiding asynchronous work behind synchronous attributes.</p>
+      </div>
+
+      <div class="notes">
+        <p>Frame HTTP QUERY carefully: the point is protocol support in the stack, not that every corporate proxy will
+        immediately permit the verb. This is a good place to mention edge-device testing.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m4-mcp-observability" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="MCP and ops">MCP template, tracing and compression</h2>
+      <p>ASP.NET Core 11 also moves some previously specialist concerns into the standard SDK and hosting stack.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">First-party MCP starting point</div>
+          <pre><code class="language-powershell">dotnet new list mcp
+dotnet new mcpserver -n Customer.Tools</code></pre>
+          <p>A Model Context Protocol server template in the .NET SDK is notable because MCP servers are no longer
+          just samples or third-party scaffolds. They become part of the normal <code>dotnet new</code> workflow.</p>
+        </div>
+        <div>
+          <div class="card-kicker">Production plumbing</div>
+          <ul>
+            <li>Native OpenTelemetry tracing for ASP.NET Core.</li>
+            <li>TLS handshake observability in Kestrel.</li>
+            <li>Zstandard response compression and request decompression.</li>
+            <li>Build-time OpenAPI document generation can select its environment.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">Template names are worth checking on the installed SDK</div>
+        <p>The workshop machine has .NET 11 RC 1 in a user-local SDK root. Use <code>dotnet new list mcp</code>
+        in the room rather than relying on memory.</p>
+      </div>
+
+      <div class="notes">
+        <p>Keep the MCP explanation short: a server exposes tools and context to AI clients over a standard protocol.
+        The SDK template matters because it lowers the barrier for internal tool servers.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m4-lab08" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="Lab 08">Lab 08 &mdash; upgrade the API <span class="badge">25 min</span></h2>
+      <p class="slide-lead">This is Day 1's Lab 03 again: the same API, retargeted from <code>net10.0</code> to <code>net11.0</code>.</p>
+
+      <pre><code class="language-powershell">cd labs/Day2/08-AspNet11-Migration/start
+dotnet build</code></pre>
+
+      <p>Your tasks:</p>
+      <ol>
+        <li>Retarget the API project to <code>net11.0</code> and build it with the RC 1 SDK.</li>
+        <li>Generate the OpenAPI document before and after the retarget.</li>
+        <li>Diff the two documents and discover the 3.1 to 3.2 change yourself.</li>
+        <li>Convert one endpoint to return a C# 15 union of result shapes.</li>
+        <li>Add an async validator and watch how the endpoint behaviour changes.</li>
+      </ol>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">Hitting the break by hand is the lab</div>
+        <p>The point is not to memorise OpenAPI 3.2. The point is to see exactly which of your tools notices the
+        new document version, and whether it fails at build time, deployment time or client-generation time.</p>
+      </div>
+
+      <div class="notes">
+        <p>Let people run the diff before explaining the answer. It is more memorable when their own contract test or
+        snapshot assertion fails first.</p>
+      </div>
+
+      <div data-further="day2-m4"></div>
+    </section>
+
+    <section class="slide" id="d2-m5-efcore-overview" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="EF Core 11">EF Core 11 <span class="badge badge-focus">Top interest</span></h2>
+      <p class="slide-lead">This is the highest-interest customer topic. The through-line is simple:
+      EF Core 10 made complex types the value-object direction; EF Core 11 makes that direction much more complete.</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-kicker">Model</div>
+          <p>Complex types now work with more inheritance and provider scenarios, and can participate in keys and indexes.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Queries</div>
+          <p>Better SQL for joins, <code>FullJoin</code>, GroupBy work, no-op cast stripping and <code>MaxBy</code>/<code>MinBy</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Workflow</div>
+          <p>Migrations get several small features that matter because teams run them every week.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Open by connecting to their survey result. This is where to slow down and invite data-layer questions;
+        do not rush to the language material.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m5-complex-types" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Complex types">Complex types become complete</h2>
+      <p>Complex types were introduced as the replacement direction for owned-entity value-object modelling.
+      EF Core 11 is where they start to feel genuinely complete.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">New reach</div>
+          <ul>
+            <li>TPT and TPC inheritance support.</li>
+            <li>Complex types on Cosmos.</li>
+            <li>Lambda chaining configuration.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">The practical unlock</div>
+          <ul>
+            <li>Keys can use complex type properties.</li>
+            <li>Indexes can be defined on complex type properties.</li>
+            <li>Value objects become more useful in real relational models.</li>
+          </ul>
+        </div>
+      </div>
+
+      <pre><code class="language-csharp">modelBuilder.Entity&lt;Customer&gt;()
+    .ComplexProperty(c =&gt; c.Address);
+
+modelBuilder.Entity&lt;Customer&gt;()
+    .HasIndex(c =&gt; c.Address.Postcode);</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Why this changes modelling advice</div>
+        <p>If you avoided complex types because you needed indexes, inheritance support or provider coverage,
+        EF Core 11 removes several of those objections. That does not mean rewrite every owned type tomorrow;
+        it means new value objects should be modelled against the new baseline.</p>
+      </div>
+
+      <div class="notes">
+        <p>The exact fluent API shape should be checked in the lab solution. Use the code as a modelling sketch, not as
+        a promise that every provider supports every combination identically.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m5-query-improvements" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Queries">Query translation keeps getting less surprising</h2>
+      <p>Most EF Core query work is not a new headline API. It is the generated SQL getting closer to what you
+      would have written by hand.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>What changes</th><th>Why you care</th></tr></thead>
+        <tbody>
+          <tr><td>Joins</td><td>Better SQL for to-one joins; <code>FullJoin</code></td><td>Cleaner plans and parity with LINQ's new full outer join shape</td></tr>
+          <tr><td>Grouping</td><td>GroupBy enhancements</td><td>More server-side work, fewer client-side surprises</td></tr>
+          <tr><td>Clean-up</td><td>No-op <code>CAST</code> stripping</td><td>Less noisy SQL, fewer avoidable plan differences</td></tr>
+          <tr><td>Extrema</td><td><code>MaxBy</code> and <code>MinBy</code> translation</td><td>Use the LINQ you meant, not an awkward order-and-first rewrite</td></tr>
+          <tr><td>JSON</td><td><code>EF.Functions.JsonPathExists()</code></td><td>Provider-side JSON predicates where supported</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <pre><code class="language-csharp">var newest = db.Orders
+    .Where(o =&gt; o.CustomerId == customerId)
+    .MaxBy(o =&gt; o.CreatedAt);</code></pre>
+
+      <div class="notes">
+        <p>Use this slide to reinforce a habit: after an EF upgrade, inspect the SQL for important queries.
+        The improvements are often visible before they show up in a benchmark.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m5-sqlserver-walkthrough" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="SQL Server">SQL Server vector, JSON and temporal work</h2>
+      <p>EF Core 11 adds several SQL Server features that are strategically important, even though the hands-on labs
+      stay on SQLite so everyone can run them locally.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Walkthrough, not the runnable lab</div>
+        <p>The vector and JSON-index material needs Azure SQL or SQL Server 2025. Treat this as a guided walkthrough;
+        the lab uses SQLite to keep the room unblocked.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Vector search</div>
+          <ul>
+            <li><code>VECTOR_SEARCH()</code> support.</li>
+            <li>Vector indexes.</li>
+            <li>Vector properties are not loaded by default.</li>
+          </ul>
+          <p>That default is right: embeddings are large and usually only needed for search or scoring paths.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">JSON, text and time</div>
+          <ul>
+            <li>Full-text search improvements.</li>
+            <li><code>JSON_CONTAINS</code> and JSON indexes.</li>
+            <li>Temporal period properties mapped to CLR properties.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Be clear that vector support is not a reason to move a simple app to SQL Server 2025. It is relevant for teams
+        already building retrieval or similarity features in the database.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m5-migrations" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Migrations">Migrations get workflow features</h2>
+      <p>This is not glamorous, but it is the part data teams feel every sprint.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Command flow</div>
+          <ul>
+            <li>Create and apply a migration in a single step.</li>
+            <li>Exclude foreign-key constraints when generating migrations.</li>
+            <li>Use <code>-NoBuild</code> from Package Manager Console.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Project shape</div>
+          <ul>
+            <li>The latest migration ID is recorded in the snapshot.</li>
+            <li>A <code>dotnet ef</code> configuration file can hold defaults.</li>
+            <li>Wildcard context support helps multi-context solutions.</li>
+            <li>SQLite adds ordering in string aggregation and <code>UInt128</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <pre><code class="language-powershell">dotnet new tool-manifest
+dotnet tool install dotnet-ef
+dotnet ef --help</code></pre>
+
+      <div class="callout callout-note">
+        <div class="callout-title">The workshop uses local tools</div>
+        <p><code>dotnet-ef</code> is not installed globally on this machine. Labs pin it through a local tool manifest
+        so Day 1 and Day 2 do not fight over one global version.</p>
+      </div>
+
+      <div class="notes">
+        <p>Do not invent the exact single-step command if the installed EF tool is not available during presentation.
+        The lab should let attendees discover the concrete syntax from the pinned tool version.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m5-lab09" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Lab 09">Lab 09 &mdash; upgrade the data model <span class="badge">25 min</span></h2>
+      <p class="slide-lead">This is Day 1's Lab 04 again, upgraded to EF Core 11 and <code>net11.0</code>.</p>
+
+      <pre><code class="language-powershell">cd labs/Day2/09-EfCore11-Migration/start
+dotnet build
+dotnet tool restore</code></pre>
+
+      <p>Your tasks:</p>
+      <ol>
+        <li>Retarget the project to <code>net11.0</code>.</li>
+        <li>Upgrade the EF Core packages and the local <code>dotnet-ef</code> tool.</li>
+        <li>Put an index on a complex type property.</li>
+        <li>Use the new single-step migration creation-and-application workflow.</li>
+        <li>Try <code>MinBy</code> and <code>MaxBy</code> translation, then inspect the generated SQL.</li>
+      </ol>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The test is the SQL</div>
+        <p>The goal is not just a green build. The goal is to see the model change in a migration and the LINQ change
+        in generated SQL.</p>
+      </div>
+
+      <div class="notes">
+        <p>Pair people who know the domain model with people who know deployment. EF migrations are where those two
+        concerns meet, and the discussion is usually more valuable than the syntax.</p>
+      </div>
+
+      <div data-further="day2-m5"></div>
+    </section>
+
+    <section class="slide" id="d2-m6-outlook-not-features" data-module-title="6 &middot; Outlook">
+      <h2 data-toc="Outlook">.NET 12 outlook: signals, not features <span class="badge badge-preview">Outlook</span></h2>
+      <p class="slide-lead">There is no .NET 12 documentation, no preview and no released feature list today.</p>
+
+      <div class="callout callout-preview">
+        <div class="callout-title">Treat any .NET 12 feature list as speculation</div>
+        <p>Previews are expected to begin in early 2027, with GA expected in November 2027 as the next LTS.
+        This module is planning guidance based on visible direction from .NET 10 and .NET 11, not a promise of .NET 12 features.</p>
+      </div>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Release</th><th>Status today</th><th>Expected role</th></tr></thead>
+        <tbody>
+          <tr><td>.NET 10</td><td>GA, LTS</td><td>Adopt-now baseline, supported to 14 November 2028</td></tr>
+          <tr><td>.NET 11</td><td>Release Candidate 1, STS</td><td>Decision release, 24 months &mdash; also ~November 2028</td></tr>
+          <tr><td>.NET 12</td><td>No public previews or docs</td><td>Expected next LTS in November 2027</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="notes">
+        <p>Say this slowly. The value here is trust. If someone asks for a .NET 12 feature, bring it back to signals
+        and cadence rather than guessing.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m6-direction-signals" data-module-title="6 &middot; Outlook">
+      <h2 data-toc="Signals">Direction of travel from .NET 10 and 11</h2>
+      <p>These are not .NET 12 features. They are the areas where the current releases clearly show unfinished or continuing work.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Language and runtime</div>
+          <ul>
+            <li>Memory safety in C# is explicitly multi-release: C# 15 recognises <code>safe</code>, but it has no effect on callers yet.</li>
+            <li>Unions shipped in C# 15, with parts of the original proposal still not implemented.</li>
+            <li>Runtime-native async is default in .NET 11, and the optimisation space it opens is ongoing.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Data and cadence</div>
+          <ul>
+            <li>Complex types have matured steadily through EF Core 10 and EF Core 11.</li>
+            <li>The LTS/STS cadence remains the planning anchor.</li>
+            <li>.NET 12 is expected to be the next LTS, not the release to plan features against today.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Do not build a roadmap on rumours</div>
+        <p>You can plan for cadence, support windows and migration cost. You cannot responsibly promise a .NET 12 API
+        that has not appeared in public documentation or a preview SDK.</p>
+      </div>
+
+      <div class="notes">
+        <p>This is a good place to ask what decisions they have to make before early 2027. Anything after the first previews
+        can be revisited with real SDKs.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m6-decision-framework" data-module-title="6 &middot; Outlook">
+      <h2 data-toc="Decision">The decision: stay on 10, take 11, or split</h2>
+      <p>This is the real close of the workshop: choose the support model that matches your
+      organisation, not the release with the longest feature list.</p>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">Check your assumption before you decide</div>
+        <p>Most people walk into this decision believing STS buys eighteen months. Since the .NET 9
+        change it buys <strong>24</strong>. Run the dates:</p>
+        <ul>
+          <li>.NET 10 LTS &mdash; ends <strong>14 November 2028</strong></li>
+          <li>.NET 11 STS &mdash; ships November 2026, plus 24 months, ends <strong>~November 2028</strong></li>
+        </ul>
+        <p>That is the same week. <strong>Taking .NET 11 costs you essentially no support runway.</strong>
+        Whichever you pick, your next forced move is late 2028 &mdash; and in both cases the natural
+        destination is .NET 12 LTS.</p>
+      </div>
+
+      <p>So the decision is <em>not</em> about support duration. Strip that out and what remains is
+      the real question: is the upgrade work itself worth doing twice?</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Path</th><th>What it actually costs</th><th>Good fit</th><th>Watch-outs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Stay on .NET 10 LTS</strong></td><td>One upgrade, in 2028. Supported to 14 Nov 2028</td><td>Slow upgrade cycles, long-lived deployments, compliance or validation overhead</td><td>You skip C# 15 and runtime-async until then &mdash; and arrive at .NET 12 having never exercised unions</td></tr>
+          <tr><td><strong>Take .NET 11 STS</strong></td><td><strong>Two</strong> upgrades &mdash; one now, one by late 2028. Same end date</td><td>Teams that already upgrade annually, want unions or closed hierarchies now, or need the runtime-async throughput work</td><td>The cost is the extra upgrade cycle and RC-era churn, not lost support</td></tr>
+          <tr><td><strong>Split the estate</strong></td><td>.NET 11 on the edge, .NET 10 in the core</td><td>New or low-risk services adopt .NET 11 while the critical estate stays put</td><td>Needs clear standards so shared libraries and tooling do not drift accidentally</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The middle path is often the right path</div>
+        <p>Use .NET 11 in new or low-risk services to build experience, while keeping the long-lived
+        estate on .NET 10 LTS. That gives you evidence before the .NET 12 LTS decision &mdash; which
+        is the decision that actually matters, because .NET 12 is where both paths converge.</p>
+      </div>
+
+      <div class="notes">
+        <p>This is the slide to spend time on if the schedule is tight. The customer can read feature
+        lists later; they need the decision model now.</p>
+        <p>The 24-month correction usually changes the conversation in the room. Teams that arrived
+        certain they were "LTS only" discover their policy was built on support arithmetic that no
+        longer holds &mdash; the honest reframing is that "LTS only" is now a statement about
+        appetite for upgrade cycles, not about support runway. Let them sit with that rather than
+        pushing a recommendation.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d2-m6-next-30-days" data-module-title="6 &middot; Outlook">
+      <h2 data-toc="Next 30 days">What to do in the next 30 days</h2>
+      <p>Turn the workshop into evidence while it is still fresh.</p>
+
+      <ol>
+        <li>Verify hardware baselines against .NET 11's raised minimum requirements.</li>
+        <li>Check whether your OpenAPI client generators, gateways and contract tests accept OpenAPI 3.2.</li>
+        <li>Audit for the C# 14 <code>field</code> breaking change before turning on the new compiler.</li>
+        <li>If you are still on .NET 8 or .NET 9, run the .NET 10 upgrade path first.</li>
+        <li>Pick one low-risk service as a .NET 11 RC rehearsal, and one LTS service to leave deliberately on .NET 10.</li>
+      </ol>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Two-day recap</div>
+        <p>Day 1 gave you the .NET 10 LTS baseline: C# 14, libraries, ASP.NET Core and EF Core.
+        Day 2 showed the .NET 11 RC decision: C# 15, runtime and libraries, ASP.NET Core, EF Core, and the .NET 12 planning horizon.
+        Labs live under <code>labs/</code>; vetted sources are filled into each module by the further-reading pipeline.</p>
+      </div>
+
+      <div class="notes">
+        <p>Close by asking each table to name one thing they will test in their own pipeline this month. Keep it concrete:
+        SDK install, OpenAPI import, EF migration, or language audit.</p>
+      </div>
+
+      <div data-further="day2-m6"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="deck-nav">
+  <button class="btn" data-action="prev" type="button">&larr; Prev</button>
+  <span class="pos"></span>
+  <button class="btn" data-action="next" type="button">Next &rarr;</button>
+  <span class="where"></span>
+</div>
+
+<script src="assets/sources.js"></script>
+<script src="assets/workshop.js"></script>
+</body>
+</html>

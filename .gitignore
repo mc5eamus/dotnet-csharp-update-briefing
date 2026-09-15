@@ -1,0 +1,25 @@
+## .NET build output
+bin/
+obj/
+*.user
+.vs/
+.idea/
+
+## Local scratch / probes (not part of the deliverable)
+.scratch/
+
+## Generated single-file pages
+dist/
+
+## Lab databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+## Fetched copies of third-party articles.
+## Kept local for offline vetting only - not redistributed, since the
+## material is copyrighted. The curated registry in sources.json IS tracked.
+content/cache/
+
+*/node_modules/

@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1 &mdash; .NET 10 &amp; C# 14</title>
+<meta name="description" content="Day 1 of the What's New in .NET workshop: .NET 10 and C# 14 — release strategy, language features, libraries, ASP.NET Core and EF Core.">
+<link rel="stylesheet" href="assets/workshop.css">
+</head>
+<body class="mode-handout">
+
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="dot"></span> What's New in .NET <small>&mdash; Day 1</small></a>
+  <nav class="navlinks">
+    <a href="index.html">Overview</a>
+    <a href="day1.html" aria-current="page">Day 1</a>
+    <a href="day2.html">Day 2</a>
+    <a href="sources.html">Sources</a>
+  </nav>
+  <button class="btn" data-action="notes" type="button" aria-pressed="false">Notes</button>
+  <button class="btn" data-action="mode" type="button" aria-pressed="false">Present</button>
+  <button class="btn" data-action="theme" type="button">Light</button>
+</header>
+
+<div class="layout">
+  <nav class="toc" data-title="Day 1"></nav>
+
+  <main class="deck">
+
+    <!-- ===================================================================
+         MODULE 1 — Orientation & release strategy (35 min)
+         =================================================================== -->
+
+    <section class="slide" id="d1-intro" data-module-title="1 &middot; Orientation">
+      <h2 data-toc="Day 1 overview">.NET 10 &amp; C# 14 <span class="badge badge-net10">LTS</span></h2>
+      <p class="slide-lead">Everything today is generally available, supported until November 2028,
+      and safe to put into production. The only real question is sequencing.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">What you'll leave with</div>
+          <ul>
+            <li>A concrete upgrade order for your own codebase</li>
+            <li>Working code for every feature that matters to you</li>
+            <li>An API and a data model that you migrate to .NET 11 tomorrow</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Shaped by your survey</div>
+          <p>Weighted towards <strong>EF Core</strong>, <strong>ASP.NET Core</strong> and the
+          <strong>.NET libraries</strong>. No MAUI, no Blazor, no F#/VB.NET.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Open by asking the room which .NET version they're on today. The answer changes how you
+        pitch the rest of the day: a room still on .NET 8 or .NET 9 has roughly eight weeks of
+        support left and needs an urgent plan, not a feature tour.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-cadence" data-module-title="1 &middot; Orientation">
+      <h2 data-toc="Cadence &amp; support">The cadence, and why it decides your upgrade plan</h2>
+      <p>.NET ships every November, alternating between long-term and standard-term support.
+      That alternation &mdash; not the feature list &mdash; is what drives most upgrade decisions.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Release</th><th>Shipped</th><th>Track</th><th>Support ends</th><th>Where you stand</th></tr></thead>
+        <tbody>
+          <tr><td>.NET 8</td><td>Nov 2023</td><td><span class="badge badge-net10">LTS</span></td><td><strong>10 Nov 2026</strong></td><td>Maintenance &mdash; weeks left</td></tr>
+          <tr><td>.NET 9</td><td>Nov 2024</td><td>STS</td><td><strong>10 Nov 2026</strong></td><td>Maintenance &mdash; weeks left</td></tr>
+          <tr><td>.NET 10</td><td>Nov 2025</td><td><span class="badge badge-net10">LTS</span></td><td>14 Nov 2028</td><td>Today's target</td></tr>
+          <tr><td>.NET 11</td><td>Nov 2026 (expected)</td><td><span class="badge badge-net11">STS</span></td><td>~Nov 2028</td><td>Tomorrow's decision</td></tr>
+          <tr><td>.NET 12</td><td>Nov 2027 (expected)</td><td>LTS</td><td>&mdash;</td><td>No previews yet</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">STS is 24 months now, not 18 &mdash; and it changes the arithmetic</div>
+        <p>Microsoft extended STS support from 18 to 24 months, effective from .NET 9. STS releases
+        now get <strong>12 months past their successor</strong>, the same as LTS.</p>
+        <p>Two consequences most people have not caught up with:</p>
+        <ul>
+          <li><strong>.NET 9 did not expire in May 2026.</strong> It runs to 10 November 2026 &mdash;
+          the very same day as .NET 8. If you assumed you were already unsupported, you are not.</li>
+          <li><strong>.NET 8 and .NET 9 now die together</strong>, in about eight weeks. Whichever
+          of the two you are on, the deadline is identical and it is close.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The practical reading</div>
+        <p>If you are on .NET 8 <em>or</em> .NET 9, you have until 10 November 2026, and .NET 10 is
+        the obvious destination &mdash; it is GA, LTS and supported for three more years.</p>
+        <p>The interesting part is what this does to tomorrow's decision. .NET 10 LTS ends
+        <strong>14 November 2028</strong>. .NET 11 STS, shipping November 2026 with 24 months, ends
+        <strong>around November 2028</strong>. Those are the same week. The old reflex of
+        "take LTS because it is supported longer" no longer describes reality.</p>
+      </div>
+
+      <div class="notes">
+        <p>Worth being explicit: STS releases are not "beta" or lower quality. They carry the same
+        production-support commitment. Since the 24-month change they carry very nearly the same
+        <em>window</em> too.</p>
+        <p>Expect pushback here &mdash; plenty of people in the room will "know" that STS is 18
+        months, because it was until the .NET 9 announcement. The sources page links the
+        announcement; it is worth showing if challenged. This correction sets up the Day 2 decision
+        slide, so do not rush it.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-upgrade" data-module-title="1 &middot; Orientation">
+      <h2 data-toc="Upgrade path">Getting to .NET 10</h2>
+      <p>Retargeting is usually a one-line change. The work is in what surfaces afterwards.</p>
+
+      <pre><code class="language-xml">&lt;PropertyGroup&gt;
+  &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
+  &lt;!-- C# 14 is the default for net10.0; you do not need to set LangVersion. --&gt;
+&lt;/PropertyGroup&gt;</code></pre>
+
+      <p>A pragmatic order that keeps each step independently revertible:</p>
+      <ol>
+        <li><strong>Retarget and build.</strong> Fix only what breaks compilation.</li>
+        <li><strong>Run your test suite</strong> before adopting a single new language feature.
+        Keep the "did the runtime change break us?" question separate from "did our refactor break us?"</li>
+        <li><strong>Update packages</strong> &mdash; especially EF Core, which must match the major version.</li>
+        <li><strong>Then</strong> adopt C# 14 features, where they earn their place.</li>
+      </ol>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">EF Core versions are not optional</div>
+        <p>EF Core 10 requires .NET 10. Mixing an EF Core 9 package into a <code>net10.0</code>
+        app usually works but leaves you without this release's query-translation fixes &mdash; and
+        it silently blocks tomorrow's EF Core 11 migration lab. Upgrade the package with the TFM.</p>
+      </div>
+
+      <h3>Tooling that helps</h3>
+      <ul>
+        <li><code>dotnet-upgrade-assistant</code> &mdash; automates retargeting and flags API removals.</li>
+        <li><code>dotnet list package --outdated</code> &mdash; the fastest way to find package drift.</li>
+        <li><code>dotnet list package --vulnerable --include-transitive</code> &mdash; run this
+        anyway; upgrades are a good moment to clear known CVEs.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="d1-filebased" data-module-title="1 &middot; Orientation">
+      <h2 data-toc="File-based apps">File-based apps: C# without a project</h2>
+      <p>.NET 10 lets you run a single <code>.cs</code> file directly. No <code>.csproj</code>,
+      no <code>obj/</code>, no scaffolding.</p>
+
+      <pre><code class="language-powershell">dotnet run hello.cs</code></pre>
+
+      <p>Dependencies and settings come from <code>#:</code> directives at the top of the file:</p>
+
+      <pre><code class="language-csharp">#:package Humanizer@2.14.1
+#:property LangVersion=preview
+
+using Humanizer;
+
+var span = TimeSpan.FromMinutes(1234);
+Console.WriteLine(span.Humanize(precision: 2));</code></pre>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Why this matters beyond demos</div>
+        <p>It removes the friction from the things people currently do badly: build scripts,
+        one-off data fixes, reproducible bug reports. A colleague can now send you a single file
+        that actually runs. When a file-based app outgrows itself, <code>dotnet project convert</code>
+        turns it into a normal project.</p>
+      </div>
+
+      <div class="notes">
+        <p>Good live demo: write a five-line file in front of the room and run it. Then add a
+        <code>#:package</code> directive and run it again to show restore happening transparently.
+        It lands better than any slide about it.</p>
+      </div>
+
+      <div data-further="day1-m1"></div>
+    </section>
+
+    <!-- ===================================================================
+         MODULE 2 — C# 14 (70 min)
+         =================================================================== -->
+
+    <section class="slide" id="d1-cs14-overview" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="C# 14 overview">C# 14 <span class="badge badge-cs14">C# 14</span></h2>
+      <p class="slide-lead">Nine features. One of them &mdash; extension members &mdash; is the
+      largest change to the language in years. Most of the rest remove boilerplate you stopped
+      noticing.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>What it replaces</th><th>Worth adopting</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Extension members</strong></td><td>Static helper classes</td><td>Yes &mdash; high impact</td></tr>
+          <tr><td><strong><code>field</code> keyword</strong></td><td>Manual backing fields</td><td>Yes &mdash; immediately</td></tr>
+          <tr><td>Null-conditional assignment</td><td><code>if (x is not null) x.P = …</code></td><td>Yes &mdash; free</td></tr>
+          <tr><td>First-class span conversions</td><td>Manual <code>.AsSpan()</code> calls</td><td>Mostly automatic</td></tr>
+          <tr><td>User-defined compound assignment</td><td><code>x = x + y</code> allocations</td><td>Only in hot paths</td></tr>
+          <tr><td>Lambda parameter modifiers</td><td>Explicit parameter types</td><td>Nice to have</td></tr>
+          <tr><td><code>partial</code> events &amp; constructors</td><td>Source-generator workarounds</td><td>If you write generators</td></tr>
+          <tr><td><code>nameof</code> on unbound generics</td><td>String literals</td><td>Niche but free</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-cs14-extension" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="Extension members">Extension members <span class="badge badge-cs14">C# 14</span></h2>
+      <p>Extension <em>methods</em> have existed since C# 3. C# 14 generalises the idea: an
+      <code>extension</code> block declares a receiver once, and can then contain properties,
+      static members and operators &mdash; not just instance methods.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Before &mdash; C# 13</div>
+          <pre><code class="language-csharp">public static class SeqExtensions
+{
+    public static bool IsEmpty&lt;T&gt;(
+        this IEnumerable&lt;T&gt; source)
+        =&gt; !source.Any();
+
+    // No way to express a property.
+    // No way to express a static member
+    // "on" IEnumerable&lt;T&gt;.
+}</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">After &mdash; C# 14</div>
+          <pre><code class="language-csharp">public static class SeqExtensions
+{
+    extension&lt;T&gt;(IEnumerable&lt;T&gt; source)
+    {
+        // extension property
+        public bool IsEmpty =&gt; !source.Any();
+
+        public int CountFast =&gt; source is ICollection&lt;T&gt; c
+            ? c.Count
+            : source.Count();
+    }
+
+    extension&lt;T&gt;(IEnumerable&lt;T&gt;)
+    {
+        // static extension member
+        public static IEnumerable&lt;T&gt; Empty =&gt; [];
+    }
+}</code></pre>
+        </div>
+      </div>
+
+      <p>The receiver parameter is named once and shared by every member in the block, which is
+      what makes properties possible &mdash; there is no <code>this</code> parameter to hang them on.</p>
+
+      <pre><code class="language-csharp">List&lt;int&gt; numbers = [1, 2, 3];
+
+if (!numbers.IsEmpty)              // extension property
+    Console.WriteLine(numbers.CountFast);
+
+var nothing = IEnumerable&lt;int&gt;.Empty;   // static extension member</code></pre>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Note the second block has no parameter name</div>
+        <p><code>extension&lt;T&gt;(IEnumerable&lt;T&gt;)</code> &mdash; type only, no identifier.
+        That is how you declare <em>static</em> extension members: there is no instance to receive.
+        Getting this wrong is the most common early mistake.</p>
+      </div>
+
+      <div class="notes">
+        <p>The honest framing: this is not "extension methods, but shorter". It changes what you can
+        model. Anywhere your codebase has a <code>FooHelpers</code> or <code>FooUtils</code> static
+        class, extension members probably express it better. Lab 01 is exactly that refactor.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-cs14-operators" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="Extension operators">Extension operators &amp; compound assignment</h2>
+      <p>Extension blocks can define user-defined operators &mdash; so you can add operator support
+      to a type you don't own. The receiver is <strong>unnamed</strong>, because the operator
+      declares its own parameters:</p>
+
+      <pre><code class="language-csharp">public static class VecExtensions
+{
+    extension(Vec)                      // &lt;- no parameter name here
+    {
+        public static Vec operator +(Vec left, Pt right)
+            =&gt; new(left.X + right.X, left.Y + right.Y);
+    }
+}</code></pre>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">Naming the receiver is a compile error</div>
+        <p>Write <code>extension(Vec left)</code> around a <code>static operator +(Vec left, …)</code>
+        and you get <strong>CS9290</strong>: <em>'left': a parameter, local variable, or local function
+        cannot have the same name as an extension parameter</em>. The operator's own parameters and the
+        extension receiver share one scope. Use the unnamed form for operators.</p>
+      </div>
+
+      <p>Separately, C# 14 lets a type implement compound assignment operators
+      <em>directly</em>, instead of synthesising them from the binary operator. Note the shape:
+      an <strong>instance</strong> member, no left-hand parameter, returning <code>void</code>:</p>
+
+      <pre><code class="language-csharp">public struct Accumulator
+{
+    private long _total;
+
+    // C# 13: only `operator +` — every `+=` allocated a new value.
+    // C# 14: mutate in place.
+    public void operator +=(long amount) =&gt; _total += amount;
+}</code></pre>
+
+      <p>The two features combine. A <code>ref</code> receiver gives you an in-place compound
+      assignment operator for a type you don't own:</p>
+
+      <pre><code class="language-csharp">extension(ref Vec target)
+{
+    public void operator +=(Pt right)
+    {
+        target.X += right.X;
+        target.Y += right.Y;
+    }
+}</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">When this actually pays</div>
+        <p>For large structs and accumulator types in hot loops, in-place compound assignment
+        removes a copy per operation. For everything else the compiler-synthesised version is fine
+        &mdash; this is a performance tool, not a style preference.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-cs14-field" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="The field keyword">The <code>field</code> keyword <span class="badge badge-cs14">C# 14</span></h2>
+      <p>The single highest-frequency change in this release. You can now write property logic
+      without declaring the backing field.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Before</div>
+          <pre><code class="language-csharp">private string _message = string.Empty;
+
+public string Message
+{
+    get =&gt; _message;
+    set =&gt; _message =
+        value?.Trim() ?? string.Empty;
+}</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">After</div>
+          <pre><code class="language-csharp">public string Message
+{
+    get;
+    set =&gt; field =
+        value?.Trim() ?? string.Empty;
+}</code></pre>
+        </div>
+      </div>
+
+      <p>Note that <code>get;</code> stays auto-implemented while <code>set</code> is custom. That
+      combination was impossible before &mdash; declaring either accessor by hand forced you to
+      declare both, plus the field.</p>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">Breaking change: existing symbols named <code>field</code></div>
+        <p>Inside a property accessor, <code>field</code> now binds to the backing field rather
+        than to any variable, parameter or member of that name. If you have a class member called
+        <code>field</code>, disambiguate:</p>
+        <pre><code class="language-csharp">public string Name
+{
+    get =&gt; this.field;   // the member named 'field'
+    set =&gt; @field = value; // also the member, via escaping
+}</code></pre>
+        <p>This is rare but silent when it happens, so grep for it before upgrading:
+        <code>\bfield\b</code> inside property bodies.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask the room to guess how many backing fields exist in their main solution. The answer is
+        usually "thousands", and most are pure ceremony. This feature alone often justifies the
+        language upgrade to a sceptical tech lead.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-cs14-null" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="Null-conditional assignment">Null-conditional assignment &amp; smaller wins</h2>
+
+      <h3>Null-conditional assignment</h3>
+      <p><code>?.</code> now works on the left-hand side of an assignment:</p>
+
+      <pre><code class="language-csharp">// Before
+if (customer is not null)
+    customer.Order = GetCurrentOrder();
+
+// C# 14
+customer?.Order = GetCurrentOrder();</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The right-hand side is not evaluated when the target is null</div>
+        <p>If <code>customer</code> is null, <code>GetCurrentOrder()</code> never runs. That is the
+        behaviour you want, but it does mean the expression can have observably different side
+        effects from the <code>if</code> form you replaced &mdash; worth a glance if the RHS mutates state.</p>
+      </div>
+      <p>Increment and decrement are <em>not</em> supported: <code>customer?.Count++</code> does not compile.</p>
+
+      <h3>Lambda parameter modifiers</h3>
+      <p>You can now use <code>ref</code>, <code>in</code>, <code>out</code> and <code>scoped</code>
+      without spelling out the parameter types:</p>
+      <pre><code class="language-csharp">// Before: types were mandatory once you needed a modifier.
+TryParse&lt;int&gt; parse = (string text, out int result) =&gt; int.TryParse(text, out result);
+
+// C# 14
+TryParse&lt;int&gt; parse = (text, out result) =&gt; int.TryParse(text, out result);</code></pre>
+
+      <h3><code>nameof</code> on unbound generics</h3>
+      <pre><code class="language-csharp">string name = nameof(List&lt;&gt;);   // "List"</code></pre>
+
+      <h3><code>partial</code> events and constructors</h3>
+      <p>Partial members now extend to events and constructors, closing a long-standing gap for
+      source generators: a generator can supply the implementation while your file declares the shape.</p>
+    </section>
+
+    <section class="slide" id="d1-cs14-spans" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="First-class spans">First-class span conversions</h2>
+      <p>The compiler now recognises implicit conversions between arrays,
+      <code>Span&lt;T&gt;</code> and <code>ReadOnlySpan&lt;T&gt;</code> as first-class conversions,
+      which means overload resolution finally picks the span overload you expected.</p>
+
+      <pre><code class="language-csharp">void Process(ReadOnlySpan&lt;int&gt; values) { }
+
+int[] numbers = [1, 2, 3];
+Process(numbers);         // implicit array -&gt; ReadOnlySpan&lt;int&gt;
+
+Span&lt;int&gt; span = numbers;
+Process(span);            // implicit Span&lt;T&gt; -&gt; ReadOnlySpan&lt;T&gt;</code></pre>
+
+      <p>Extension methods participate too, so <code>numbers.SomeSpanExtension()</code> now
+      resolves without an explicit <code>.AsSpan()</code>.</p>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">This can change which overload you bind to</div>
+        <p>If you have both <code>Process(int[])</code> and <code>Process(ReadOnlySpan&lt;int&gt;)</code>,
+        recompiling under C# 14 may select a different one than before. Usually that is an
+        improvement &mdash; fewer allocations &mdash; but if the two overloads behave differently,
+        it is a silent behavioural change. Worth checking in any library that offers both shapes.</p>
+      </div>
+
+      <div data-further="day1-m2"></div>
+    </section>
+
+    <section class="slide" id="d1-lab01" data-module-title="2 &middot; C# 14">
+      <h2 data-toc="Lab 01">Lab 01 &mdash; C# 14 in anger <span class="badge">30 min</span></h2>
+      <p class="slide-lead">Take a deliberately old-fashioned type and modernise it.</p>
+
+      <pre><code class="language-powershell">cd labs/Day1/01-CSharp14/start
+dotnet run</code></pre>
+
+      <p>You are given a small order-processing library written in C# 7 style. Your tasks:</p>
+      <ol>
+        <li>Replace every manual backing field with the <code>field</code> keyword.</li>
+        <li>Convert the <code>OrderHelpers</code> static class into an <code>extension</code> block,
+        turning at least two of its methods into extension <em>properties</em>.</li>
+        <li>Add a static extension member that returns an empty order.</li>
+        <li>Find the three places that can use null-conditional assignment.</li>
+        <li>Make the <code>Money</code> struct support in-place <code>+=</code>.</li>
+      </ol>
+
+      <p>The solution is in <code>labs/Day1/01-CSharp14/solution</code>. Tests in the
+      <code>start</code> project must keep passing throughout &mdash; that's the point.</p>
+
+      <div class="notes">
+        <p>Attendees who finish early: point them at the breaking change. The starter code contains
+        a member named <code>field</code> that compiles cleanly in C# 13 and changes meaning under
+        C# 14. Nobody spots it unless prompted.</p>
+      </div>
+    </section>
+
+  
+    <section class="slide" id="d1-libraries-overview" data-module-title="3 &middot; Libraries">
+      <h2 data-toc=".NET 10 libraries">.NET 10 libraries <span class="badge badge-net10">.NET 10</span></h2>
+      <p class="slide-lead">This is the release where the base class library catches several
+      problems that used to require specialist packages or defensive local conventions.</p>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-kicker">Crypto</div>
+          <p>Post-quantum algorithms are the headline: ML-KEM for key encapsulation,
+          ML-DSA for signatures, SLH-DSA for stateless hash-based signatures and composite
+          ML-DSA for migration paths.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">JSON</div>
+          <p><code>System.Text.Json</code> gains source-generated reference handling,
+          duplicate-property rejection, stricter option defaults and better pipeline support.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Everyday APIs</div>
+          <p>Async ZIP APIs, better ordered dictionaries, numeric-aware string ordering,
+          <code>WebSocketStream</code> and diagnostics improvements round out the module.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The theme is defensive modernisation</div>
+        <p>The most valuable changes here are not syntax. They remove places where teams have
+        historically relied on "we always remember to do this safely" conventions.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask which topic brought people to this module: crypto, JSON hardening or "what do we
+        get for free by retargeting?" Use that answer to decide how much time to spend on the
+        grab-bag slide. PQC and JSON deserve the time even if only one person raises a hand.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-pqc-why-now" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="PQC: why now">Post-quantum crypto is now an application concern</h2>
+      <p>PQC matters before quantum computers are practical at scale because of
+      <strong>harvest now, decrypt later</strong>: an attacker can store encrypted traffic today
+      and wait for cryptanalysis that makes old key exchange unsafe.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>API</th><th>Standard</th><th>Use it for</th><th>Teaching point</th></tr></thead>
+        <tbody>
+          <tr><td><code>MLKem</code></td><td>FIPS 203</td><td>Key encapsulation</td><td>Stable; key formats experimental</td></tr>
+          <tr><td><code>MLDsa</code></td><td>FIPS 204</td><td>Digital signatures</td><td>Stable; key formats experimental</td></tr>
+          <tr><td><code>SlhDsa</code></td><td>FIPS 205</td><td>Stateless hash signatures</td><td>Support varies</td></tr>
+          <tr><td><code>CompositeMLDsa</code></td><td>Composite migration</td><td>Hybrid-style signatures</td><td>Experimental warning</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">This is not "replace TLS tomorrow"</div>
+        <p>The practical move is inventory and controlled adoption: know where long-lived secrets
+        exist, gate algorithm use at runtime, and avoid hard-coding assumptions about platform
+        support.</p>
+      </div>
+
+      <div class="notes">
+        <p>Keep this calm. The room needs to understand why the topic matters without turning the
+        workshop into a crypto scare story. For most application teams the first action is
+        capability detection and migration planning, not rewriting every protocol.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-pqc-api-shape" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="PQC API shape">The PQC APIs deliberately do not look like RSA</h2>
+      <p>The new types do <strong>not</strong> derive from <code>AsymmetricAlgorithm</code>.
+      They use static generate and import factory methods, and every real application must gate
+      on <code>IsSupported</code>.</p>
+
+      <pre><code class="language-csharp">using System.Security.Cryptography;
+
+if (!MLKem.IsSupported)
+{
+    throw new PlatformNotSupportedException("ML-KEM is not available here.");
+}
+
+// Recipient generates a key pair and publishes the encapsulation (public) key.
+using MLKem recipient = MLKem.GenerateKey(MLKemAlgorithm.MLKem768);
+byte[] publicKey = recipient.ExportEncapsulationKey();
+
+// Sender uses it to agree a shared secret and produce a ciphertext.
+using MLKem sender = MLKem.ImportEncapsulationKey(MLKemAlgorithm.MLKem768, publicKey);
+sender.Encapsulate(out byte[] ciphertext, out byte[] senderSecret);
+
+// Recipient recovers the same secret from the ciphertext alone.
+byte[] recipientSecret = recipient.Decapsulate(ciphertext);
+// senderSecret and recipientSecret are now identical.</code></pre>
+
+      <p>Note the shape: there is no <code>Encrypt</code>/<code>Decrypt</code> pair. ML-KEM is a
+      <em>key encapsulation mechanism</em> &mdash; it agrees a symmetric secret, which you then use
+      with AES. Signing is a separate type:</p>
+
+      <pre><code class="language-csharp">using MLDsa signer = MLDsa.GenerateKey(MLDsaAlgorithm.MLDsa65);
+
+byte[] data = Encoding.UTF8.GetBytes("invoice-4471");
+byte[] signature = signer.SignData(data);          // 3309 bytes for ML-DSA-65
+
+bool ok = signer.VerifyData(data, signature);
+
+// Verification only needs the public key. Note the ML-DSA-specific export:
+// the *standard* SPKI/PKCS#8 formats are still experimental here. See below.
+byte[] publicKey = signer.ExportMLDsaPublicKey();
+using MLDsa verifier = MLDsa.ImportMLDsaPublicKey(MLDsaAlgorithm.MLDsa65, publicKey);
+bool alsoOk = verifier.VerifyData(data, signature);</code></pre>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Why no AsymmetricAlgorithm base?</div>
+          <p>Key encapsulation and modern PQC signatures do not map cleanly onto the old
+          encrypt/decrypt/sign/verify base-class shape. The explicit APIs make misuse harder.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">What code must do</div>
+          <ul>
+            <li>Check <code>IsSupported</code> before offering the algorithm.</li>
+            <li>Expect OpenSSL 3.5+ or Windows CNG with PQC support.</li>
+            <li>Suppress <code>SYSLIB5006</code> around key serialisation and the
+            experimental algorithms.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">The real experimental boundary is per-member, not per-type</div>
+        <p>The usual summary &mdash; "ML-KEM and ML-DSA are stable, SLH-DSA is not" &mdash; is only
+        half the story, and the half it misses is the half that will stop your build. We enumerated
+        <code>ExperimentalAttribute</code> by reflection on .NET 10.0.12:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Type-level</th><th>Stable members</th><th>Experimental members</th></tr></thead>
+            <tbody>
+              <tr><td><code>MLKem</code></td><td>stable</td><td>12</td><td>14</td></tr>
+              <tr><td><code>MLDsa</code></td><td>stable</td><td>12</td><td>18</td></tr>
+              <tr><td><code>SlhDsa</code></td><td><strong>experimental</strong></td><td colspan="2">whole type</td></tr>
+              <tr><td><code>CompositeMLDsa</code></td><td><strong>experimental</strong></td><td colspan="2">whole type</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The split inside <code>MLKem</code> and <code>MLDsa</code> is completely consistent:</p>
+        <ul>
+          <li><strong>Stable</strong> &mdash; the cryptography itself, plus the algorithm-specific raw
+          key formats: <code>GenerateKey</code>, <code>SignData</code>, <code>VerifyData</code>,
+          <code>Encapsulate</code>, <code>Decapsulate</code>,
+          <code>ExportMLDsaPublicKey</code>, <code>ImportMLKemEncapsulationKey</code>, and friends.</li>
+          <li><strong>Experimental</strong> &mdash; <em>every standard key-interchange format</em>:
+          <code>ExportSubjectPublicKeyInfo</code>, <code>ImportSubjectPublicKeyInfo</code>,
+          all the <code>Pkcs8</code> variants, and everything <code>...Pem</code>.</li>
+        </ul>
+        <p>So: <strong>you can do post-quantum crypto today, but you cannot yet persist or
+        interchange the keys</strong> without opting in to an unstable API. For a migration project
+        that is the single most important fact on this slide &mdash; key storage and distribution is
+        exactly where you were going to integrate.</p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">SYSLIB5006 is an error, not a warning</div>
+        <p>It stops the build outright, so the suppression has to be deliberate. Keep it narrow
+        &mdash; wrap the serialisation call, not the file:</p>
+      </div>
+
+      <pre><code class="language-csharp">#pragma warning disable SYSLIB5006   // Standard key formats are still evaluation-only.
+byte[] spki = signer.ExportSubjectPublicKeyInfo();
+using MLDsa verifier = MLDsa.ImportSubjectPublicKeyInfo(spki);
+#pragma warning restore SYSLIB5006</code></pre>
+
+      <p>The workshop machine is current Windows 11 25H2 running .NET 10. Two algorithms are
+      available through the platform provider. One is not:</p>
+
+      <pre><code class="language-output">MLKem.IsSupported          : True
+MLDsa.IsSupported          : True
+SlhDsa.IsSupported         : False     &lt;-- not available via Windows CNG on this build
+CompositeMLDsa.IsSupported : True
+
+ML-KEM-768   public key 1184 bytes, ciphertext 1088 bytes, shared secret 32 bytes, match=True
+ML-DSA-65    signature 3309 bytes, verify=True, tampered=False</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Look at those sizes before you design a protocol</div>
+        <p>A 3309-byte signature is roughly 13&times; an RSA-2048 signature, and the ML-KEM public
+        key is 1184 bytes. That is the real cost of post-quantum security, and it lands on anything
+        with a size budget &mdash; certificates, tokens, QR codes, embedded payloads, TLS handshakes.
+        Measure before you commit.</p>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title"><code>IsSupported</code> changes the control flow today</div>
+        <p>This is not a future portability nicety. On this machine ML-KEM and ML-DSA work, while
+        SLH-DSA does not. Lab 02 is built around the two working paths and uses SLH-DSA as the
+        visible reason to gate.</p>
+      </div>
+
+      <div class="notes">
+        <p>Do not invent method names live if you cannot remember the exact overloads. The lab
+        gives attendees compilable code. Run the support probe live if the room is interested:
+        different attendee results are a feature of the demo, not a failure.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-json-hardening" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="JSON hardening"><code>System.Text.Json</code>: less trust in input</h2>
+      <p>.NET 10 continues the shift from "fast serializer" to "safe boundary component". The
+      most important change for service teams is duplicate-property rejection.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">The attack shape</div>
+          <pre><code class="language-json">{
+  "role": "user",
+  "role": "admin"
+}</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">The defensive posture</div>
+          <pre><code class="language-csharp">var options = new JsonSerializerOptions
+{
+    AllowDuplicateProperties = false,
+    RespectNullableAnnotations = true,
+    RespectRequiredConstructorParameters = true
+};</code></pre>
+        </div>
+      </div>
+
+      <p>Duplicate properties are a real security hardening win because different parsers,
+      gateways, loggers and application code may disagree about which value "wins". That parser
+      differential is exactly what JSON injection attacks exploit.</p>
+
+      <ul>
+        <li><code>ReferenceHandler</code> can now be set from <code>JsonSourceGenerationOptions</code>.</li>
+        <li>Strict serialization options make missing required data and nullable mismatches fail earlier.</li>
+        <li><code>PipeReader</code> support reduces copying when JSON arrives from pipelines.</li>
+      </ul>
+
+      <div class="notes">
+        <p>Ask whether their API gateway, body logger and application deserializer are the same
+        parser. They usually are not. That is the point: duplicate rejection belongs at the
+        boundary before business logic has to reason about ambiguous input.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-library-grab-bag" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="More libraries">The smaller library changes you will actually use</h2>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">More crypto hygiene</div>
+          <ul>
+            <li>AES KeyWrap with Padding, matching RFC 5649.</li>
+            <li>PKCS#12/PFX export algorithm control.</li>
+            <li>Certificate lookup by non-SHA-1 thumbprints.</li>
+            <li>PEM discovery over ASCII and UTF-8 data.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Runtime-library polish</div>
+          <ul>
+            <li>Async ZIP APIs and ZIP performance/memory improvements.</li>
+            <li><code>OrderedDictionary&lt;K,V&gt;</code> adds <code>TryAdd</code> and <code>TryGetValue</code>.</li>
+            <li>Numeric-aware string ordering for "file2" before "file10" style sorting.</li>
+            <li><code>WebSocketStream</code> for stream-shaped WebSocket handling.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>Diagnostics also move forward: telemetry schema URLs, out-of-process Activity events
+      and links, and rate-limit sampling are all aimed at making production traces easier to
+      interpret rather than merely more verbose.</p>
+
+      <div class="notes">
+        <p>Do not let this become a catalogue reading. Pick one example that matches the room:
+        archives for back-office systems, certificate lookup for platform teams, or numeric sort
+        for anyone who has shipped "item10 before item2" bugs.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-lab02" data-module-title="3 &middot; Libraries">
+      <h2 data-toc="Lab 02">Lab 02 &mdash; PQC and JSON hardening <span class="badge">30 min</span></h2>
+      <p class="slide-lead">Use the new APIs as boundary code: capability-gated crypto first,
+      then a stricter JSON input path.</p>
+
+      <pre><code class="language-powershell">cd labs/Day1/02-Libraries-Pqc-Json/start
+dotnet run</code></pre>
+
+      <ol>
+        <li>Gate PQC features with <code>IsSupported</code> and print the local support matrix.</li>
+        <li>Generate an ML-KEM key pair, encapsulate a shared secret and decapsulate it.</li>
+        <li>Sign and verify a payload with ML-DSA, then prove a tampered payload fails.</li>
+        <li>Harden a JSON deserializer with strict options and duplicate-property rejection.</li>
+      </ol>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Expected surprise</div>
+        <p>On this machine SLH-DSA reports unsupported. Do not "fix" that in the lab. The
+        unsupported branch is the lesson.</p>
+      </div>
+
+      <div class="notes">
+        <p>Keep the crypto code small. The goal is not to teach cryptographic protocol design; it
+        is to teach how the .NET 10 APIs behave, where platform support comes from, and how to
+        avoid assuming that every algorithm is present everywhere.</p>
+      </div>
+
+      <div data-further="day1-m3"></div>
+    </section>
+
+    <section class="slide" id="d1-openapi31" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="OpenAPI 3.1">OpenAPI 3.1 is now the default <span class="badge badge-net10">ASP.NET Core 10</span></h2>
+      <p class="slide-lead">This is the ASP.NET Core 10 change most likely to show up in customer
+      tooling, because it changes the document your generators and gateways consume.</p>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">Breaking change: nullable schema shape</div>
+        <p>OpenAPI 3.1 aligns with JSON Schema 2020-12. Nullable values are represented as type
+        arrays instead of the OpenAPI 3.0 <code>nullable</code> extension.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">OpenAPI 3.0</div>
+          <pre><code class="language-json">{
+  "type": "string",
+  "nullable": true
+}</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">OpenAPI 3.1</div>
+          <pre><code class="language-json">{
+  "type": ["string", "null"]
+}</code></pre>
+        </div>
+      </div>
+
+      <p>The underlying OpenAPI stack also moves to <code>Microsoft.OpenApi</code> 2.0.0. Treat
+      the generated document as a compatibility surface and test it, not just the HTTP endpoint.</p>
+
+      <div class="callout callout-verified">
+        <div class="callout-title">It says <code>3.1.1</code>, not <code>3.1.0</code></div>
+        <p>Verified against the document Lab 03 actually generates: the emitted value is
+        <code>"openapi": "3.1.1"</code>. Any contract test, gateway policy or client generator
+        that string-matches an exact version rather than the <code>3.1.x</code> family will trip
+        over this.</p>
+        <p>It gets worse on Day 2. We measured the same probe on .NET 11 RC 1: the default becomes
+        <code>3.2.0</code>, and pinning back to &ldquo;3.1&rdquo; yields <code>3.1.2</code> &mdash;
+        not the <code>3.1.1</code> you have today. So an exact-match assertion breaks on upgrade
+        <em>even if you deliberately pin the version back</em>.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask who has client generation in CI. Those teams need to run generation after retargeting
+        and compare the output. The server can be perfectly correct while downstream tooling still
+        needs an OpenAPI 3.1 update.</p>
+        <p>The 3.1.1 detail reliably gets a reaction from anyone who maintains contract tests. It
+        is also the setup for Lab 08, where they migrate this exact app and watch the string move
+        again.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-openapi-yaml-xml" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="OpenAPI docs">OpenAPI output is easier to make useful</h2>
+      <p>ASP.NET Core 10 improves the document pipeline around the places teams actually touch:
+      format, endpoint comments and descriptions.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Serve JSON and YAML</div>
+          <pre><code class="language-csharp">app.MapOpenApi();
+app.MapOpenApi("/openapi/{documentName}.yaml");</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">Let XML comments flow through</div>
+          <pre><code class="language-csharp">app.MapGet("/orders/{id}", GetOrder)
+   .WithName("GetOrder");
+
+/// &lt;summary&gt;
+/// Gets an order by identifier.
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;Returns 404 when the order does not exist.&lt;/remarks&gt;
+static IResult GetOrder(int id)
+    =&gt; TypedResults.NotFound();</code></pre>
+        </div>
+      </div>
+
+      <pre><code class="language-json">{
+  "summary": "Gets an order by identifier.",
+  "description": "Returns 404 when the order does not exist."
+}</code></pre>
+
+      <p>Response descriptions can also be supplied through <code>ProducesResponseType</code>,
+      which makes status-code meaning visible to generated clients and API reviewers.</p>
+
+      <div class="notes">
+        <p>The useful demo is opening the generated YAML next to the endpoint code. XML comments
+        tend to be dismissed as ceremony until people see them appear in the contract their
+        consumers actually read.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-openapi-transformers" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="OpenAPI pipeline">The OpenAPI pipeline is now programmable</h2>
+      <p>You can retrieve generated documents from DI with <code>IOpenApiDocumentProvider</code>,
+      customize individual operations, and use schema generation inside transformers.</p>
+
+      <pre><code class="language-csharp">builder.Services.AddOpenApi(options =&gt;
+{
+    options.AddOperationTransformer((operation, context, cancellationToken) =&gt;
+    {
+        if (context.Description.ActionDescriptor.EndpointMetadata
+            .OfType&lt;RequiresTenantAttribute&gt;().Any())
+        {
+            operation.Parameters.Add(/* tenant header parameter */);
+        }
+
+        return Task.CompletedTask;
+    });
+});</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Why this matters</div>
+        <p>Most production APIs have contract rules that are not obvious from a delegate signature:
+        tenant headers, correlation identifiers, feature flags or gateway-only metadata. Operation
+        transformers are where those rules belong.</p>
+      </div>
+
+      <div class="notes">
+        <p>Keep the code schematic. The exact parameter object is less important than the fact that
+        this now belongs in the supported OpenAPI generation pipeline rather than a post-processing
+        script that nobody remembers to run.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-minimal-validation" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="Minimal validation">Validation moved into the shared stack</h2>
+      <p>Minimal API validation is no longer something every team has to hand-roll. The validation
+      APIs live in <code>Microsoft.Extensions.Validation</code> and integrate with
+      <code>IProblemDetailsService</code>.</p>
+
+      <pre><code class="language-csharp">builder.Services.AddProblemDetails();
+builder.Services.AddValidation();
+
+app.MapPost("/orders", (CreateOrderRequest request) =&gt;
+{
+    return TypedResults.Created($"/orders/{request.Id}", request);
+});
+
+public sealed record CreateOrderRequest(
+    Guid Id,
+    [property: Required] string CustomerId,
+    [property: Range(1, 999)] int Quantity);</code></pre>
+
+      <p>The practical change is consistency. Invalid DTOs can now produce the same problem-details
+      shape whether the endpoint is MVC or Minimal APIs.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Package boundaries changed</div>
+        <p>If you had preview validation APIs wired directly into ASP.NET Core, expect namespace
+        and package cleanup during the .NET 10 migration. The capability moved to
+        <code>Microsoft.Extensions.Validation</code>.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask how many Minimal API endpoints in the room validate by calling a local helper at the
+        top of every delegate. This feature is a good moment to replace that pattern with framework
+        behaviour and one error contract.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-sse-jsonpatch" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="SSE &amp; JSON Patch">Streaming and patching move forward</h2>
+
+      <h3>Server-Sent Events</h3>
+      <pre><code class="language-csharp">app.MapGet("/events", () =&gt;
+{
+    async IAsyncEnumerable&lt;SseItem&lt;string&gt;&gt; Stream()
+    {
+        while (true)
+        {
+            yield return new SseItem&lt;string&gt;($"tick {DateTimeOffset.UtcNow}");
+            await Task.Delay(TimeSpan.FromSeconds(1));
+        }
+    }
+
+    return TypedResults.ServerSentEvents(Stream());
+});</code></pre>
+
+      <h3>JSON Patch without Newtonsoft.Json</h3>
+      <p>ASP.NET Core 10 adds a new JSON Patch implementation built on
+      <code>System.Text.Json</code>. That removes a common Newtonsoft dependency, but it is not a
+      byte-for-byte behavioural clone, so test existing patch documents during migration.</p>
+
+      <ul>
+        <li>Auth/authz and Identity add metrics you can feed into existing telemetry.</li>
+        <li>Cookie login no longer redirects for API endpoints; APIs get API-shaped responses.</li>
+        <li>Memory pool eviction reduces long-lived memory retention under changing workloads.</li>
+        <li><code>.localhost</code> is treated as a local development top-level domain.</li>
+      </ul>
+
+      <div class="notes">
+        <p>SSE is a good live demo because the browser shows it immediately. JSON Patch is the
+        migration warning: if a public client sends patch documents today, include those documents
+        in the upgrade test set rather than assuming equivalent behaviour.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-lab03" data-module-title="4 &middot; ASP.NET Core">
+      <h2 data-toc="Lab 03">Lab 03 &mdash; OpenAPI-first Minimal APIs <span class="badge">40 min</span></h2>
+      <p class="slide-lead">Build the API contract you will deliberately break and migrate
+      tomorrow.</p>
+
+      <pre><code class="language-powershell">cd labs/Day1/03-AspNetCore-OpenApi/start
+dotnet run</code></pre>
+
+      <ol>
+        <li>Generate and inspect the default OpenAPI 3.1 document.</li>
+        <li>Serve the OpenAPI document as YAML as well as JSON.</li>
+        <li>Add XML comments and response descriptions that appear in the contract.</li>
+        <li>Add Minimal API validation and return problem details for invalid requests.</li>
+        <li>Add a small SSE endpoint so the contract includes a streaming shape.</li>
+      </ol>
+
+      <div class="callout callout-breaking">
+        <div class="callout-title">Tomorrow depends on this lab</div>
+        <p>The API you build here is the one you migrate to .NET 11 in Lab 08. You will hit the
+        OpenAPI 3.1 &rarr; 3.2 breaking change yourself rather than just reading about it.</p>
+      </div>
+
+      <div class="notes">
+        <p>Make sure everyone keeps their Lab 03 workspace. Lab 08 assumes they have this API and
+        its OpenAPI document, because tomorrow's lesson is the experience of watching the contract
+        shape change under a real app.</p>
+      </div>
+
+      <div data-further="day1-m4"></div>
+    </section>
+
+    <section class="slide" id="d1-ef-complex-types" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Complex types">Complex types are the EF Core 10 headline <span class="badge badge-net10">EF Core 10</span></h2>
+      <p class="slide-lead">For value objects, complex types are now the model you should reach
+      for first. Owned entity types still exist, but they were overloaded for too many jobs.</p>
+
+      <pre><code class="language-csharp">public sealed class Customer
+{
+    public int Id { get; set; }
+    public required Address BillingAddress { get; set; }
+}
+
+public readonly record struct Address(
+    string Line1,
+    string City,
+    string Country);
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;Customer&gt;()
+        .ComplexProperty(c =&gt; c.BillingAddress);
+}</code></pre>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">What EF Core 10 adds</div>
+          <ul>
+            <li>Table splitting for complex type properties.</li>
+            <li>JSON mapping for complex values.</li>
+            <li>Struct support, which fits immutable value objects.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Rule of thumb</div>
+          <p>Use complex types when the value has no identity of its own. Use an owned entity type
+          only when you need entity-like behaviour that a value object should not have.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>This is the highest-interest module. Spend time on the modelling guidance, not just the
+        API. Many teams used owned types because they had no better option; EF Core 10 gives them a
+        cleaner vocabulary for value objects.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-ef-named-filters" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Named filters">Named query filters solve the "one giant filter" problem</h2>
+      <p>EF Core has long supported global query filters. EF Core 10 lets you name multiple filters
+      on the same entity and disable one without disabling the rest.</p>
+
+      <pre><code class="language-csharp">modelBuilder.Entity&lt;Order&gt;()
+    .HasQueryFilter("SoftDelete", o =&gt; !o.IsDeleted)
+    .HasQueryFilter("Tenant", o =&gt; o.TenantId == tenantId);
+
+var withDeleted = await db.Orders
+    .IgnoreQueryFilters(["SoftDelete"])
+    .ToListAsync();</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The real win is operational</div>
+        <p>Support tooling can include soft-deleted rows without accidentally bypassing tenant
+        isolation. Before named filters, teams often had to combine unrelated rules into one
+        expression and then choose between all filters or none.</p>
+      </div>
+
+      <div class="notes">
+        <p>Ask who has soft delete and multi-tenancy in the same model. This feature is aimed
+        directly at that pain. Emphasise that disabling a filter by name should be rare and
+        auditable, not sprinkled through application queries.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-ef-json-update" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="JSON updates">JSON columns and bulk updates get more practical</h2>
+      <p>EF Core 10 improves relational JSON column support, including <code>ExecuteUpdate</code>
+      for JSON columns. It also makes bulk update code easier to read.</p>
+
+      <div class="grid grid-2">
+        <div>
+          <div class="card-kicker">Before</div>
+          <pre><code class="language-csharp">await db.Orders.ExecuteUpdateAsync(setters =&gt;
+    setters.SetProperty(
+        o =&gt; o.Status,
+        o =&gt; OrderStatus.Archived));</code></pre>
+        </div>
+        <div>
+          <div class="card-kicker">EF Core 10</div>
+          <pre><code class="language-csharp">await db.Orders.ExecuteUpdateAsync(setters =&gt;
+{
+    setters.SetProperty(
+        o =&gt; o.Status,
+        o =&gt; OrderStatus.Archived);
+});</code></pre>
+        </div>
+      </div>
+
+      <p>The regular statement lambda matters because real updates rarely fit nicely on one line.
+      You can keep the update readable without breaking the server-side bulk operation shape.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Provider reality still applies</div>
+        <p>JSON support is relational-provider specific. In this workshop the lab uses SQLite, so
+        JSON-column walkthroughs are discussed as capability and migration planning, not as a
+        hands-on provider feature.</p>
+      </div>
+
+      <div class="notes">
+        <p>If attendees ask whether this replaces tracked updates, answer no. It is for set-based
+        updates that should happen in the database. The readability improvement just makes that
+        pattern less hostile in real code.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-ef-vector-query" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Vector and LINQ">Vector search is here, but not in today's SQLite lab</h2>
+      <p>EF Core 10 includes vector search support for Azure SQL and SQL Server. That is important
+      for search and AI-adjacent workloads, but it is provider-specific.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Walkthrough, not runnable lab code</div>
+        <p>The Day 1 EF lab uses SQLite so everyone can run it locally. Treat vector search as a
+        provider walkthrough today: shape the model, discuss indexing and query intent, but do not
+        expect the lab database to execute Azure SQL vector operations.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Query operators</div>
+          <ul>
+            <li><code>LeftJoin</code> and <code>RightJoin</code> reduce awkward group-join patterns.</li>
+            <li>Parameterized collections translate better.</li>
+            <li>Split-query ordering is more consistent.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Other provider work</div>
+          <ul>
+            <li>Custom default constraint names.</li>
+            <li>Cosmos full-text search leaves preview.</li>
+            <li>Cosmos hybrid and vector search leave preview.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Be clear that "EF supports vector search" does not mean "every provider supports vector
+        search". That distinction prevents frustration in the lab and sets up the deeper SQL Server
+        vector discussion tomorrow.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-ef-security" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="EF security">EF Core 10 makes unsafe patterns harder to miss</h2>
+      <p>Two security changes are worth calling out because they reduce real incident risk without
+      asking every developer to remember another checklist item.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Logs leak less by default</div>
+          <p>Inlined constants are redacted from EF logs by default. That helps prevent customer
+          identifiers, tokens or query literals from ending up in central logging systems.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Raw SQL gets a warning</div>
+          <p>EF warns when it sees string concatenation with raw-SQL APIs. It is a direct guardrail
+          against accidental SQL injection in code review-resistant paths.</p>
+        </div>
+      </div>
+
+      <pre><code class="language-csharp">// Suspicious: user input is being concatenated into raw SQL.
+var sql = "SELECT * FROM Orders WHERE CustomerId = '" + customerId + "'";
+await db.Orders.FromSqlRaw(sql).ToListAsync();</code></pre>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">Frame this as production hygiene</div>
+        <p>These are not flashy features, but they matter in audits: fewer secrets in logs, and
+        earlier feedback when raw SQL drifts away from parameterization.</p>
+      </div>
+
+      <div class="notes">
+        <p>Do not turn this into a SQL injection lecture. The point is that EF Core 10 gives teams
+        better defaults and warnings in exactly the places where mistakes usually survive code
+        review.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="d1-lab04" data-module-title="5 &middot; EF Core">
+      <h2 data-toc="Lab 04">Lab 04 &mdash; EF Core 10 value objects and filters <span class="badge">30 min</span></h2>
+      <p class="slide-lead">Use SQLite for the hands-on pieces, then keep the same model for the
+      EF Core 11 migration tomorrow.</p>
+
+      <pre><code class="language-powershell">cd labs/Day1/04-EfCore10/start
+dotnet test</code></pre>
+
+      <ol>
+        <li>Model an address-style value object as a complex type.</li>
+        <li>Add two named query filters to the same entity.</li>
+        <li>Disable one named filter in a support-style query while keeping the other active.</li>
+        <li>Use <code>ExecuteUpdateAsync</code> with a statement lambda.</li>
+      </ol>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Tomorrow's continuation</div>
+        <p>Lab 09 migrates this model to EF Core 11. Keep the SQLite lab simple today so the
+        differences tomorrow are about EF behaviour, not local infrastructure.</p>
+      </div>
+
+      <div class="notes">
+        <p>Watch for people reaching for owned types out of habit. Ask them whether the value has
+        identity. If the answer is no, steer them back to complex types before they start wiring up
+        ownership configuration.</p>
+      </div>
+
+      <div data-further="day1-m5"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="deck-nav">
+  <button class="btn" data-action="prev" type="button">&larr; Prev</button>
+  <span class="pos"></span>
+  <button class="btn" data-action="next" type="button">Next &rarr;</button>
+  <span class="where"></span>
+</div>
+
+<script src="assets/sources.js"></script>
+<script src="assets/workshop.js"></script>
+</body>
+</html>

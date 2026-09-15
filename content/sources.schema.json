@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Workshop community sources registry",
+  "type": "object",
+  "required": ["modules", "sources"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "generated": { "type": ["string", "null"], "description": "ISO date of last pipeline run" },
+    "note": { "type": "string" },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "day", "title"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^day[12]-m[0-9]+$" },
+          "day": { "type": "integer", "enum": [1, 2] },
+          "title": { "type": "string" }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "url", "origin", "kind", "modules", "verification", "usageTier", "summary"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "title": { "type": "string" },
+          "author": { "type": ["string", "null"] },
+          "publisher": { "type": ["string", "null"], "description": "e.g. Medium, dev.to, personal blog, YouTube, GitHub" },
+          "url": { "type": "string", "format": "uri" },
+          "published": { "type": ["string", "null"], "description": "ISO date" },
+          "retrieved": { "type": ["string", "null"], "description": "ISO date" },
+          "origin": { "enum": ["user-supplied", "discovered"] },
+          "kind": { "enum": ["docs", "article", "video", "repo", "talk", "spec", "podcast", "book"], "description": "'docs' is reserved for first-party vendor documentation (Microsoft Learn, official release notes). It is the strongest trust signal on the sources page, so do not use it for community writing." },
+          "modules": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": "^day[12]-m[0-9]+$" }
+          },
+          "covers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Free-form topic tags, e.g. csharp-15, unions, openapi, pqc"
+          },
+          "writtenAgainst": {
+            "type": ["string", "null"],
+            "description": "Build the piece was written against, e.g. '.NET 11 Preview 4'. Drives the preview-drift check."
+          },
+          "previewDrift": {
+            "enum": ["none", "minor", "major"],
+            "description": "Verdict on how far the piece has drifted from current behaviour. 'none' = still accurate. 'minor' = cosmetic/API-name drift, still teachable. 'major' = the central claim no longer holds; explain in driftNote and never cite without the correction."
+          },
+          "driftNote": {
+            "type": "string",
+            "description": "Required when previewDrift is 'minor' or 'major': what specifically changed, and what the current behaviour is."
+          },
+          "verification": {
+            "enum": ["pending", "verified", "partially-verified", "contradicts-learn", "outdated", "unverifiable"],
+            "description": "'pending' is the intake state: captured but not yet vetted. Pending records never ship to the site - build-sources.ps1 emits verified records only."
+          },
+          "verificationNotes": { "type": ["string", "null"] },
+          "usageTier": {
+            "type": "integer",
+            "enum": [1, 2, 3],
+            "description": "1 = reference/link only, 2 = attributed insight restated in our words, 3 = short attributed quote"
+          },
+          "license": { "type": ["string", "null"], "description": "e.g. unknown, MIT, CC-BY-4.0, Apache-2.0" },
+          "summary": { "type": "string", "description": "Our own description - never copied from the source" },
+          "quote": { "type": "string", "maxLength": 300, "description": "Optional short attributed quotation. Requires usageTier 3. Always rendered with attribution and a link." },
+          "recommended": { "type": "boolean" },
+          "cachePath": { "type": ["string", "null"], "description": "Relative path under content/cache/ if fetched" }
+        }
+      }
+    }
+  }
+}

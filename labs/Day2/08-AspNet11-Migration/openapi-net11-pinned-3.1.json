@@ -1,0 +1,236 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Lab03 | v1-compat",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5115"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Lab03"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/catalogue": {
+      "get": {
+        "tags": [
+          "CatalogHandlers"
+        ],
+        "summary": "List catalogue items.",
+        "description": "The list lives in memory so tomorrow's migration has no storage baggage.",
+        "operationId": "ListCatalogue",
+        "responses": {
+          "200": {
+            "description": "The current catalogue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogueItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CatalogHandlers"
+        ],
+        "summary": "Create a catalogue item.",
+        "description": "Validation comes from Microsoft.Extensions.Validation and the data annotations on the request DTO.",
+        "operationId": "CreateCatalogueItem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCatalogueItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The item was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body failed validation."
+          }
+        }
+      }
+    },
+    "/catalogue/{id}": {
+      "get": {
+        "tags": [
+          "CatalogHandlers"
+        ],
+        "summary": "Get a catalogue item by id.",
+        "description": "Returns one item when the id exists.",
+        "operationId": "GetCatalogueItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested catalogue item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueItem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No catalogue item has that id."
+          }
+        }
+      }
+    },
+    "/catalogue/events": {
+      "get": {
+        "tags": [
+          "CatalogHandlers"
+        ],
+        "summary": "Stream catalogue events.",
+        "description": "Sends a short server-sent event stream for command-line verification.",
+        "operationId": "CatalogueEvents",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/event-stream": {
+                "x-oai-itemSchema": {
+                  "required": [
+                    "data"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    },
+                    "event": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CatalogueItem": {
+        "required": [
+          "id",
+          "name",
+          "category",
+          "price"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "price": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "format": "double"
+          }
+        },
+        "description": "A catalogue item returned by the API."
+      },
+      "CreateCatalogueItemRequest": {
+        "required": [
+          "name",
+          "category"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 80,
+            "minLength": 3,
+            "type": "string",
+            "description": "The display name. Short names make poor catalogue entries."
+          },
+          "category": {
+            "maxLength": 40,
+            "minLength": 2,
+            "type": "string",
+            "description": "The small category label shown in the workshop UI."
+          },
+          "price": {
+            "maximum": 10000,
+            "minimum": 0.01,
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "number",
+              "string"
+            ],
+            "description": "The price in euros. Zero is a discount, not a catalogue item.",
+            "format": "double"
+          }
+        },
+        "description": "The request body used to create a catalogue item."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "CatalogHandlers"
+    },
+    {
+      "name": "Lab03"
+    }
+  ]
+}

@@ -1,0 +1,1031 @@
+/* GENERATED FILE - DO NOT EDIT.
+   Source: content/sources.json
+   Regenerate: pwsh tools/build-sources.ps1
+
+   Loaded as a script (not fetched) so the site works from file:// where
+   fetch() is blocked by the browser's origin rules. */
+window.WORKSHOP_SOURCES ={
+  "generated": "2026-09-15",
+  "modules": [
+    {
+      "id": "day1-m1",
+      "day": 1,
+      "title": "Orientation & release strategy"
+    },
+    {
+      "id": "day1-m2",
+      "day": 1,
+      "title": "C# 14 language"
+    },
+    {
+      "id": "day1-m3",
+      "day": 1,
+      "title": ".NET 10 libraries (PQC, System.Text.Json)"
+    },
+    {
+      "id": "day1-m4",
+      "day": 1,
+      "title": "ASP.NET Core 10 (OpenAPI 3.1)"
+    },
+    {
+      "id": "day1-m5",
+      "day": 1,
+      "title": "EF Core 10"
+    },
+    {
+      "id": "day2-m1",
+      "day": 2,
+      "title": ".NET 11 runtime & runtime-native async"
+    },
+    {
+      "id": "day2-m2",
+      "day": 2,
+      "title": "C# 15 language (unions, closed hierarchies)"
+    },
+    {
+      "id": "day2-m3",
+      "day": 2,
+      "title": ".NET 11 libraries"
+    },
+    {
+      "id": "day2-m4",
+      "day": 2,
+      "title": "ASP.NET Core 11 (OpenAPI 3.2)"
+    },
+    {
+      "id": "day2-m5",
+      "day": 2,
+      "title": "EF Core 11"
+    },
+    {
+      "id": "day2-m6",
+      "day": 2,
+      "title": ".NET 12 outlook & adoption decision"
+    }
+  ],
+  "sources": [
+    {
+      "id": "dotnet-blog-sts-24-months",
+      "title": ".NET STS releases supported for 24 months",
+      "author": "Jamshed Damkewala",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/dotnet-sts-releases-supported-for-24-months/",
+      "published": "2025-09-16",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m1",
+        "day2-m6"
+      ],
+      "covers": [
+        "net11",
+        "lifecycle",
+        "sts",
+        "lts",
+        "support-policy",
+        "adoption-decision"
+      ],
+      "writtenAgainst": ".NET 9 era - a support-policy post, not tied to a preview build",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 3,
+      "summary": "Changes the arithmetic behind the whole LTS-versus-STS conversation: an STS release is now supported for 24 months, 12 months past its successor, which is why .NET 8 and .NET 9 both end on 10 November 2026. Acting on this corrected our own material, which had recorded the old 18-month figure, and it inverted Day 2's closing advice: .NET 11 STS and .NET 10 LTS now expire in the same week.",
+      "quote": "We are increasing the length of support offered for .NET Standard Term Support (STS) releases from 18 months to 24 months. This change is effective starting with .NET 9",
+      "recommended": true
+    },
+    {
+      "id": "dotnet-blog-api-versioning-openapi-net10",
+      "title": "Combining API versioning with OpenAPI in .NET 10 applications",
+      "author": "Sander ten Brinke",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/api-versioning-in-dotnet-10-applications/",
+      "published": "2026-04-28",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m4"
+      ],
+      "covers": [
+        "net10",
+        "aspnetcore",
+        "openapi",
+        "openapi-31",
+        "api-versioning",
+        "minimal-apis"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Takes the built-in .NET 10 OpenAPI generator past hello-world and into versioned APIs, including how document names, transformers and version sets fit together. This is the shape of the problem the customer actually has, not a toy sample.",
+      "recommended": true
+    },
+    {
+      "id": "dotnet-blog-post-quantum-cryptography",
+      "title": "Post-Quantum Cryptography in .NET",
+      "author": "Jeremy Barton",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/post-quantum-cryptography-in-dotnet/",
+      "published": "2025-11-18",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m3"
+      ],
+      "covers": [
+        "net10",
+        "pqc",
+        "cryptography",
+        "mlkem",
+        "mldsa",
+        "slhdsa",
+        "fips-203",
+        "fips-204",
+        "fips-205"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Written by the engineer who owns the .NET crypto stack, so it explains not just the new ML-KEM / ML-DSA / SLH-DSA types but why they deliberately do not derive from AsymmetricAlgorithm. The reference we should anchor the PQC module on.",
+      "recommended": true
+    },
+    {
+      "id": "dotnet-blog-unions-closed-hierarchies-aspnetcore",
+      "title": "Use C# unions and closed hierarchies in ASP.NET Core",
+      "author": "Dmitrii Korolev",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/unions-and-closed-hierarchies-in-aspnetcore/",
+      "published": "2026-09-10",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m4",
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "aspnetcore",
+        "unions",
+        "closed-hierarchies",
+        "system-text-json",
+        "openapi",
+        "minimal-apis"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-09-10",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The clearest answer yet to 'when do I use a union and when do I use a closed hierarchy', with the serialization consequences spelled out — discriminator-free union payloads, the structural classifier and its cost, and InferClosedTypePolymorphism for closed bases. Published two days after RC 1, so the API names are current.",
+      "recommended": true
+    },
+    {
+      "id": "andrewlock-net11-union-types",
+      "title": ".NET (OK, C#) finally gets union types",
+      "author": "Andrew Lock",
+      "publisher": "Andrew Lock | .NET Escapades",
+      "url": "https://andrewlock.net/exploring-the-dotnet-11-preview-2-dotnet-gets-union-types/",
+      "published": "2026-05-19",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "unions",
+        "exhaustive-switch",
+        "oneof",
+        "iunion"
+      ],
+      "writtenAgainst": ".NET 11 Preview 2 (stated in the post title)",
+      "previewDrift": "minor",
+      "driftNote": "Declaration syntax and the codegen discussion still match RC 1. Correction: exhaustiveness is reported as CS8509, which is a warning by default, not a compile error - we verified that a union switch with a missing arm builds cleanly and throws SwitchExpressionException at runtime. Set WarningsAsErrors=CS8509 to get the safety most readers assume they already have.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Goes further than most union write-ups by decompiling what the compiler actually generates and discussing the allocation and boxing behaviour, which matters if unions land in a hot path. The declaration syntax still matches RC 1.",
+      "recommended": true
+    },
+    {
+      "id": "andrewlock-csharp14-extension-members",
+      "title": "C# 14 extension members; AKA extension everything",
+      "author": "Andrew Lock",
+      "publisher": "Andrew Lock | .NET Escapades",
+      "url": "https://andrewlock.net/exploring-dotnet-10-preview-features-3-csharp-14-extensions-members/",
+      "published": "2025-07-15",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "net10",
+        "csharp-14",
+        "extension-members",
+        "extension-properties",
+        "static-extensions",
+        "operators"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Works through the mechanical conversion from a classic extension method to an extension(T receiver) block and then pushes into extension properties, static members and operators. Note it was written pre-GA, so ignore the <LangVersion>preview</LangVersion> step — that is no longer needed on .NET 10.",
+      "recommended": true
+    },
+    {
+      "id": "andrewlock-net11-stj-unions-closed-hierarchies",
+      "title": "The pain of serializing unions and closed class hierarchies with System.Text.Json",
+      "author": "Andrew Lock",
+      "publisher": "Andrew Lock | .NET Escapades",
+      "url": "https://andrewlock.net/exploring-the-dotnet-11-preview-7-the-pain-of-serializing-unions-and-closed-class-hierarchies-with-system-text-json/",
+      "published": "2026-09-01",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m3",
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "system-text-json",
+        "unions",
+        "closed-hierarchies",
+        "serialization"
+      ],
+      "writtenAgainst": ".NET 11 Preview 7 (stated in the post title)",
+      "previewDrift": "minor",
+      "driftNote": "Still the most honest account of the serialization gaps, and the cases it could not make work were real when written. We re-measured on RC 1 (Lab 07): round-tripping DOES work once JsonSerializerOptions.TypeClassifiers gets an explicit JsonUnionTypeStructuralClassifier. Two limits the post is right to be wary of survive: serialization succeeds without any classifier and emits no discriminator, so only the read side fails; and the structural classifier throws NotSupportedException at contract-build time when two cases share a shape.",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "A deliberately unflattering walkthrough of trying to round-trip unions and closed hierarchies through System.Text.Json, ending with cases the author could not make work. Valuable precisely because it is the counterweight to the official 'here is how it works' narrative.",
+      "recommended": true
+    },
+    {
+      "id": "jaliya-ef-core-11-migrations",
+      "title": "EF Core 11.0: What's New with Migrations",
+      "author": "Jaliya Udagedara",
+      "publisher": "Jaliya's Blog",
+      "url": "https://jaliyaudagedara.blogspot.com/2026/09/ef-core-110-whats-new-with-migrations.html",
+      "published": "2026-09-11",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "net11",
+        "efcore",
+        "efcore11",
+        "migrations",
+        "dotnet-ef",
+        "tooling"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-09-11",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Written three days after RC 1, so it reflects where the migrations tooling actually landed: the dotnet ef configuration file, -NoBuild for PMC, wildcard context support and the migration ID recorded in the snapshot. The freshest EF Core 11 community writing we found.",
+      "recommended": true
+    },
+    {
+      "id": "dotnet-support-policy-dotnet-core",
+      "title": ".NET and .NET Core Support Policy",
+      "publisher": "Microsoft",
+      "url": "https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1"
+      ],
+      "covers": [
+        "support",
+        "lts",
+        "sts",
+        "lifecycle"
+      ],
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "This is the page that corrected us. STS is 24 months, not 18, and has been since .NET 9. The consequence is not cosmetic: .NET 10 LTS and .NET 11 STS reach end of support in the same week, which removes the usual 'LTS lasts longer' argument. Facilitator guide section 3.5.",
+      "usageTier": 2,
+      "summary": "The official support lifecycle policy and the arithmetic behind every adoption argument in this workshop. Check it live before you present - the numbers moved once already and the conclusions moved with them.",
+      "recommended": true
+    },
+    {
+      "id": "learn-whats-new-dotnet-10-overview",
+      "title": "What's new in .NET 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1"
+      ],
+      "covers": [
+        "net10",
+        "release"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "The index page for everything that landed in .NET 10. Start here when someone asks 'where is the real list?' - it is the spine the whole of Day 1 hangs off, and it links onward to the language, library, ASP.NET Core and EF Core pages.",
+      "recommended": true
+    },
+    {
+      "id": "learn-whats-new-dotnet-11-overview",
+      "title": "What's new in .NET 11",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "release"
+      ],
+      "writtenAgainst": ".NET 11 RC 1",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "First-party and current, but preview-era pages change under you. Everything we teach from this page was re-measured against RC 1 locally before it went into a slide.",
+      "usageTier": 2,
+      "summary": "The .NET 11 index. Still moving while .NET 11 is in release-candidate, so treat it as current-at-time-of-reading rather than settled - which is exactly the habit Day 2 is trying to teach.",
+      "recommended": true
+    },
+    {
+      "id": "learn-whats-new-dotnet-10-libraries",
+      "title": "What's new in .NET libraries for .NET 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/libraries",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m3"
+      ],
+      "covers": [
+        "net10",
+        "pqc",
+        "system-text-json"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Accurate, but it does not make the experimental boundary obvious: MLKem and MLDsa are stable types while every standard key-interchange format on them is marked experimental per-member. See facilitator guide section 3.4 - we measured this rather than inferring it.",
+      "usageTier": 2,
+      "summary": "The library-by-library rundown for .NET 10, including the post-quantum cryptography section the customer linked when scoping this workshop. The canonical follow-up for Day 1 Module 3.",
+      "recommended": true
+    },
+    {
+      "id": "learn-whats-new-dotnet-11-libraries",
+      "title": "What's new in .NET libraries for .NET 11",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/libraries",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "system-text-json",
+        "linq"
+      ],
+      "writtenAgainst": ".NET 11 RC 1",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Two things we had to measure ourselves: unions serialize with default options but will not deserialize without JsonUnionTypeStructuralClassifier (see FACILITATOR.md section 3.9), and FullJoin surfaces unmatched value-type rows as default(T) rather than as nullables.",
+      "usageTier": 2,
+      "summary": "Library changes in .NET 11: System.Text.Json contract control, LINQ additions including FullJoin, and the union serialization support. Backs Day 2 Module 3 and Lab 07.",
+      "recommended": true
+    },
+    {
+      "id": "learn-core-release-notes-aspnetcore-10-0",
+      "title": "What's new in ASP.NET Core 10.0",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m4"
+      ],
+      "covers": [
+        "aspnetcore",
+        "openapi",
+        "net10"
+      ],
+      "writtenAgainst": "ASP.NET Core 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Says OpenAPI 3.1. The document actually emitted is version string 3.1.1 - a detail that matters only if you assert-equal on it, which Lab 03 deliberately does. See facilitator guide section 3.6.",
+      "usageTier": 2,
+      "summary": "ASP.NET Core 10 release notes, covering the OpenAPI 3.1 move that Day 1 Module 4 and Lab 03 are built around.",
+      "recommended": true
+    },
+    {
+      "id": "learn-core-release-notes-aspnetcore-11",
+      "title": "What's new in ASP.NET Core 11.0",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-11",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m4"
+      ],
+      "covers": [
+        "aspnetcore",
+        "openapi",
+        "net11"
+      ],
+      "writtenAgainst": "ASP.NET Core 11 RC 1",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "We measured the actual emitted version strings rather than trusting the headline: 3.2.0 by default, 3.1.2 when pinned to OpenApi3_1, 3.0.4 when pinned to OpenApi3_0. Pinning does not freeze the patch digit. Facilitator guide section 3.6.",
+      "usageTier": 2,
+      "summary": "ASP.NET Core 11 release notes. The reference for the OpenAPI 3.2 default that Day 2 Module 4 and Lab 08 migrate onto.",
+      "recommended": true
+    },
+    {
+      "id": "learn-csharp-whats-new-csharp-14",
+      "title": "What's new in C# 14",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "csharp-14",
+        "language"
+      ],
+      "writtenAgainst": "C# 14 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "The authoritative C# 14 feature list. Worth linking rather than summarising, because it is the one page attendees will return to after the workshop.",
+      "recommended": true
+    },
+    {
+      "id": "learn-csharp-whats-new-csharp-15",
+      "title": "What's new in C# 15",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "csharp-15",
+        "unions",
+        "language"
+      ],
+      "writtenAgainst": "C# 15 preview",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Does not emphasise that exhaustiveness over a union or a closed hierarchy is CS8509, a warning, not an error. That surprises people who expect the compiler to stop them. See facilitator guide section 3.3.",
+      "usageTier": 2,
+      "summary": "The C# 15 feature list, including unions and closed hierarchies. The single most useful link for Day 2 Module 2.",
+      "recommended": true
+    },
+    {
+      "id": "learn-what-is-new-ef-core-10-0-whatsnew",
+      "title": "What's new in EF Core 10",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m5"
+      ],
+      "covers": [
+        "ef-core",
+        "net10"
+      ],
+      "writtenAgainst": "EF Core 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "EF Core 10 feature list. The reference for Day 1 Module 5 and Lab 04, and the page to send anyone who wants the full set rather than the subset we teach.",
+      "recommended": true
+    },
+    {
+      "id": "learn-what-is-new-ef-core-11-0-whatsnew",
+      "title": "What's new in EF Core 11",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-11.0/whatsnew",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "ef-core",
+        "net11"
+      ],
+      "writtenAgainst": "EF Core 11 RC 1",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "EF Core 11 feature list, backing Day 2 Module 5 and the Lab 09 migration.",
+      "recommended": true
+    },
+    {
+      "id": "milanjovanovic-named-query-filters-ef10",
+      "title": "Named Query Filters in EF 10 (multiple query filters per entity)",
+      "author": "Milan Jovanović",
+      "publisher": "milanjovanovic.tech",
+      "url": "https://milanjovanovic.tech/blog/named-query-filters-in-ef-10-multiple-query-filters-per-entity",
+      "published": "2025-07-26",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m5"
+      ],
+      "covers": [
+        "net10",
+        "efcore",
+        "efcore10",
+        "query-filters",
+        "soft-delete",
+        "multi-tenancy"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Shows why one global filter per entity was never enough once soft-delete and tenant scoping collide, and walks the EF 10 replacement where each filter is named and can be switched off independently. The most practical treatment of the feature our EF Core module leads with.",
+      "recommended": true
+    },
+    {
+      "id": "dotnet-blog-net-11-rc-1",
+      "title": "Announcing .NET 11 Release Candidate 1",
+      "author": ".NET Team",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/dotnet-11-rc-1/",
+      "published": "2026-09-08",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m1",
+        "day1-m1"
+      ],
+      "covers": [
+        "net11",
+        "release-candidate",
+        "go-live",
+        "unions",
+        "async-validation"
+      ],
+      "writtenAgainst": ".NET 11 RC 1 (the post is the RC 1 announcement)",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The current baseline for anything we say about .NET 11 on Day 2, and the source of the go-live licence point that changes the risk conversation for early adopters. Every preview-era post in this list should be read against it."
+    },
+    {
+      "id": "dotnet-blog-exploring-extension-members",
+      "title": "C# 14 - Exploring extension members",
+      "author": "Kathleen Dollard",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/csharp-exploring-extension-members/",
+      "published": "2025-05-08",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "net10",
+        "csharp-14",
+        "extension-members",
+        "language-design"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The language team's own explanation of why extension members are shaped the way they are, which is the part attendees need in order to judge when to reach for them. Read it after Andrew Lock's post for the design rationale rather than the syntax."
+    },
+    {
+      "id": "dotnet-blog-explore-csharp-15",
+      "title": "Explore new features available in C# 15 preview",
+      "author": "Bill Wagner",
+      "publisher": ".NET Blog (devblogs.microsoft.com)",
+      "url": "https://devblogs.microsoft.com/dotnet/explore-csharp-15/",
+      "published": "2026-08-24",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "unions",
+        "closed-hierarchies",
+        "collection-expressions",
+        "extension-indexers",
+        "labeled-break"
+      ],
+      "writtenAgainst": ".NET 11 Preview 7 (post states \"available in .NET 11 preview 7\")",
+      "previewDrift": "minor",
+      "driftNote": "A preview-era survey, so treat feature-by-feature details as provisional. Two we re-measured on RC 1: exhaustiveness is a warning rather than an error, and runtime async is opt-in behind a Roslyn feature flag rather than on by default.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The best single-page survey of C# 15 beyond unions — collection expression arguments, extension indexers and labeled break/continue all get airtime. Useful for showing attendees that the release is broader than the headline feature."
+    },
+    {
+      "id": "andrewlock-net11-closed-class-hierarchies",
+      "title": "Closed class hierarchies",
+      "author": "Andrew Lock",
+      "publisher": "Andrew Lock | .NET Escapades",
+      "url": "https://andrewlock.net/exploring-the-dotnet-11-preview-4-closed-class-hierarchies/",
+      "published": "2026-06-30",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "closed-hierarchies",
+        "exhaustive-switch",
+        "pattern-matching"
+      ],
+      "writtenAgainst": ".NET 11 Preview 4 (stated in the post title)",
+      "previewDrift": "minor",
+      "driftNote": "The non-transitivity discussion holds and we reproduced it on RC 1. Same correction as the unions post: the missing-arm diagnostic CS8509 is a warning, not an error, unless you promote it explicitly.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Explains what closed actually buys you across assembly boundaries and where exhaustiveness checking stops — including the non-transitive behaviour that surprises people who expect sealed-like semantics. Pairs directly with our closed-vs-union decision exercise."
+    },
+    {
+      "id": "anthonygiretti-stj-net10-improvements",
+      "title": ".NET 10: System.Text.Json Improvements",
+      "author": "Anthony Giretti",
+      "publisher": "Anthony Giretti's .NET blog",
+      "url": "https://anthonygiretti.com/2026/03/02/net-10-system-text-json-improvements/",
+      "published": "2026-03-02",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m3"
+      ],
+      "covers": [
+        "net10",
+        "system-text-json",
+        "duplicate-properties",
+        "pipereader",
+        "source-generation",
+        "referencehandler"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Focused write-up of the three System.Text.Json changes with real consequences in .NET 10: rejecting duplicate JSON properties, PipeReader-based deserialization, and ReferenceHandler finally being configurable from the source generator. Short enough to read in a coffee break."
+    },
+    {
+      "id": "duende-pqc-dotnet-10-practical-guide",
+      "title": "Post-Quantum Cryptography in .NET 10: A Practical Guide",
+      "author": "Duende Software",
+      "publisher": "Duende Software blog",
+      "url": "https://duendesoftware.com/blog/20260514-post-quantum-cryptography-in-dotnet-10",
+      "published": "2026-05-14",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m3"
+      ],
+      "covers": [
+        "net10",
+        "pqc",
+        "cryptography",
+        "mlkem",
+        "mldsa",
+        "slhdsa",
+        "issupported",
+        "openssl",
+        "cng"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The deployment-reality companion to the .NET Blog post: IsSupported gating, the [Experimental] diagnostics, and the hard platform requirement of OpenSSL 3.5+ or Windows CNG with no macOS support in .NET 10. Answers the 'can we actually ship this' question attendees will ask."
+    },
+    {
+      "id": "duende-field-keyword-csharp-14",
+      "title": "The field Keyword in C# 14: Write Less, Validate More",
+      "author": "Duende Software",
+      "publisher": "Duende Software blog",
+      "url": "https://duendesoftware.com/blog/20260512-the-field-keyword-in-csharp-14",
+      "published": "2026-05-12",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "net10",
+        "csharp-14",
+        "field-keyword",
+        "properties",
+        "validation",
+        "breaking-change"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Good coverage of the validating-setter pattern that the field keyword makes cheap, and it does not skip the collision case where an existing member is literally named field and you need this.field to disambiguate. That caveat is the one to demo live."
+    },
+    {
+      "id": "jaliya-ef-core-11-complex-types-tpt-tpc",
+      "title": "EF Core 11.0: Complex Types and JSON Columns on Entity Types with TPT/TPC Inheritance",
+      "author": "Jaliya Udagedara",
+      "publisher": "Jaliya's Blog",
+      "url": "https://jaliyaudagedara.blogspot.com/2026/03/ef-core-110-complex-types-and-json.html",
+      "published": "2026-03-01",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "net11",
+        "efcore",
+        "efcore11",
+        "complex-types",
+        "tpt",
+        "tpc",
+        "json-columns",
+        "inheritance"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-03-01",
+      "previewDrift": "minor",
+      "driftNote": "Written during the preview cycle. We have not re-run its samples against RC 1, so treat the specific API surface as indicative rather than exact; the modelling capability it describes is still present.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Demonstrates the EF Core 11 change that finally lets complex types and JSON columns sit on entities mapped with TPT or TPC inheritance — the gap that blocked several EF Core 10 modelling designs. Short, code-first, and easy to lift into a demo."
+    },
+    {
+      "id": "maartenballiauw-discriminated-unions-net-11",
+      "title": "Discriminated unions in C# and .NET 11 (for real this time)",
+      "author": "Maarten Balliauw",
+      "publisher": "Maarten Balliauw {blog}",
+      "url": "https://blog.maartenballiauw.be/posts/2026-06-16-discriminated-unions-in-csharp-for-real-this-time/",
+      "published": "2026-06-16",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "net11",
+        "csharp-15",
+        "unions",
+        "discriminated-unions",
+        "oneof",
+        "migration"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-06-16",
+      "previewDrift": "minor",
+      "driftNote": "The framing against OneOf-style libraries is unaffected by preview drift. The exhaustiveness correction applies here too: CS8509 is a warning by default, so a union switch is not as safe as the OneOf Match() call it replaces unless you promote the diagnostic.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Frames C# 15 unions against the years of library workarounds (OneOf and friends) and is honest about what the language version does and does not replace. The right piece for a team that already has a hand-rolled result type and wants to know whether to migrate."
+    },
+    {
+      "id": "learn-code-analysis-style-rules-ide0410",
+      "title": "IDE0410: Use labeled jump statement",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0410",
+      "published": "2026-07-09",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m2"
+      ],
+      "covers": [
+        "csharp-15"
+      ],
+      "writtenAgainst": ".NET 11 (rule shipped with the C# 15 tooling)",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Fetched the rule page and confirmed the title is 'Use labeled jump statement', which is the claim the Day 2 labeled-loops slide makes. The feature itself was compiled and run against SDK 11.0.100-rc.1.26425.128: 'continue outer' abandons the remaining inner iterations, not just the current one.",
+      "usageTier": 2,
+      "summary": "The analyser rule behind the labeled break/continue slide: flags bool-flag and goto workarounds that the new labelled control flow replaces."
+    },
+    {
+      "id": "nikolatech-complex-types-ef-core-10",
+      "title": "Complex Types in EF Core 10",
+      "author": "Nikola Knez",
+      "publisher": "NikolaTech",
+      "url": "https://www.nikolatech.net/blogs/complex-types-ef-core-10",
+      "published": "2026-01-08",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m5"
+      ],
+      "covers": [
+        "net10",
+        "efcore",
+        "efcore10",
+        "complex-types",
+        "value-objects",
+        "owned-entities",
+        "structs"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Covers the complex-type story end to end for EF Core 10 — optional complex types, struct support, JSON mapping and the breaking changes — and explains why value objects should now move off owned entities. Directly supports the complex-vs-owned decision we ask attendees to make."
+    },
+    {
+      "id": "nikolatech-ef-core-vector-similarity-search",
+      "title": "Vector Similarity Search in EF Core 10",
+      "author": "Nikola Knez",
+      "publisher": "NikolaTech",
+      "url": "https://www.nikolatech.net/blogs/ef-core-vector-similarity-search",
+      "published": "2025-12-25",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m5"
+      ],
+      "covers": [
+        "net10",
+        "efcore",
+        "efcore10",
+        "vector-search",
+        "sql-server-2025",
+        "vectordistance"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Runs the new VECTOR column type and VectorDistance translation against SQL Server 2025 from LINQ, with the argument that many teams no longer need a separate vector store. Useful counterweight to the 'just add a vector database' reflex."
+    },
+    {
+      "id": "singhsk-modern-aspnetcore-10-apis",
+      "title": "Modern ASP.NET Core 10 APIs: OpenAPI 3.1, Validation, ProblemDetails, and Server-Sent Events",
+      "author": "Santosh Kumar Singh",
+      "publisher": "singhsk.com",
+      "url": "https://www.singhsk.com/posts/2026/07/modern_aspnetcore10_apis/",
+      "published": "2026-07-27",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m4"
+      ],
+      "covers": [
+        "net10",
+        "aspnetcore",
+        "openapi",
+        "openapi-31",
+        "validation",
+        "problemdetails",
+        "server-sent-events"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Stitches together four ASP.NET Core 10 additions that are usually written up separately — OpenAPI 3.1 output, Minimal API validation, ProblemDetails and SSE — into one coherent API design. Written well after GA, so the samples match the shipped packages."
+    },
+    {
+      "id": "startdebugging-efcore-11-cheat-sheet",
+      "title": "EF Core 11 cheat sheet",
+      "author": "Marius Bughiu",
+      "publisher": "Start Debugging",
+      "url": "https://startdebugging.net/pillars/efcore-11-cheat-sheet/",
+      "published": "2026-04-18",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "net11",
+        "efcore",
+        "efcore11",
+        "vector-search",
+        "diskann",
+        "tph",
+        "tpt",
+        "tpc",
+        "analyzers"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-04-18",
+      "previewDrift": "minor",
+      "driftNote": "A living index updated through the preview cycle, so individual entries may lead or lag RC 1. Use it as a map of what to investigate, not as a citation for any single claim.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "A running index of EF Core 11 changes kept up to date through the preview cycle — VECTOR_SEARCH() with DiskANN indexes, inheritance-strategy guidance and the new EF1004 analyzer. Handy as a breadth map before attendees pick what to dig into."
+    },
+    {
+      "id": "startdebugging-swashbuckle-to-openapi-net-11",
+      "title": "Migrate from Swashbuckle to the built-in OpenAPI generator in .NET 11",
+      "author": "Marius Bughiu",
+      "publisher": "Start Debugging",
+      "url": "https://startdebugging.net/2026/06/migrate-from-swashbuckle-to-built-in-openapi-in-dotnet-11/",
+      "published": "2026-06-16",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m4"
+      ],
+      "covers": [
+        "net11",
+        "aspnetcore",
+        "openapi",
+        "openapi-32",
+        "swashbuckle",
+        "migration",
+        "breaking-change"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-06-16",
+      "previewDrift": "minor",
+      "driftNote": "Its central claim checks out: we measured ASP.NET Core 11 RC 1 emitting \"openapi\": \"3.2.0\" by default. One refinement - pinning back with OpenApiVersion = OpenApi3_1 emits 3.1.2, not 3.1.1 and never 3.1.0, so an exact-string contract test still breaks even when you pin.",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "A concrete migration path off Swashbuckle onto Microsoft.AspNetCore.OpenApi, including the trap that ASP.NET Core 11 emits 3.2.0 by default and older Swagger UI builds simply refuse to render it. Exactly the failure mode attendees will hit on their first upgrade."
+    },
+    {
+      "id": "steven-giesel-runtime-async-net-11-part-1",
+      "title": "New runtime async is hitting .NET 11 - Part 1",
+      "author": "Steven Giesel",
+      "publisher": "steven-giesel.com",
+      "url": "https://steven-giesel.com/blogPost/1fb10ed2-df84-4080-b660-72c04a4cc674/new-runtime-async-is-hitting-net-11-part-1",
+      "published": "2026-02-15",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "runtime-async",
+        "async-await",
+        "benchmarkdotnet",
+        "stack-traces",
+        "allocations"
+      ],
+      "writtenAgainst": "Not stated by the author; published 2026-02-15",
+      "previewDrift": "minor",
+      "driftNote": "Written against .NET 11 Preview 1. One instruction is stale and one is not, and it matters which. We measured RC 1 by reflecting over the compiled assembly: with the default net11.0 settings the assembly still contains IAsyncStateMachine types and AsyncStateMachineAttribute methods, and only with <Features>$(Features);runtime-async=on</Features> do both drop to zero. So runtime async is still OPT-IN at RC 1 and this post is right to tell you to enable it - what is obsolete is only the <EnablePreviewFeatures>true</EnablePreviewFeatures> line, which is no longer required. Treat the stack-trace comparison with scepticism too: we measured identical traces on .NET 10, default .NET 11 and runtime-async .NET 11.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Benchmarks classic state-machine async against runtime-native async, and is one of the few pieces that shows the csproj opt-in concretely. Use it for the benchmark methodology and the opt-in switch, not for the stack-trace claim, which we could not reproduce on RC 1."
+    },
+    {
+      "id": "timdeschryver-named-global-query-filters-ef10",
+      "title": "Named global query filters in Entity Framework Core 10",
+      "author": "Tim Deschryver",
+      "publisher": "timdeschryver.dev",
+      "url": "https://timdeschryver.dev/blog/named-global-query-filters-in-entity-framework-core-10",
+      "published": "2025-12-04",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "article",
+      "modules": [
+        "day1-m5"
+      ],
+      "covers": [
+        "net10",
+        "efcore",
+        "efcore10",
+        "query-filters",
+        "ignorequeryfilters"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "A short before/after piece that focuses on the part attendees usually get wrong: selectively disabling one named filter instead of nuking them all with IgnoreQueryFilters. Good hand-out to pair with the lab."
+    }
+  ]
+};

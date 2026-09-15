@@ -1,0 +1,33 @@
+# Normalise line endings in the repository to LF, and let Git hand each
+# platform what it expects on checkout. Without this, the first clone on a
+# different OS shows every file as modified, which is a confusing thing to
+# hand an attendee alongside a workshop.
+* text=auto eol=lf
+
+# Windows-only tooling. CRLF in the working tree keeps these well-behaved in
+# PowerShell ISE and older editors.
+*.ps1   text eol=crlf
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# Visual Studio writes solution files with CRLF and rewrites them otherwise.
+*.sln   text eol=crlf
+*.slnx  text eol=crlf
+
+# Explicitly textual, so diffs stay readable.
+*.cs       text
+*.csproj   text
+*.json     text
+*.html     text
+*.css      text
+*.js       text
+*.mjs      text
+*.md       text
+
+# Binary — never touch, never diff.
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.svg   text
+*.db    binary
+*.pfx   binary

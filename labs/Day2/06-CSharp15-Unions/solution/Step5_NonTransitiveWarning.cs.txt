@@ -1,0 +1,19 @@
+// Rename this file to Step5_NonTransitiveWarning.cs during the lab and build.
+// Because CS8509 is treated as an error in this project, the compiler output is
+// the same code the probe produced as a warning:
+// CS8509: The switch expression does not handle all possible values of its input type
+// (it is not exhaustive). For example, the pattern 'NonTransitiveMiddle' is not covered.
+
+namespace Lab06;
+
+public static class BrokenNonTransitiveDemo
+{
+    // TASK 5: this is intentionally wrong. NonTransitiveMiddle is not closed,
+    // so matching NonTransitiveGrandchild is not enough.
+    public static string BrokenName(NonTransitiveRoot value)
+        => value switch
+        {
+            NonTransitiveLeaf => "leaf",
+            NonTransitiveGrandchild => "grandchild"
+        };
+}

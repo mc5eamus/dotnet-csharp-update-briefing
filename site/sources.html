@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sources &mdash; What's New in .NET 10 / 11</title>
+<meta name="description" content="Vetted first-party and community sources behind the .NET 10 / .NET 11 workshop, with provenance and reuse terms.">
+<link rel="stylesheet" href="assets/workshop.css">
+</head>
+<body class="mode-handout">
+
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="dot"></span> What's New in .NET <small>&mdash; 2-day workshop</small></a>
+  <nav class="navlinks">
+    <a href="index.html">Overview</a>
+    <a href="day1.html">Day 1</a>
+    <a href="day2.html">Day 2</a>
+    <a href="sources.html" aria-current="page">Sources</a>
+  </nav>
+  <button class="btn" data-action="notes" type="button" aria-pressed="false">Notes</button>
+  <button class="btn" data-action="mode" type="button" aria-pressed="false">Present</button>
+  <button class="btn" data-action="theme" type="button">Light</button>
+</header>
+
+<div class="layout">
+  <nav class="toc" data-title="Sources"></nav>
+
+  <main class="deck">
+
+    <section class="slide" id="src-intro">
+      <h2 data-toc="How to read this">Sources</h2>
+      <p class="slide-lead">Everything this workshop asserts is traceable. This page lists the
+      community material we drew on, what state it was in when we checked it, and how far we
+      are entitled to reuse it. <span data-source-count>No sources loaded</span>.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">First-party first</div>
+        <p>Microsoft Learn, the .NET Blog, the language design notes and the runtime repositories
+        are the <strong>only</strong> sources used for factual claims about behaviour, API shapes
+        and support dates. Community material is here because it explains, benchmarks or
+        pressure-tests those facts &mdash; never because it is the origin of them. Where a
+        community post and Learn disagree, the entry is marked
+        <span class="vstat vstat-contradicts-learn">contradicts learn</span> and we go with Learn.</p>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Preview drift is the main hazard on Day 2</div>
+        <p>Much of what has been written about .NET 11 and C# 15 dates from Preview 1&ndash;5.
+        Union syntax and the memory-safety rules both changed before RC 1. Each Day 2 entry
+        records the build it was <em>written against</em> so you can judge it. Treat any
+        undated .NET 11 post as suspect.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="src-verification">
+      <h2 data-toc="Verification &amp; reuse">Verification status and reuse tiers</h2>
+
+      <p>Two independent axes. <strong>Verification</strong> is how much we trust it;
+      <strong>tier</strong> is how much of it we are allowed to put on a slide.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Status</th><th>What it means</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="vstat vstat-verified">verified</span></td>
+              <td>We read it and independently confirmed its central claims against Learn or by
+              compiling the code ourselves.</td>
+            </tr>
+            <tr>
+              <td><span class="vstat vstat-partially-verified">partially verified</span></td>
+              <td>We read it and the main thrust holds up, but we did not check every claim.
+              Fine for context; don't quote figures from it unchecked.</td>
+            </tr>
+            <tr>
+              <td><span class="vstat vstat-outdated">outdated</span></td>
+              <td>Was accurate, isn't any more &mdash; almost always preview drift. Kept when the
+              <em>reasoning</em> is still instructive, with a note saying what moved.</td>
+            </tr>
+            <tr>
+              <td><span class="vstat vstat-contradicts-learn">contradicts learn</span></td>
+              <td>Actively disagrees with first-party documentation. Listed so you recognise the
+              claim if you meet it in the wild, not because we endorse it.</td>
+            </tr>
+            <tr>
+              <td><span class="vstat vstat-unverifiable">unverifiable</span></td>
+              <td>Paywalled, video-only, or makes claims about internal behaviour we cannot
+              reproduce. Read with the appropriate scepticism.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tier</th><th>Permitted use in workshop material</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1</strong></td>
+              <td>Link to it and describe it <em>in our own words</em>. The default, and what
+              almost every entry here uses. No copying of prose, figures, tables or code.</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td>Restate a specific finding in our own words with an explicit citation on the
+              slide. Used where someone else's benchmark or measurement is the point.</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td>Short attributed quotation, 300 characters maximum, with author and link.
+              Reserved for cases where the exact wording matters &mdash; a design-note rationale,
+              for instance.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Why this is spelled out</div>
+        <p>This deck is delivered inside a customer's organisation. Being able to point at the
+        provenance and reuse basis of every third-party item is not pedantry &mdash; it is the
+        difference between material you can hand over and material you cannot.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="src-contribute">
+      <h2 data-toc="Adding a source">Adding a source</h2>
+
+      <p>The registry is generated, not hand-edited. Anything added this way is validated before
+      it can reach the page.</p>
+
+      <div class="code-wrap" data-label="PowerShell">
+<pre><code class="language-powershell"># Single link, straight into the registry with verification 'pending'
+pwsh -NoProfile -File tools/add-source.ps1 `
+    -Url 'https://example.com/whats-new-in-ef-core-10' `
+    -Modules day1-m5 `
+    -Summary 'Walks through the complex-type mapping changes with a real model.'
+
+# Validate, then regenerate site/assets/sources.js
+pwsh -NoProfile -File tools/validate-sources.ps1
+pwsh -NoProfile -File tools/build-sources.ps1</code></pre>
+      </div>
+
+      <p><code>add-source.ps1</code> normalises the URL and rejects duplicates, so the same
+      article arriving from two directions lands once. It captures only &mdash; nothing is
+      verified at intake, so the record lands as <code>pending</code> at reuse tier&nbsp;1
+      (link&nbsp;only) and <strong>cannot reach the deck until a human vets it</strong>.
+      <code>build-sources.ps1</code> ships verified records only, and refuses to emit anything
+      if validation fails.</p>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">What the validator insists on</div>
+        <p>Unique ids; every module id known; a reuse tier on anything marked verified; a
+        <code>quote</code> present only at tier 3 and never over 300 characters; a
+        <code>writtenAgainst</code> build recorded for every .NET 11 / C# 15 entry; and a
+        <code>retrieved</code> date on everything, because a source you checked a year ago is a
+        source you have not checked.</p>
+      </div>
+    </section>
+
+    <div data-source-index></div>
+
+  </main>
+</div>
+
+<script src="assets/sources.js"></script>
+<script src="assets/workshop.js"></script>
+</body>
+</html>

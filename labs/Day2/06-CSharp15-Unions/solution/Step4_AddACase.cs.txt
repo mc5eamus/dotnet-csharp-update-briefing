@@ -1,0 +1,12 @@
+// Rename this file to Step4_AddACase.cs during the lab.
+// The project sets <WarningsAsErrors>CS8509</WarningsAsErrors>, so adding this
+// case makes every non-exhaustive switch a build break instead of a warning.
+
+namespace Lab06;
+
+public sealed record RateLimited(TimeSpan RetryAfter);
+
+// TASK 4: add RateLimited to SaveResult in DomainResults.cs:
+// public union SaveResult(Success, ValidationFailed, NotFound, Conflict, RateLimited);
+// Then build. SaveResultFormatter.ToHttpSummary will fail with CS8509 until you
+// add a RateLimited arm. Remove or rename this file before continuing.

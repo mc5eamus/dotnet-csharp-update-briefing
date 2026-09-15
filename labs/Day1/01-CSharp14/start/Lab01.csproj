@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- C# 14 is the default language version for net10.0 - no LangVersion needed. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Lab01</RootNamespace>
+    <AssemblyName>Lab01</AssemblyName>
+  </PropertyGroup>
+
+</Project>

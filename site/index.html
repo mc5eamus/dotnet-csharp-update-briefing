@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's New in .NET 10 / 11 &mdash; 2-day workshop</title>
+<meta name="description" content="Two-day workshop covering .NET 10 / C# 14 and .NET 11 / C# 15, focused on EF Core, ASP.NET Core and the .NET libraries.">
+<link rel="stylesheet" href="assets/workshop.css">
+</head>
+<body class="mode-handout">
+
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="dot"></span> What's New in .NET <small>&mdash; 2-day workshop</small></a>
+  <nav class="navlinks">
+    <a href="index.html" aria-current="page">Overview</a>
+    <a href="day1.html">Day 1</a>
+    <a href="day2.html">Day 2</a>
+    <a href="sources.html">Sources</a>
+  </nav>
+  <button class="btn" data-action="notes" type="button" aria-pressed="false">Notes</button>
+  <button class="btn" data-action="mode" type="button" aria-pressed="false">Present</button>
+  <button class="btn" data-action="theme" type="button">Light</button>
+</header>
+
+<div class="layout">
+  <nav class="toc" data-title="Overview"></nav>
+
+  <main class="deck">
+
+    <section class="slide" id="welcome">
+      <h2 data-toc="Welcome">What's New in .NET 10 &amp; .NET 11</h2>
+      <p class="slide-lead">Two days across four releases: .NET 10 with C# 14, and .NET 11 with C# 15.
+      Day 1 is what you can adopt today. Day 2 is what you need to decide about.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">Day 1 &mdash; Adopt now</div>
+          <h3>.NET 10 &amp; C# 14 <span class="badge badge-net10">LTS</span></h3>
+          <p>Generally available and supported for three years. Everything here is production-ready
+          and most of it you can turn on in an afternoon.</p>
+          <p><a href="day1.html">Open Day 1 &rarr;</a></p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Day 2 &mdash; Prepare &amp; decide</div>
+          <h3>.NET 11 &amp; C# 15 <span class="badge badge-net11">RC</span></h3>
+          <p>Release candidate, GA expected November 2026, and a <strong>standard-term</strong>
+          release. Big language features &mdash; and a genuine support-window decision.</p>
+          <p><a href="day2.html">Open Day 2 &rarr;</a></p>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Verified, not summarised</div>
+        <p>Every code sample in this workshop was compiled and run against
+        <strong>.NET 10.0.12</strong> and <strong>.NET 11.0.100-rc.1.26425.128</strong> on the
+        machine that built it. Where something doesn't work &mdash; and a few things genuinely
+        don't &mdash; that's called out rather than glossed over.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="why-split">
+      <h2 data-toc="Why this split">Why the days split this way</h2>
+      <p>The obvious split &mdash; one release per day &mdash; happens to also be the useful one,
+      because it maps onto a real decision boundary rather than an arbitrary version number.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>.NET 10 / C# 14</th><th>.NET 11 / C# 15</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Status</strong></td><td>Generally available</td><td>Release candidate 1</td></tr>
+          <tr><td><strong>Released</strong></td><td>November 2025</td><td>GA expected November 2026</td></tr>
+          <tr><td><strong>Support</strong></td><td><span class="badge badge-net10">LTS</span> 3 years, to 14 Nov 2028</td><td><span class="badge badge-net11">STS</span> 24 months, to ~Nov 2028</td></tr>
+          <tr><td><strong>Your question</strong></td><td>"When do we upgrade?"</td><td>"Do we take this one at all?"</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p>Those are different conversations, so they get different days. Day 1 is stable and
+      immediately actionable. Day 2 is forward-looking, still moving, and ends in a decision.</p>
+
+      <div class="callout callout-focus">
+        <div class="callout-title">The labs carry across the days</div>
+        <p>Day 2's ASP.NET Core and EF Core labs are <em>upgrades of the Day 1 labs</em>. You build
+        an API and a data model on .NET 10, then migrate them to .NET 11 &mdash; and hit the
+        OpenAPI 3.1 &rarr; 3.2 breaking change yourself instead of reading about it on a slide.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="agenda-day1">
+      <h2 data-toc="Day 1 agenda">Day 1 agenda <span class="badge badge-net10">.NET 10</span> <span class="badge badge-cs14">C# 14</span></h2>
+      <div class="agenda card">
+        <div class="agenda-row"><span class="mins">35 min</span><span class="what"><strong>Orientation &amp; release strategy</strong><span>Cadence, LTS vs STS, support windows, upgrade path, tooling, file-based apps</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">70 min</span><span class="what"><strong>C# 14 language</strong><span>Extension members, <code>field</code>, null-conditional assignment, first-class spans, partial members</span></span><span class="badge badge-cs14">C# 14</span></div>
+        <div class="agenda-row is-lab"><span class="mins">30 min</span><span class="what"><strong>Lab 01 &mdash; C# 14</strong><span>Refactor a legacy type onto the new language features</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">55 min</span><span class="what"><strong>.NET 10 libraries</strong><span>Post-quantum cryptography, System.Text.Json, compression, diagnostics</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">30 min</span><span class="what"><strong>Lab 02 &mdash; PQC &amp; JSON hardening</strong><span>ML-KEM, ML-DSA, strict serialization</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">55 min</span><span class="what"><strong>ASP.NET Core 10</strong><span>OpenAPI 3.1, YAML, XML doc comments, Minimal API validation, SSE</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">40 min</span><span class="what"><strong>Lab 03 &mdash; Minimal API &amp; OpenAPI</strong><span>Build the API you'll migrate tomorrow</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">45 min</span><span class="what"><strong>EF Core 10</strong><span>Complex types, named query filters, JSON columns, vector search</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">30 min</span><span class="what"><strong>Lab 04 &mdash; EF Core 10</strong><span>Complex types and named filters on SQLite</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">15 min</span><span class="what"><strong>Wrap-up</strong><span>.NET 10 adoption checklist</span></span><span></span></div>
+      </div>
+    </section>
+
+    <section class="slide" id="agenda-day2">
+      <h2 data-toc="Day 2 agenda">Day 2 agenda <span class="badge badge-net11">.NET 11 RC</span> <span class="badge badge-cs15">C# 15</span></h2>
+      <div class="agenda card">
+        <div class="agenda-row"><span class="mins">45 min</span><span class="what"><strong>.NET 11 runtime</strong><span>Runtime-native async, raised hardware requirements, JIT and SIMD</span></span><span></span></div>
+        <div class="agenda-row is-lab"><span class="mins">20 min</span><span class="what"><strong>Lab 05 &mdash; Runtime async</strong><span>Make the state machines disappear &mdash; and see what doesn't change</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">85 min</span><span class="what"><strong>C# 15 language</strong><span>Union types, closed hierarchies, collection expression arguments, extension indexers, memory safety</span></span><span class="badge badge-cs15">C# 15</span></div>
+        <div class="agenda-row is-lab"><span class="mins">40 min</span><span class="what"><strong>Lab 06 &mdash; Unions &amp; closed hierarchies</strong><span>Model a domain with exhaustive matching</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">40 min</span><span class="what"><strong>.NET 11 libraries</strong><span>Union serialization, Zstandard, decimal floating point, FullJoin, async validation</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 07 &mdash; Libraries</strong><span>Round-trip a union through JSON</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">45 min</span><span class="what"><strong>ASP.NET Core 11</strong><span>OpenAPI 3.2 by default, unions in Minimal APIs, async validation, MCP template</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 08 &mdash; Migrate Lab 03</strong><span>.NET 10 &rarr; 11, and the OpenAPI break</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">40 min</span><span class="what"><strong>EF Core 11</strong><span>Complex types on TPT/TPC, vector and JSON indexes, migration workflow</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 09 &mdash; Migrate Lab 04</strong><span>EF Core 10 &rarr; 11</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">15 min</span><span class="what"><strong>.NET 12 outlook &amp; the decision</strong><span>What's signalled, and whether to take .NET 11 at all</span></span><span></span></div>
+      </div>
+    </section>
+
+    <section class="slide" id="scope">
+      <h2 data-toc="Scope">What's in scope &mdash; and what isn't</h2>
+      <p>This workshop was shaped by your team's survey, so it is deliberately narrower than a
+      general "what's new" tour.</p>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-kicker">In focus</div>
+          <ul>
+            <li><strong>EF Core</strong> &mdash; complex types, JSON columns, query translation, migrations</li>
+            <li><strong>ASP.NET Core</strong> &mdash; OpenAPI 3.1 and 3.2, validation, Minimal APIs</li>
+            <li><strong>.NET libraries</strong> &mdash; post-quantum cryptography, System.Text.Json, compression, diagnostics</li>
+            <li><strong>The languages</strong> &mdash; C# 14 and C# 15</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Deliberately excluded</div>
+          <ul>
+            <li>MAUI, Windows Forms, WPF</li>
+            <li>Blazor</li>
+            <li>F#, VB.NET</li>
+          </ul>
+          <p class="src-note">Worth knowing: roughly half of the official ASP.NET Core release
+          notes for both releases is Blazor content. All of it has been filtered out here, which
+          is why this covers more of what you actually use in less time.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">.NET 12</div>
+        <p>There is a short outlook at the end of Day 2. Be aware that no .NET 12 documentation
+        or preview exists yet &mdash; previews are expected to start in early 2027 &mdash; so that
+        module covers <em>directional signals and planning</em>, not features. Anything you read
+        online today claiming .NET 12 feature detail is speculation.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="prerequisites">
+      <h2 data-toc="Prerequisites">Before you arrive</h2>
+      <p>The labs are hands-on. Please install these ahead of time.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Install</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><strong>.NET 10 SDK</strong></td><td>Day 1 labs target <code>net10.0</code></td></tr>
+          <tr><td><strong>.NET 11 SDK</strong> (RC 1 or later)</td><td>Day 2 labs target <code>net11.0</code></td></tr>
+          <tr><td>An editor</td><td>Visual Studio 2026, VS Code with the C# Dev Kit, or Rider</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Install both SDKs &mdash; 11 alone is not enough</div>
+        <p>The .NET 11 SDK ships only <code>net11.0</code> templates, so this fails on a machine
+        that only has .NET 11:</p>
+        <pre><code class="language-powershell">dotnet new console --framework net10.0
+# error: 'net10.0' is not a valid value for --framework</code></pre>
+        <p>The .NET 11 SDK can happily <em>build</em> an existing <code>net10.0</code> project &mdash;
+        it just can't scaffold one. SDKs install side-by-side and won't disturb each other.</p>
+      </div>
+
+      <h3>Optional, for full coverage</h3>
+      <ul>
+        <li><strong>Post-quantum cryptography</strong> needs OpenSSL 3.5+ or Windows CNG with PQC
+        support. Lab 02 gates on <code>IsSupported</code> and still works if an algorithm is
+        missing &mdash; which is realistic, because on Windows 11 25H2 ML-KEM and ML-DSA are
+        available but SLH-DSA is not.</li>
+        <li><strong>SQL Server vector search</strong> needs Azure SQL or SQL Server 2025. The
+        runnable EF labs use SQLite; vector and JSON-index topics are walkthroughs.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="using-site">
+      <h2 data-toc="Using this site">Using this site</h2>
+      <p>This page is the slide deck, the handout and the reference, depending on which mode
+      you put it in. It's a single set of files with no network dependency &mdash; it works from a
+      USB stick.</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Key</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>P</code></td><td>Toggle presentation mode (one section at a time) and handout mode (continuous scroll)</td></tr>
+          <tr><td><code>&larr;</code> <code>&rarr;</code> <code>Space</code></td><td>Previous / next section, in presentation mode</td></tr>
+          <tr><td><code>N</code></td><td>Show or hide speaker notes</td></tr>
+          <tr><td><code>T</code></td><td>Switch between dark and light theme</td></tr>
+          <tr><td><code>/</code></td><td>Jump to the topic filter</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p>Printing from handout mode produces a clean paper handout &mdash; speaker notes included,
+      link targets expanded, code wrapped rather than clipped.</p>
+
+      <div class="notes">
+        <p>If you're delivering this: present from handout mode if the room wants to follow along
+        on their own screens, and presentation mode if they're watching yours. The mode, theme and
+        notes settings persist per browser, so set them once before you start.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="deck-nav">
+  <button class="btn" data-action="prev" type="button">&larr; Prev</button>
+  <span class="pos"></span>
+  <button class="btn" data-action="next" type="button">Next &rarr;</button>
+  <span class="where"></span>
+</div>
+
+<script src="assets/sources.js"></script>
+<script src="assets/workshop.js"></script>
+</body>
+</html>
