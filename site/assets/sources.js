@@ -346,6 +346,26 @@ window.WORKSHOP_SOURCES ={
       "recommended": true
     },
     {
+      "id": "learn-core-porting-github-copilot-upgrade-overview",
+      "title": "GitHub Copilot upgrade overview",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-upgrade/overview",
+      "retrieved": "2026-09-15",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m1",
+        "day1-m6"
+      ],
+      "writtenAgainst": ".NET 10 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "verificationNotes": "Page updated 2026-08-04, newer than the Upgrade Assistant deprecation notice that points here. Note the discrepancy: the deprecation notice calls the replacement a Visual Studio feature, while this page documents it across Visual Studio, VS Code, the GitHub Copilot CLI and GitHub.com. This page is the more current of the two.",
+      "usageTier": 2,
+      "summary": "The agent that replaces Upgrade Assistant: scenario-based upgrade workflows that assess, plan, fix and commit, available well beyond Visual Studio.",
+      "recommended": true
+    },
+    {
       "id": "learn-whats-new-dotnet-10-overview",
       "title": "What's new in .NET 10",
       "publisher": "Microsoft",
@@ -853,14 +873,14 @@ window.WORKSHOP_SOURCES ={
       "origin": "discovered",
       "kind": "docs",
       "modules": [
-        "day1-m1",
-        "day1-m6"
+        "day1-m1"
       ],
       "writtenAgainst": ".NET 10 GA",
       "previewDrift": "none",
       "verification": "verified",
+      "verificationNotes": "The page is accurate and current; the tool it documents is not. It carries its own deprecation notice (page updated 2026-03-23) and redirects readers to the GitHub Copilot upgrade agent. Kept and surfaced deliberately: it is the primary evidence for the deprecation. Cite it as proof, never as a recommendation.",
       "usageTier": 2,
-      "summary": "The Upgrade Assistant tool: what it automates when retargeting, and what it leaves for you."
+      "summary": "Upgrade Assistant's overview page, now carrying its own deprecation notice. Useful as proof that the long-standing default answer has been retired, not as tooling advice."
     },
     {
       "id": "learn-breaking-changes-10-withopenapi-deprecated",

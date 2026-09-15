@@ -724,6 +724,23 @@ later.
 **"Why doesn't `dotnet new` offer net10.0?"**
 Because they are on the .NET 11 SDK. See [Setup](#1-setup). This comes up on Day 2 constantly.
 
+**"Can't we just run Upgrade Assistant?"**
+No — `dotnet-upgrade-assistant` is **officially deprecated**. Microsoft Learn carries the notice
+on the tool's own overview page and redirects to the **GitHub Copilot upgrade** agent.
+
+Expect resistance, for a good reason: the tool was the standard answer for years, it is still
+installable, and nothing in the tooling itself tells you it has been retired. Practically every
+blog post about .NET upgrades recommends it. Show the Learn page rather than asserting it — the
+notice is right at the top, and the source is registered as
+`learn-core-porting-upgrade-assistant-overview` precisely so you can pull it up offline.
+
+One detail worth having ready, because it changes who in the room is affected: the deprecation
+notice describes the replacement as a Visual Studio feature, but the agent's **own** documentation
+is more recent (updated 2026-08-04 versus 2026-03-23) and lists Visual Studio, VS Code, the GitHub
+Copilot CLI and GitHub.com. If someone objects that their team is not on Visual Studio, the
+broader page is the accurate one. Two first-party pages, different scope, and the one people land
+on first is the staler of the two.
+
 ---
 
 ## 6. Sources and reuse

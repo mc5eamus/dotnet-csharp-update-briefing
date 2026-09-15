@@ -236,15 +236,32 @@
 
       <h3>Tooling that helps</h3>
       <ul>
-        <li><code>dotnet-upgrade-assistant</code> &mdash; automates retargeting and flags API removals.</li>
+        <li><strong>GitHub Copilot upgrade</strong> &mdash; the agent that replaced Upgrade Assistant.
+        Assesses the solution, proposes a plan, applies fixes and commits each step so you can
+        review or roll back. Available in Visual Studio, VS Code, the Copilot CLI and GitHub.com.</li>
         <li><code>dotnet list package --outdated</code> &mdash; the fastest way to find package drift.</li>
         <li><code>dotnet list package --vulnerable --include-transitive</code> &mdash; run this
         anyway; upgrades are a good moment to clear known CVEs.</li>
       </ul>
 
+      <div class="callout callout-gotcha">
+        <div class="callout-title">Do not reach for <code>dotnet-upgrade-assistant</code></div>
+        <p><strong>It is officially deprecated.</strong> Learn now carries the notice on the tool's
+        own overview page and points to the Copilot upgrade agent instead. This matters in the room
+        because the tool has a decade of muscle memory and near-universal blog coverage behind it
+        &mdash; someone will suggest it, and it is still installable, so nothing tells you it has
+        been retired.</p>
+        <p>Worth noting for planning: the deprecation notice describes the replacement as a Visual
+        Studio feature, but the agent's own documentation is newer and broader &mdash; VS, VS Code,
+        Copilot CLI and GitHub.com. If your team is not on Visual Studio, you are not excluded.</p>
+      </div>
+
       <div class="notes">
         <p>If anyone asks about .NET Framework, be direct: this path does not apply. That is a
         rewrite conversation, not an upgrade conversation, and it is out of scope today.</p>
+        <p>The Upgrade Assistant deprecation is a good small demonstration of why this deck cites
+        retrieval dates. The tool was the standard answer for years; the notice went up in 2026 and
+        nothing in the tooling itself signals it. Expect at least one person to push back.</p>
       </div>
     </section>
 
