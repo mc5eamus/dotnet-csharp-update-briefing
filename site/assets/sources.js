@@ -616,6 +616,85 @@ window.WORKSHOP_SOURCES ={
       "recommended": true
     },
     {
+      "id": "learn-api-decimal128",
+      "title": "Decimal128 struct (System.Numerics)",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.numerics.decimal128",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "libraries",
+        "decimal-floating-point",
+        "ieee-754",
+        "numerics"
+      ],
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Namespace independently confirmed as System.Numerics against the RC 1 reference assemblies.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the IEEE 754 decimal floating-point types. The namespace on this page is the correction that matters: the types are System.Numerics.Decimal32/64/128, so a sample with only 'using System;' will not compile.",
+      "recommended": true
+    },
+    {
+      "id": "learn-api-queryable-maxby",
+      "title": "Queryable.MaxBy method",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.linq.queryable.maxby",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "linq",
+        "queryable",
+        "maxby",
+        "efcore11",
+        "translation"
+      ],
+      "writtenAgainst": "API reference for System.Linq.Queryable, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "The method predates .NET 11; only EF Core's ability to translate it is new. We confirmed the translation by capturing the generated SQL on RC 1.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference proving where MaxBy actually lives: System.Linq.Queryable, not an EF Core extension class. EF Core 11's contribution is translating it, and this page is the quickest way to settle that in the room.",
+      "recommended": true
+    },
+    {
+      "id": "learn-dotnet11-runtime",
+      "title": "What's new in the .NET 11 runtime",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/runtime",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "runtime",
+        "hardware-requirements",
+        "jit",
+        "runtime-async",
+        "arm64"
+      ],
+      "writtenAgainst": "Page states it was last updated for .NET 11 RC 1; ms.date 2026-09-08",
+      "previewDrift": "none",
+      "driftNote": "Explicitly versioned to RC 1, which is the build this workshop was measured on. The hardware-baseline section is the part to re-read at GA.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The first-party runtime page, explicitly marked as last updated for RC 1. It is the authority for the raised minimum hardware requirements — the x86/x64 and Arm64 instruction-set baselines and the moved ReadyToRun targets — which is the .NET 11 change most likely to block a deployment rather than a build.",
+      "recommended": true
+    },
+    {
       "id": "milanjovanovic-named-query-filters-ef10",
       "title": "Named Query Filters in EF 10 (multiple query filters per entity)",
       "author": "Milan Jovanović",
@@ -639,6 +718,31 @@ window.WORKSHOP_SOURCES ={
       "verification": "verified",
       "usageTier": 1,
       "summary": "Shows why one global filter per entity was never enough once soft-delete and tenant scoping collide, and walks the EF 10 replacement where each filter is named and can be switched off independently. The most practical treatment of the feature our EF Core module leads with.",
+      "recommended": true
+    },
+    {
+      "id": "openapi-spec-3-2-0",
+      "title": "OpenAPI Specification v3.2.0",
+      "publisher": "OpenAPI Initiative",
+      "url": "https://spec.openapis.org/oas/v3.2.0.html",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "spec",
+      "modules": [
+        "day2-m4"
+      ],
+      "covers": [
+        "openapi",
+        "openapi32",
+        "spec",
+        "api-contracts"
+      ],
+      "writtenAgainst": "OpenAPI Specification 3.2.0, a finished specification independent of .NET",
+      "previewDrift": "none",
+      "driftNote": "A released specification, not preview material. It is the fixed target; what may still move is ASP.NET Core's emission of it.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The specification .NET 11 emits by default. Needed for the tooling-compatibility conversation: the question is never whether ASP.NET Core produces a valid document, it is whether the client generators and gateways downstream accept a 3.2.0 version string.",
       "recommended": true
     },
     {
@@ -1568,6 +1672,55 @@ window.WORKSHOP_SOURCES ={
       "summary": "SDK and CLI changes in .NET 10, including the new command verbs and file-based app support."
     },
     {
+      "id": "learn-ef-client-eval",
+      "title": "Client vs. server evaluation",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/ef/core/querying/client-eval",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "efcore",
+        "client-evaluation",
+        "performance",
+        "translation"
+      ],
+      "writtenAgainst": "Live EF Core docs page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Long-standing conceptual guidance, not release-specific.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The rules that decide whether a query runs in the database or in your process. Directly supports the module's guardrail slides: a newly translatable operator is only a win if you can prove it did not quietly fall back to the client."
+    },
+    {
+      "id": "learn-ef-complex-query-operators",
+      "title": "Complex query operators in EF Core",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/ef/core/querying/complex-query-operators",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "efcore",
+        "joins",
+        "groupjoin",
+        "selectmany",
+        "sql-translation"
+      ],
+      "writtenAgainst": "Live EF Core docs page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Describes translation behaviour that is largely stable across EF Core versions.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "How EF Core turns LINQ join shapes into SQL, including the older GroupJoin and SelectMany patterns the new first-class join operators replace. Useful for showing attendees what their existing query code was compiling into."
+    },
+    {
       "id": "learn-code-analysis-style-rules-ide0410",
       "title": "IDE0410: Use labeled jump statement",
       "publisher": "Microsoft Learn",
@@ -1588,6 +1741,153 @@ window.WORKSHOP_SOURCES ={
       "verificationNotes": "Fetched the rule page and confirmed the title is 'Use labeled jump statement', which is the claim the Day 2 labeled-loops slide makes. The feature itself was compiled and run against SDK 11.0.100-rc.1.26425.128: 'continue outer' abandons the remaining inner iterations, not just the current one.",
       "usageTier": 2,
       "summary": "The analyser rule behind the labeled break/continue slide: flags bool-flag and goto workarounds that the new labelled control flow replaces."
+    },
+    {
+      "id": "learn-native-aot-deployment",
+      "title": "Native AOT deployment",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "native-aot",
+        "trimming",
+        "deployment",
+        "publishing"
+      ],
+      "writtenAgainst": "Version-independent conceptual page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Not tied to a single release; the AOT and trimming constraints it describes predate .NET 11.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Reference for the AOT and trimming constraints the runtime module asks attendees to check before adopting .NET 11. Relevant because union and closed-hierarchy modelling interacts with reflection-based serialization, which is exactly what trimming analysis flags."
+    },
+    {
+      "id": "learn-api-queryable-leftjoin",
+      "title": "Queryable.LeftJoin method",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.linq.queryable.leftjoin",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "linq",
+        "queryable",
+        "joins",
+        "efcore11",
+        "translation"
+      ],
+      "writtenAgainst": "API reference for System.Linq.Queryable, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "BCL surface rather than EF Core surface, confirmed by reflection over the RC 1 reference assemblies.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Same point as MaxBy for the join family. LeftJoin, RightJoin and FullJoin are BCL query operators; an attendee searching EntityFrameworkQueryableExtensions for them will come up empty."
+    },
+    {
+      "id": "learn-versioning-sdk-msbuild-vs",
+      "title": "SDK, MSBuild and Visual Studio versioning",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m6"
+      ],
+      "covers": [
+        "sdk",
+        "msbuild",
+        "visual-studio",
+        "tooling",
+        "upgrade-planning"
+      ],
+      "writtenAgainst": "Live first-party page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Updated per release. Confirm the .NET 11 row is present before showing it; during a release candidate the table can lag the SDK by a few weeks.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Which SDK and Visual Studio version a given target framework needs. The practical constraint behind upgrade cadence planning: build agents and developer machines usually gate an upgrade well before application code does."
+    },
+    {
+      "id": "learn-dotnet11-sdk",
+      "title": "What's new in the .NET 11 SDK",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/sdk",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "sdk",
+        "tooling",
+        "msbuild",
+        "cli"
+      ],
+      "writtenAgainst": "Live first-party page, read 2026-09-14 during the .NET 11 RC 1 cycle",
+      "previewDrift": "none",
+      "driftNote": "Maintained with the release rather than written once, so it tracks RC 1 and will track GA.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "SDK and tooling changes for .NET 11, separate from the runtime page. Use it when an attendee asks why a build behaves differently after installing the RC even though the target framework did not change."
+    },
+    {
+      "id": "learn-api-x25519diffiehellman",
+      "title": "X25519DiffieHellman class",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.x25519diffiehellman",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "cryptography",
+        "x25519",
+        "key-agreement"
+      ],
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Type name independently confirmed against the RC 1 reference assemblies; no bare X25519 type is present.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the new key-agreement type. The page name is itself the correction: there is no bare X25519 type, only X25519DiffieHellman and its Cng and OpenSsl derivatives."
+    },
+    {
+      "id": "learn-api-zstandardstream",
+      "title": "ZstandardStream class",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.io.compression.zstandardstream",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "libraries",
+        "compression",
+        "zstandard"
+      ],
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "We independently confirmed the type and its siblings exist by loading the RC 1 reference assemblies through a MetadataLoadContext.",
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the new compression stream. Worth opening live because Zstandard arrives as a family of types rather than a single stream — the sibling encoder, decoder, options and dictionary types are visible from this page."
     },
     {
       "id": "nikolatech-complex-types-ef-core-10",

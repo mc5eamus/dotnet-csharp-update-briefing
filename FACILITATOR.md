@@ -162,31 +162,39 @@ the `field` shadowing slide (3.12), or
 the OpenAPI before/after diff. Those are the ones attendees cannot get from the release notes, and
 they are the reason the day is worth attending.
 
-**Day 2 currently runs about two hours of content, not four.** Its 37 slides have not yet had the
-expansion Day 1 received, so at Day 1's measured pace the module budget is roughly:
+**Day 2 now carries slightly more than Day 1.** It was expanded from 37 slides to 93, and its
+modules are budgeted against their real slide counts at the same measured pace:
 
-| Module | Slides | Realistic |
+| Module | Slides | Minutes |
 |---|---:|---:|
-| 1 · .NET 11 runtime | 6 | 20 min |
-| 2 · C# 15 | 9 | 25 min |
-| 3 · Libraries | 6 | 20 min |
-| 4 · ASP.NET Core 11 | 6 | 20 min |
-| 5 · EF Core 11 | 6 | 20 min |
-| 6 · .NET 12 outlook & the decision | 4 | 15 min |
-| **Total** | **37** | **120 min** |
+| 1 · .NET 11 runtime | 13 | 38 |
+| 2 · C# 15 | 20 | 58 |
+| 3 · Libraries | 14 | 41 |
+| 4 · ASP.NET Core 11 | 16 | 46 |
+| 5 · EF Core 11 | 17 | 49 |
+| 6 · .NET 12 outlook & the decision | 8 | 23 |
+| **Total** | **88** | **255 ≈ 4 h 15** |
 
-With 2 h 15 of labs that is a little over four hours — a short day. Plan to either finish early,
-expand the day the way Day 1 was expanded, or run the C# 15 and EF Core modules as longer
-discussion sessions. Do not promise a full day from the current slide count.
+(Slide counts here are content slides; each of modules 1–5 also carries a lab marker slide, for 93
+sections in the page.) With 2 h 15 of labs, Day 2 is a full day with breaks — slightly heavier than
+Day 1, because it is the day carrying the most measured material. The extra weight went
+disproportionately into **EF Core, ASP.NET Core and C# 15**, which is what the survey asked for.
 
-If you are nonetheless running late on Day 2, the safe cuts are, in order:
+If you are running late on Day 2, the safe cuts are, in order:
 
-1. The .NET 12 outlook (15 min) — there is genuinely nothing to say yet, see below.
-2. Memory safety in C# 15 — the one feature needing `<LangVersion>preview</LangVersion>`.
+1. The .NET 12 outlook — there is genuinely nothing to announce, see below. The planning slides
+   survive as a handout.
+2. Memory safety — it is not even in C# 15 (§ 3.23), so it is the most cuttable content in module 2.
 3. Lab 07, which can be a demo rather than hands-on.
+4. The union allocation and generic/nested union slides, if the room is modelling-focused rather
+   than performance-focused.
+5. The `with` collection-argument trap (§ 3.26) — a narrow trigger, and the generalisable lesson can
+   be delivered in one sentence.
 
-Do **not** cut the CS8509 slide or the runtime-async correction. They are the parts attendees
-cannot get from the release notes.
+Do **not** cut the CS8509 slide, the runtime-async correction, the absent-state slide
+(`default(union)` and `null`), the float-conversion saturation slide, the union expression-tree
+boundary, the EF Core `PrimitiveCollection` break, the LINQ-operator-ownership correction, or the
+OpenAPI document diff. They are the parts attendees cannot get from the release notes.
 
 ### What the customer asked for
 
@@ -206,24 +214,37 @@ say is speculation. Say that plainly; it lands better than hedging.
 
 ## 3. Corrections we found by testing
 
-Every code sample here was compiled and run on the machine that built this workshop. Sixteen
+Every code sample here was compiled and run on the machine that built this workshop. Twenty-seven
 findings came out of that, and they fall into four groups:
 
 - **Widely-repeated claims that are wrong** — runtime async being on by default (3.1), the cleaner
-  stack traces demo (3.2), the OpenAPI version string (3.6), and the panic about `Reverse()`
+  stack traces demo (3.2), the OpenAPI version string (3.6), the panic about `Reverse()`
   silently becoming a span call, which is unfounded on `net10.0` and entirely real on `net8.0`
-  (3.11, 3.16).
+  (3.11, 3.16), the new LINQ join operators being presented as EF Core APIs when they are not
+  (3.20), and memory safety being sold as a C# 15 feature when the compiler rejects it at
+  `LangVersion=15.0` (3.23).
 - **Things the docs state correctly but nobody reads carefully** — `CS8509` being only a warning
   (3.3), the per-member PQC experimental boundary (3.4), the support arithmetic (3.5), unions
   serializing happily while never deserializing (3.9), `CS9258` also being only a warning (3.12),
-  and exactly what `JsonSerializerDefaults.Strict` does and does not change (3.13).
+  exactly what `JsonSerializerDefaults.Strict` does and does not change (3.13), the exact
+  namespaces and type names of the new library surface (3.22), and unions being unable to cross an
+  expression tree at all (3.25).
 - **Silent behaviour changes that produce no diagnostic at all** — overload resolution moving to
   spans, which can turn a thrown exception into a silent no-op (3.11), an array reversing itself in
-  place on `net8.0` with zero warnings (3.16), enums disappearing from OpenAPI documents (3.14), and
-  an allocation optimisation that comes and goes between runs of the same binary (3.15).
+  place on `net8.0` with zero warnings (3.16), enums disappearing from OpenAPI documents (3.14),
+  an allocation optimisation that comes and goes between runs of the same binary (3.15), the
+  absent-state hole that makes an "exhaustive" switch throw at runtime with zero warnings (3.17),
+  a union over a value type putting an allocation on a path that had none (3.19), narrowing
+  float→integer conversions changing their result with no warning and no compat switch (3.24),
+  and a method named `with` vanishing out of a collection expression (3.26).
 - **Slides we got wrong ourselves and fixed by measuring** — collection-expression capacity (3.7),
   the extension-operator receiver and instance `operator +=` (3.8), and placeholder text shipping
   as expected output (3.10).
+
+One finding sits outside that taxonomy because it is the plainest kind of break: EF Core's explicit
+`Property()` mapping for a primitive collection compiles on both versions and then throws at
+runtime on EF 11 (3.27). It only reaches teams who write explicit configuration classes, which in
+practice means most enterprises.
 
 That last group is not an embarrassment to hide. Say it in the room: this material was checked by
 running it, which is exactly why you can trust the rest.
@@ -417,7 +438,7 @@ That is the real reason to reach for `with(capacity:)`.
   run reports 0 warnings, because the project was already up to date. Anyone spot-checking "did the
   trap get fixed?" needs `--no-incremental`. This bites during pre-flight, not during the lab.
 
-### 3.9 Unions serialize without a classifier — but never deserialize
+### 3.9 Unions serialize without a classifier — and then will not deserialize without one
 
 Directly on the customer's System.Text.Json interest, and the most likely of these to cost someone
 a production incident.
@@ -663,6 +684,265 @@ This is the best two-build demo in the workshop, and it takes ninety seconds. Ru
 
 ---
 
+### 3.17 "Exhaustive" does not mean the value is one of your cases
+
+The single most important Day 2 finding, because it applies to **both** new modelling constructs
+and the compiler is silent about it.
+
+A `union` is a **struct**, so it always has a zero value matching no case. A `closed` class is a
+reference type, so it can be `null`. In both cases a switch with an arm for every declared case
+compiles with **0 warnings** and throws at runtime:
+
+```
+Build succeeded.  0 Warning(s)  0 Error(s)
+
+real     : dog Rex
+default  : threw SwitchExpressionException
+           Non-exhaustive switch expression failed to match its input.
+           Unmatched value was Pet.
+```
+
+| | Absent state | How you reach it |
+|---|---|---|
+| `union` | `default` | `default(T)`, **every element of `new T[n]`**, unassigned struct fields |
+| `closed class` | `null` | any unassigned reference, deserialisation, an API returning null |
+
+Reflection confirms the union is a struct: `IsValueType: True`, `BaseType: ValueType`, implements
+`IUnion`, carries `UnionAttribute`, exposes `object Value`. `Pet?` is `Nullable<Pet>`. A closed type
+reports `IsAbstract: True`, `IsSealed: False` and carries `IsClosedTypeAttribute`.
+
+**The defence is free:** adding `_ => …` closes both holes and produces **no** unreachable-arm
+warning, because the arm genuinely is reachable.
+
+**The line to deliver:** C# 15 exhaustiveness proves you handled every case you *declared*. It does
+not prove a case is *present*. Array initialisation is the one that will bite a real codebase.
+
+Pair this with 3.3 and the picture is complete: a **missing** arm gives you a warning you can
+promote to an error, but a **complete** set of arms still throws on the absent state — and for that
+one there is no diagnostic to promote.
+
+---
+
+### 3.18 Unions have three identity traps
+
+All measured, all easy to hit within an hour of adopting them:
+
+- **`==` does not compile.** `error CS0019: Operator '==' cannot be applied to operands of type
+  'Pet' and 'Pet'`. But `a.Equals(b)` returns `True` and the hash codes match. Record cases make
+  `==` the natural thing to reach for, so this surprises people.
+- **There is no cast back out.** `(Dog)pet` gives `error CS0030: Cannot convert type 'Pet' to
+  'Dog'`. The conversion is one-way; pattern matching is the only exit. `pet.Value` is typed
+  `object`.
+- **`ToString()` returns `"Pet"`** — the union's type name, not the record's `Dog { Name = Rex }`
+  formatting. `GetType()` also returns `Pet`, even though `pet is Dog` is `True`. Anything that logs
+  a union prints the wrapper instead of the payload.
+
+---
+
+### 3.19 A union over value types allocates; over reference types it is free
+
+Measured with `GC.GetAllocatedBytesForCurrentThread()`, Release, `[MethodImpl(NoInlining)]`,
+200,000 iterations, storing into a static field:
+
+| | B/call |
+|---|---:|
+| raw `int` | 0.00 |
+| union over `int` | **24.00** |
+| raw record | 24.00 |
+| union over record | **24.00** |
+
+The wrapper itself costs nothing — over a record, the 24 B is the record you were allocating
+anyway. But `Value` is typed `object`, so a value-type case **boxes**: a `union Num(int, double)`
+allocates where the bare `int` allocated nothing.
+
+**Measurement trap:** calling `.GetHashCode()` on the union struct boxes it and contaminates the
+result (we got a misleading 48 B that way). Measure with a plain field store.
+
+---
+
+### 3.20 The new query operators are BCL methods, not EF Core methods
+
+`FullJoin`, `LeftJoin`, `RightJoin`, `MaxBy` and `MinBy` all live on `System.Linq.Queryable` and
+`System.Linq.Enumerable`. Reflection shows them **absent** from both
+`EntityFrameworkQueryableExtensions` and `RelationalQueryableExtensions`.
+
+EF Core 11's contribution is **translating** them. Presenting them as new EF APIs is wrong, and an
+attendee who goes looking for `EntityFrameworkQueryableExtensions.FullJoin` will not find it.
+
+The translation is real, and worth proving from the generated SQL rather than the result:
+
+```
+SQL> SELECT "o"."Id", "o"."CreatedAt", "o"."CustomerId", "o"."Total"
+     FROM "Orders" AS "o"
+     WHERE "o"."CustomerId" = 1
+     ORDER BY "o"."CreatedAt" DESC
+     LIMIT 1
+```
+
+That is `MaxBy`. It does **not** client-evaluate. This matters because `MaxBy` is an *immediate*
+operator, so you cannot call `ToQueryString()` on it — which makes it easy to assume it pulls the
+table into memory. Use `LogTo` with `RelationalEventId.CommandExecuted` to show the SQL live.
+
+`FullJoin` translates to `FULL JOIN` and executes — but note SQLite only supports `FULL JOIN` since
+3.39, so on an older engine the generated SQL will be rejected.
+
+---
+
+### 3.21 The OpenAPI 3.2 upgrade changes the envelope, not the contract
+
+The same `Program.cs` built on .NET 10 (`Microsoft.AspNetCore.OpenApi` 10.0.12) and .NET 11 (RC 1)
+produces documents that are both **115 lines** and differ on exactly **two**:
+
+```
+line 2    10: "openapi": "3.1.1",
+          11: "openapi": "3.2.0",
+line 9    10: "url": "http://localhost:5285/"
+          11: "url": "http://localhost:5035"
+```
+
+Schema generation, `$ref` layout, `required` arrays, parameter descriptions and response shapes are
+otherwise **identical**. The second difference is real: .NET 11 drops the **trailing slash** on
+`servers[].url`, which can matter to strict client generators.
+
+**The trap not to teach:** a C# `int` property generates `"type": ["integer", "string"]` — a JSON
+Schema union type. It looks like a .NET 11 novelty. It is not; .NET 10 emits exactly the same
+thing, proven by the diff above. Do not present it as new.
+
+---
+
+### 3.22 Exact names in the new library surface
+
+Verified by loading all 176 reference assemblies of the .NET 11 RC 1 targeting pack through a
+`MetadataLoadContext`. Three corrections protect the presenter:
+
+| Do not say | The measured name |
+|---|---|
+| `System.Decimal128` | **`System.Numerics.Decimal32/64/128`** — a lab with only `using System;` will not compile |
+| `X25519` | **`X25519DiffieHellman`** (plus `…Cng` and `…OpenSsl`); no bare `X25519` type exists |
+| a DataAnnotations startup validator | **`Microsoft.Extensions.Options.IAsyncStartupValidator`**, next to the existing `IStartupValidator` |
+
+Two details worth having:
+
+- The async validation surface is **six** methods, symmetric with the sync API:
+  `ValidateObjectAsync`, `ValidatePropertyAsync`, `ValidateValueAsync` and the three
+  `TryValidate…Async` variants.
+- Zstandard is a **family**, not one stream type: `ZstandardStream`, `ZstandardEncoder`,
+  `ZstandardDecoder`, `ZstandardDictionary`, `ZstandardCompressionOptions`,
+  `ZstandardDecompressionOptions`. `ZstandardDictionary` is the interesting one for anyone
+  compressing many small similar payloads.
+- `TryParsePartial` is on **every** numeric primitive, not a niche single-type addition.
+
+### 3.23 Memory safety is not in C# 15 at all
+
+Same project, only `LangVersion` changed, pointer declaration and address-of outside `unsafe`:
+
+| `LangVersion` | Result |
+|---|---|
+| `15.0` | **`error CS0214`** ×3 — "Pointers and fixed size buffers may only be used in an unsafe context" |
+| `preview` | **builds clean, 0 errors** |
+
+A feature that shipped in C# 15 would not require `preview`. Microsoft's "What's new in C# 15" page
+lists this material anyway, while the .NET 11 breaking-changes page calls it C# 16 and the compiler
+refuses it at `15.0`.
+
+**The line to deliver:** when first-party sources disagree, the compiler wins. This is the cleanest
+example of the workshop's whole method, so say it out loud rather than just correcting the label.
+
+---
+
+### 3.24 Narrowing float→integer conversions now saturate
+
+The highest-impact silent change we found in .NET 11. Values returned from `[MethodImpl(NoInlining)]`
+methods so nothing is constant-folded, Release build:
+
+| Expression | .NET 10.0.12 | .NET 11 RC 1 |
+|---|---:|---:|
+| `(byte)300.0` | 44 | **255** |
+| `(byte)-1.0` | 255 | **0** |
+| `(short)70000.0` | 4464 | **32767** |
+| `(int)1e20f` | 2147483647 | 2147483647 |
+| `(uint)-5.0` | 0 | 0 |
+
+Only the **narrowing** cases changed — `byte`, `sbyte`, `short`, `ushort`. `int` and `uint` already
+saturated in .NET 10; that dates from .NET Core 3.0.
+
+No warning, no analyzer, no compat switch. `(byte)-1.0` is the one to dwell on: it flips from all
+bits set to no bits set. Ask who casts floating-point values to `byte` — imaging, device, telemetry
+and signal-processing teams will say yes, and they need a targeted review.
+
+Values already inside the destination range are unaffected, which is exactly why a test suite with
+tidy fixtures will not catch it.
+
+---
+
+### 3.25 Unions cannot cross an expression tree
+
+```csharp
+Expression<Func<Dog, Pet>> f = d => d;   // Dog is a case of union Pet
+// error CS9369: An expression tree may not contain a union conversion.
+```
+
+**This is the most important union constraint for this audience.** Every LINQ provider consumes
+`Expression<...>`, so a union cannot be projected inside an EF Core query. It also blocks Moq
+setups and any other expression-tree API.
+
+Frame it as a design boundary rather than a gap: an expression tree has to be translatable to SQL,
+and a union conversion has no SQL meaning. Unions describe domain states; entity types describe
+rows. The workaround costs one `Select` after materialisation.
+
+It pairs neatly with 3.20: EF Core 11 gets better at translating LINQ while C# 15's headline type
+cannot enter a translated query at all.
+
+---
+
+### 3.26 A method named `with` disappears from a collection expression
+
+```
+plain    with(3): Count=1, Capacity=3, Items=[a]
+escaped @with(3): Count=2, Capacity=2, Items=[W3, a]
+```
+
+Zero warnings on the version that loses the element. C# 15 collection expressions take arguments, so
+`with(3)` is parsed as *collection-expression arguments* — setting capacity to 3 rather than
+contributing `"W3"`. The method is never called, so its side effects never happen.
+
+**Scope it honestly.** On the SDK used here (10.0.300) the same source does not compile at all
+(`CS8652`), so what we measured is "fails to build" → "builds and silently drops an element", not
+"worked correctly" → "silently wrong". A true silent regression needs an older 10.0.1xx SDK, which
+we did not have. Do not claim more.
+
+The trigger is narrow, but the generalisable lesson is not: contextual keywords are cheap for the
+language designers and expensive for a codebase that used the word first — as `var`, `async`,
+`record` and `field` have all shown.
+
+---
+
+### 3.27 EF Core: explicit `Property()` on a collection stops working
+
+Paired projects, identical shared source, SQLite; only the TFM and EF package version differ.
+
+```csharp
+mb.Entity<Team>().Property(t => t.Scores);        // List<int>
+var n = ctx.Teams.Count(t => t.Scores.Contains(2));
+```
+
+| EF assembly | Result |
+|---|---|
+| `10.0.12.0` | `query succeeded, rows = 1` |
+| `11.0.0.0` | **`InvalidOperationException`** — the LINQ expression "could not be translated" |
+
+Fix, verified in the same harness: `.PrimitiveCollection(t => t.Scores)` → `rows = 1` again.
+
+**Why this is the module's most actionable item:** it compiles on both, and **by-convention
+discovery is unaffected** — so it only bites teams who write explicit `IEntityTypeConfiguration`
+classes, which is most enterprises. It also explains why the issue is not more widely reported.
+
+Give the room an instruction, not a caution: search for `.Property(` calls whose lambda returns a
+collection type and change them to `.PrimitiveCollection(`. That change can be made *before* the
+upgrade, on EF Core 10, because `PrimitiveCollection` already exists there.
+
+---
+
 ## 4. Running the labs
 
 Nine labs. Each has `start/` (with numbered `// TASK n:` comments), `solution/`, and a `README.md`.
@@ -723,6 +1003,17 @@ later.
 
 **"Why doesn't `dotnet new` offer net10.0?"**
 Because they are on the .NET 11 SDK. See [Setup](#1-setup). This comes up on Day 2 constantly.
+
+**"I read that Swashbuckle is completely broken on .NET 11."**
+We tested that specific claim and could not reproduce it. `Swashbuckle.AspNetCore` 10.2.3 on
+`net11.0` RC 1, minimal API with a POST body, builds with zero warnings and serves a valid
+`3.0.4` document on `/swagger/v1/swagger.json` — HTTP 200, request body included. The report we
+chased described an HTTP 500 with `MissingMethodException` on `IOpenApiRequestBody.get_Content()`;
+we could not produce it.
+
+That does not prove their setup is safe. It proves the claim is not universal. Tell them to spend
+ten minutes running their own project against RC 1 rather than trusting either us or the post they
+read — which is the entire argument this workshop is making. Do not promise them it works.
 
 **"Can't we just run Upgrade Assistant?"**
 No — `dotnet-upgrade-assistant` is **officially deprecated**. Microsoft Learn carries the notice

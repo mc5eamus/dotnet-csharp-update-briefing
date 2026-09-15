@@ -1873,6 +1873,338 @@
       "publisher": "Microsoft",
       "previewDrift": "none",
       "writtenAgainst": ".NET 10 GA"
+    },
+    {
+      "id": "learn-dotnet11-runtime",
+      "title": "What's new in the .NET 11 runtime",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/runtime",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "runtime",
+        "hardware-requirements",
+        "jit",
+        "runtime-async",
+        "arm64"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The first-party runtime page, explicitly marked as last updated for RC 1. It is the authority for the raised minimum hardware requirements — the x86/x64 and Arm64 instruction-set baselines and the moved ReadyToRun targets — which is the .NET 11 change most likely to block a deployment rather than a build.",
+      "recommended": true,
+      "writtenAgainst": "Page states it was last updated for .NET 11 RC 1; ms.date 2026-09-08",
+      "previewDrift": "none",
+      "driftNote": "Explicitly versioned to RC 1, which is the build this workshop was measured on. The hardware-baseline section is the part to re-read at GA."
+    },
+    {
+      "id": "learn-dotnet11-sdk",
+      "title": "What's new in the .NET 11 SDK",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/sdk",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "net11",
+        "sdk",
+        "tooling",
+        "msbuild",
+        "cli"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "SDK and tooling changes for .NET 11, separate from the runtime page. Use it when an attendee asks why a build behaves differently after installing the RC even though the target framework did not change.",
+      "recommended": false,
+      "writtenAgainst": "Live first-party page, read 2026-09-14 during the .NET 11 RC 1 cycle",
+      "previewDrift": "none",
+      "driftNote": "Maintained with the release rather than written once, so it tracks RC 1 and will track GA."
+    },
+    {
+      "id": "learn-native-aot-deployment",
+      "title": "Native AOT deployment",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m1"
+      ],
+      "covers": [
+        "native-aot",
+        "trimming",
+        "deployment",
+        "publishing"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Reference for the AOT and trimming constraints the runtime module asks attendees to check before adopting .NET 11. Relevant because union and closed-hierarchy modelling interacts with reflection-based serialization, which is exactly what trimming analysis flags.",
+      "recommended": false,
+      "writtenAgainst": "Version-independent conceptual page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Not tied to a single release; the AOT and trimming constraints it describes predate .NET 11."
+    },
+    {
+      "id": "learn-api-zstandardstream",
+      "title": "ZstandardStream class",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.io.compression.zstandardstream",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "libraries",
+        "compression",
+        "zstandard"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the new compression stream. Worth opening live because Zstandard arrives as a family of types rather than a single stream — the sibling encoder, decoder, options and dictionary types are visible from this page.",
+      "recommended": false,
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "We independently confirmed the type and its siblings exist by loading the RC 1 reference assemblies through a MetadataLoadContext."
+    },
+    {
+      "id": "learn-api-decimal128",
+      "title": "Decimal128 struct (System.Numerics)",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.numerics.decimal128",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "libraries",
+        "decimal-floating-point",
+        "ieee-754",
+        "numerics"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the IEEE 754 decimal floating-point types. The namespace on this page is the correction that matters: the types are System.Numerics.Decimal32/64/128, so a sample with only 'using System;' will not compile.",
+      "recommended": true,
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Namespace independently confirmed as System.Numerics against the RC 1 reference assemblies."
+    },
+    {
+      "id": "learn-api-x25519diffiehellman",
+      "title": "X25519DiffieHellman class",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.x25519diffiehellman",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m3"
+      ],
+      "covers": [
+        "net11",
+        "cryptography",
+        "x25519",
+        "key-agreement"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference for the new key-agreement type. The page name is itself the correction: there is no bare X25519 type, only X25519DiffieHellman and its Cng and OpenSsl derivatives.",
+      "recommended": false,
+      "writtenAgainst": "API reference generated from the .NET 11 ref assemblies, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Type name independently confirmed against the RC 1 reference assemblies; no bare X25519 type is present."
+    },
+    {
+      "id": "openapi-spec-3-2-0",
+      "title": "OpenAPI Specification v3.2.0",
+      "author": null,
+      "publisher": "OpenAPI Initiative",
+      "url": "https://spec.openapis.org/oas/v3.2.0.html",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "spec",
+      "modules": [
+        "day2-m4"
+      ],
+      "covers": [
+        "openapi",
+        "openapi32",
+        "spec",
+        "api-contracts"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The specification .NET 11 emits by default. Needed for the tooling-compatibility conversation: the question is never whether ASP.NET Core produces a valid document, it is whether the client generators and gateways downstream accept a 3.2.0 version string.",
+      "recommended": true,
+      "writtenAgainst": "OpenAPI Specification 3.2.0, a finished specification independent of .NET",
+      "previewDrift": "none",
+      "driftNote": "A released specification, not preview material. It is the fixed target; what may still move is ASP.NET Core's emission of it."
+    },
+    {
+      "id": "learn-api-queryable-maxby",
+      "title": "Queryable.MaxBy method",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.linq.queryable.maxby",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "linq",
+        "queryable",
+        "maxby",
+        "efcore11",
+        "translation"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "API reference proving where MaxBy actually lives: System.Linq.Queryable, not an EF Core extension class. EF Core 11's contribution is translating it, and this page is the quickest way to settle that in the room.",
+      "recommended": true,
+      "writtenAgainst": "API reference for System.Linq.Queryable, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "The method predates .NET 11; only EF Core's ability to translate it is new. We confirmed the translation by capturing the generated SQL on RC 1."
+    },
+    {
+      "id": "learn-api-queryable-leftjoin",
+      "title": "Queryable.LeftJoin method",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.linq.queryable.leftjoin",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "linq",
+        "queryable",
+        "joins",
+        "efcore11",
+        "translation"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Same point as MaxBy for the join family. LeftJoin, RightJoin and FullJoin are BCL query operators; an attendee searching EntityFrameworkQueryableExtensions for them will come up empty.",
+      "recommended": false,
+      "writtenAgainst": "API reference for System.Linq.Queryable, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "BCL surface rather than EF Core surface, confirmed by reflection over the RC 1 reference assemblies."
+    },
+    {
+      "id": "learn-ef-complex-query-operators",
+      "title": "Complex query operators in EF Core",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/ef/core/querying/complex-query-operators",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "efcore",
+        "joins",
+        "groupjoin",
+        "selectmany",
+        "sql-translation"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "How EF Core turns LINQ join shapes into SQL, including the older GroupJoin and SelectMany patterns the new first-class join operators replace. Useful for showing attendees what their existing query code was compiling into.",
+      "recommended": false,
+      "writtenAgainst": "Live EF Core docs page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Describes translation behaviour that is largely stable across EF Core versions."
+    },
+    {
+      "id": "learn-ef-client-eval",
+      "title": "Client vs. server evaluation",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/ef/core/querying/client-eval",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m5"
+      ],
+      "covers": [
+        "efcore",
+        "client-evaluation",
+        "performance",
+        "translation"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "The rules that decide whether a query runs in the database or in your process. Directly supports the module's guardrail slides: a newly translatable operator is only a win if you can prove it did not quietly fall back to the client.",
+      "recommended": false,
+      "writtenAgainst": "Live EF Core docs page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Long-standing conceptual guidance, not release-specific."
+    },
+    {
+      "id": "learn-versioning-sdk-msbuild-vs",
+      "title": "SDK, MSBuild and Visual Studio versioning",
+      "author": null,
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs",
+      "published": null,
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day2-m6"
+      ],
+      "covers": [
+        "sdk",
+        "msbuild",
+        "visual-studio",
+        "tooling",
+        "upgrade-planning"
+      ],
+      "verification": "verified",
+      "usageTier": 1,
+      "summary": "Which SDK and Visual Studio version a given target framework needs. The practical constraint behind upgrade cadence planning: build agents and developer machines usually gate an upgrade well before application code does.",
+      "recommended": false,
+      "writtenAgainst": "Live first-party page, read 2026-09-14",
+      "previewDrift": "none",
+      "driftNote": "Updated per release. Confirm the .NET 11 row is present before showing it; during a release candidate the table can lag the SDK by a few weeks."
     }
   ]
 }

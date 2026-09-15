@@ -7,7 +7,10 @@ const root = process.argv[2] || ".";
 
 function walk(dir, out = []) {
   for (const e of readdirSync(dir)) {
-    if ([".git", "node_modules", "bin", "obj", "dist"].includes(e)) continue;
+    /* Dot-directories are local scratch (.scratch, .research) or tooling
+       state (.git, .vs) — never part of the handed-over package. */
+    if (e.startsWith(".")) continue;
+    if (["node_modules", "bin", "obj", "dist"].includes(e)) continue;
     const p = join(dir, e);
     if (statSync(p).isDirectory()) walk(p, out);
     else if (e.endsWith(".md")) out.push(p);

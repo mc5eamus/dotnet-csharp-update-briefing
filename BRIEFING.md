@@ -17,17 +17,19 @@ Version-based, one release per day. The split maps onto a *decision*, not onto a
 | Covers | .NET 10 / C# 14 | .NET 11 / C# 15 |
 | Status | **GA, LTS** — supported to 14 Nov 2028 | **RC 1**, GA Nov 2026 — **STS** to ~Nov 2028 |
 | The question | "How do we adopt this?" | "*Should* we take this at all?" |
-| Content | 6 modules, 84 slides (4 h, measured) | 6 modules, 37 slides (~2 h, **not yet deepened**) |
+| Content | 6 modules, 84 slides (4 h, measured) | 6 modules, 88 slides (4 h 15, measured) |
 | Labs | 4 (130 min) | 5 (135 min) |
 
-Day 1 runs **four hours of content plus two hours ten of labs** — a full day with breaks. Every
-module was timed against its actual slide count rather than estimated.
+Both days run **four hours or a little more of content plus a little over two hours of labs** — a
+full day with breaks, twice. Every module on both days is timed against its actual slide count
+rather than estimated.
 
-**Day 2 has not had that pass yet.** At 37 slides it currently carries about **two hours** of
-content at Day 1's measured pace, so with labs it is a short day rather than a full one. The
-earlier "~3 h 45" figure was an estimate made before Day 1 was timed, and Day 1 turned out to need
-84 slides to fill four hours — which is what exposed the Day 2 number as too optimistic. Deepening
-Day 2 to match is the next piece of work; see [`FACILITATOR.md` § 2](FACILITATOR.md#2-shape-of-the-two-days).
+Day 2 covers a release candidate rather than a shipped release, so it carries the largest share of
+material that was verified by compiling and running it on the delivery machine — including several
+places where the published documentation, the community write-ups, or an earlier draft of this deck
+turned out to be wrong. Those corrections are listed in
+[`FACILITATOR.md` § 3](FACILITATOR.md#3-what-we-measured) and are the reason the day is worth
+attending rather than reading.
 
 The two days are deliberately coupled: **Labs 08 and 09 migrate the exact applications attendees
 build in Labs 03 and 04.** The upgrade is experienced rather than described, which is the only way

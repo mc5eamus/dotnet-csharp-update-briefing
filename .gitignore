@@ -7,6 +7,7 @@ obj/
 
 ## Local scratch / probes (not part of the deliverable)
 .scratch/
+.research/
 
 ## Generated single-file pages
 dist/

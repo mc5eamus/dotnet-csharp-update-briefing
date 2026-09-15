@@ -108,25 +108,26 @@
     <section class="slide" id="agenda-day2">
       <h2 data-toc="Day 2 agenda">Day 2 agenda <span class="badge badge-net11">.NET 11 RC</span> <span class="badge badge-cs15">C# 15</span></h2>
       <div class="agenda card">
-        <div class="agenda-row"><span class="mins">20 min</span><span class="what"><strong>.NET 11 runtime</strong><span>Runtime-native async, raised hardware requirements, JIT and SIMD</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">38 min</span><span class="what"><strong>.NET 11 runtime</strong><span>Runtime-native async and its opt-in switch, what it means for libraries and diagnostics, raised hardware requirements, narrowing float conversions that now saturate, JIT and SIMD, AOT and trimming, and the STS decision</span></span><span></span></div>
         <div class="agenda-row is-lab"><span class="mins">20 min</span><span class="what"><strong>Lab 05 &mdash; Runtime async</strong><span>Make the state machines disappear &mdash; and see what doesn't change</span></span><span></span></div>
-        <div class="agenda-row"><span class="mins">25 min</span><span class="what"><strong>C# 15 language</strong><span>Union types, closed hierarchies, collection expression arguments, extension indexers, memory safety</span></span><span class="badge badge-cs15">C# 15</span></div>
+        <div class="agenda-row"><span class="mins">58 min</span><span class="what"><strong>C# 15 language</strong><span>Union types and closed hierarchies in depth &mdash; runtime shape, identity traps, allocation cost, the absent-state hole, the expression-tree boundary that keeps unions out of EF Core queries &mdash; plus collection expression arguments and their <code>with</code> trap, extension indexers and memory safety</span></span><span class="badge badge-cs15">C# 15</span></div>
         <div class="agenda-row is-lab"><span class="mins">40 min</span><span class="what"><strong>Lab 06 &mdash; Unions &amp; closed hierarchies</strong><span>Model a domain with exhaustive matching</span></span><span></span></div>
-        <div class="agenda-row"><span class="mins">20 min</span><span class="what"><strong>.NET 11 libraries</strong><span>Union serialization, Zstandard, decimal floating point, FullJoin, async validation</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row"><span class="mins">41 min</span><span class="what"><strong>.NET 11 libraries</strong><span>Union serialization and round-tripping, the Zstandard family, IEEE 754 decimal floating point, LINQ <code>FullJoin</code>, the async validation surface, X25519 and <code>DnsResolver</code></span></span><span class="badge badge-focus">Focus</span></div>
         <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 07 &mdash; Libraries</strong><span>Round-trip a union through JSON</span></span><span></span></div>
-        <div class="agenda-row"><span class="mins">20 min</span><span class="what"><strong>ASP.NET Core 11</strong><span>OpenAPI 3.2 by default, unions in Minimal APIs, async validation, MCP template</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row"><span class="mins">46 min</span><span class="what"><strong>ASP.NET Core 11</strong><span>OpenAPI 3.2 by default and exactly what changes in the document, pinning and parallel documents, unions in Minimal APIs, async validation, MCP template</span></span><span class="badge badge-focus">Focus</span></div>
         <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 08 &mdash; Migrate Lab 03</strong><span>.NET 10 &rarr; 11, and the OpenAPI break</span></span><span></span></div>
-        <div class="agenda-row"><span class="mins">20 min</span><span class="what"><strong>EF Core 11</strong><span>Complex types on TPT/TPC, vector and JSON indexes, migration workflow</span></span><span class="badge badge-focus">Focus</span></div>
+        <div class="agenda-row"><span class="mins">49 min</span><span class="what"><strong>EF Core 11</strong><span>Where the new query operators really live, proving translation from generated SQL, the explicit-configuration break that only hits enterprise codebases, complex types, JSON columns, migrations in CI/CD, and a provider reality check</span></span><span class="badge badge-focus">Focus</span></div>
         <div class="agenda-row is-lab"><span class="mins">25 min</span><span class="what"><strong>Lab 09 &mdash; Migrate Lab 04</strong><span>EF Core 10 &rarr; 11</span></span><span></span></div>
-        <div class="agenda-row"><span class="mins">15 min</span><span class="what"><strong>.NET 12 outlook &amp; the decision</strong><span>What's signalled, and whether to take .NET 11 at all</span></span><span></span></div>
+        <div class="agenda-row"><span class="mins">23 min</span><span class="what"><strong>.NET 12 outlook &amp; the decision</strong><span>What's signalled, planning without a roadmap, and whether to take .NET 11 at all</span></span><span></span></div>
       </div>
-      <p class="slide-lead" style="margin-top:1rem">That is <strong>2 hours of content</strong> across 37 slides, plus 2 hours 15 of labs.</p>
+      <p class="slide-lead" style="margin-top:1rem">That is <strong>4 hours of content</strong> across 84 slides, plus 2 hours 15 of labs &mdash;
+      the same weight as Day 1.</p>
       <div class="callout callout-note">
-        <div class="callout-title">Day 2 has not yet been expanded the way Day 1 was</div>
-        <p>Day 1 was deepened to 84 slides and each module timed against its real slide count, which
-        is how it reaches four hours without labs. Day 2 still carries its original 37 slides, so at
-        the same pace it runs about two hours &mdash; a short day rather than a full one. These
-        figures are honest about that rather than rounded up.</p>
+        <div class="callout-title">Both days are timed against their real slide counts</div>
+        <p>Neither day is rounded up. Day 1 and Day 2 each carry 84 content slides, and every module
+        above is budgeted at the pace those slides actually take &mdash; which is how both reach
+        roughly four hours before a single lab starts. Day 2 is an RC release, so it is also the day
+        with the most &ldquo;we measured this ourselves&rdquo; content.</p>
       </div>
     </section>
 

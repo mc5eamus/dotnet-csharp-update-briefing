@@ -18,16 +18,15 @@ if you are deciding whether to schedule this rather than preparing to deliver it
 | **Covers** | .NET 10 / C# 14 | .NET 11 / C# 15 |
 | **Status** | GA, **LTS** to 14 Nov 2028 | **RC 1**, GA ~Nov 2026, **STS** (24 months, so also ~Nov 2028) |
 | **Modules** | Platform &amp; runtime → C# 14 → Libraries (PQC, System.Text.Json) → ASP.NET Core 10 (OpenAPI 3.1) → EF Core 10 → Wrap-up | Runtime-native async → C# 15 (unions, closed hierarchies) → Libraries → ASP.NET Core 11 (OpenAPI 3.2) → EF Core 11 → .NET 12 outlook |
-| **Length** | 84 slides, **4 h** content + 2 h 10 labs | 37 slides, ~2 h content + 2 h 15 labs |
+| **Length** | 84 slides, **4 h** content + 2 h 10 labs | 88 slides, **4 h 15** content + 2 h 15 labs |
 
 Day 2's ASP.NET Core and EF Core labs are **upgrades of the Day 1 labs**, so attendees migrate
 their own application from .NET 10 to .NET 11 and hit the OpenAPI 3.1 → 3.2 breaking change
 themselves rather than reading about it.
 
-> **Day 2 is not yet at Day 1's depth.** Day 1 was expanded and each module timed against its real
-> slide count; it now fills four hours without labs. Day 2 still carries the original 37 slides —
-> roughly two hours at the same pace — so it currently runs short of a full day. That is the next
-> piece of work, not an oversight in the timings.
+Both days carry 84 content slides and are budgeted against their real slide counts rather than
+rounded up. Day 2 covers a release candidate, so it also carries the most material we verified by
+compiling and running it ourselves — see [`FACILITATOR.md`](FACILITATOR.md) § 3.
 
 ## Getting started
 
