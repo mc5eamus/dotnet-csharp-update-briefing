@@ -133,8 +133,8 @@ a useful day. Several teams in the room should conclude they will **skip .NET 11
 ### Timing
 
 Day 1 is **6 modules / 88 slides** (84 content + 4 lab markers): **4 hours of content** plus 2 h 10
-of labs. Day 2 is 6 modules / 37 slides, about 6 hours including labs. Full timings are on
-`index.html`.
+of labs. Every module below was timed against its actual slide count, not estimated. Full timings
+are on `index.html`.
 
 Day 1 module budget:
 
@@ -162,8 +162,24 @@ the `field` shadowing slide (3.12), or
 the OpenAPI before/after diff. Those are the ones attendees cannot get from the release notes, and
 they are the reason the day is worth attending.
 
-**Day 2 is heavier and the C# 15 module is 85 minutes.** If you are running late, the safe cuts
-are, in order:
+**Day 2 currently runs about two hours of content, not four.** Its 37 slides have not yet had the
+expansion Day 1 received, so at Day 1's measured pace the module budget is roughly:
+
+| Module | Slides | Realistic |
+|---|---:|---:|
+| 1 · .NET 11 runtime | 6 | 20 min |
+| 2 · C# 15 | 9 | 25 min |
+| 3 · Libraries | 6 | 20 min |
+| 4 · ASP.NET Core 11 | 6 | 20 min |
+| 5 · EF Core 11 | 6 | 20 min |
+| 6 · .NET 12 outlook & the decision | 4 | 15 min |
+| **Total** | **37** | **120 min** |
+
+With 2 h 15 of labs that is a little over four hours — a short day. Plan to either finish early,
+expand the day the way Day 1 was expanded, or run the C# 15 and EF Core modules as longer
+discussion sessions. Do not promise a full day from the current slide count.
+
+If you are nonetheless running late on Day 2, the safe cuts are, in order:
 
 1. The .NET 12 outlook (15 min) — there is genuinely nothing to say yet, see below.
 2. Memory safety in C# 15 — the one feature needing `<LangVersion>preview</LangVersion>`.
