@@ -139,8 +139,8 @@ publish if any structural check fails.
 
 - **Day 2 runs against .NET 11 RC 1.** Behaviour can still change before GA in November 2026.
   Re-run the labs and `tools/check-links.ps1` before any delivery after that date.
-- **Day 2 is the heavier day**; the C# 15 module alone is 85 minutes. Safe cuts are listed in
-  `FACILITATOR.md`.
+- **Day 2 is the lighter day** — about 2 h of content against Day 1's 4 h, because it has not yet
+  had Day 1's expansion pass. Module budget and the three options are in `FACILITATOR.md`.
 - Two Day 2 features need explicit opt-in (`runtime-async=on`, `<LangVersion>preview</LangVersion>`)
   and will not behave as documented without it.
 - The .NET 11 SDK is not on `PATH` by default on the build machine; `tools/dotnet11.ps1` resolves it.
