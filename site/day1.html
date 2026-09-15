@@ -538,7 +538,7 @@ Console.WriteLine($"{(after - before) / 2_000_000.0:F2} bytes/call");</code></pr
     </section>
 
         <!-- ===================================================================
-         MODULE 2 — C# 14 (50 min)
+         MODULE 2 — C# 14 (53 min)
          =================================================================== -->
 
     <section class="slide" id="d1-cs14-overview" data-module-title="2 &middot; C# 14">
@@ -910,8 +910,10 @@ Validate(numbers);</code></pre>
 
   <div class="grid grid-2">
     <div class="callout callout-verified">
-      <div class="callout-title"><code>int[].Reverse()</code> did not switch</div>
-      <p>Measured under C# 14: <code>int[].Reverse()</code> still binds to <code>Enumerable.Reverse</code>, still returns a lazy iterator, and does not reverse the array in place.</p>
+      <div class="callout-title"><code>int[].Reverse()</code> did not switch &mdash; <em>on <code>net10.0</code></em></div>
+      <p>Measured on <code>net10.0</code> under C# 14: <code>int[].Reverse()</code> still binds to
+      <code>Enumerable.Reverse</code>, still returns a lazy iterator, and does not reverse in place.
+      <strong>That qualifier is load-bearing</strong> &mdash; see the next slide.</p>
     </div>
     <div class="callout callout-verified">
       <div class="callout-title">An exact array overload still wins</div>
@@ -930,7 +932,61 @@ Validate(numbers);</code></pre>
   </table>
   </div>
 
-  <div class="notes"><p>This slide prevents panic. The recommended search is targeted: APIs with both enumerable and span shapes, not every use of <code>Span</code>.</p></div>
+  <div class="notes"><p>This slide prevents panic. The recommended search is targeted: APIs with both enumerable and span shapes, not every use of <code>Span</code>. But do not end the topic here &mdash; the next slide is where the reassurance runs out.</p></div>
+</section>
+
+    <section class="slide" id="d1-cs14-langversion-trap" data-module-title="2 &middot; C# 14">
+  <h2 data-toc="The LangVersion shortcut">The shortcut that silently reverses your arrays</h2>
+  <p class="slide-lead">Someone will ask it within ten minutes of the retargeting slide: <em>"can we just set
+  <code>LangVersion</code> to 14 and keep <code>net8.0</code>?"</em> It compiles. Do not do it.</p>
+
+  <p>Target framework and language version are separate dials, and the SDK will let you turn one
+  without the other. Every C# 14 feature we have seen so far builds and runs on <code>net8.0</code>
+  with <code>&lt;LangVersion&gt;14.0&lt;/LangVersion&gt;</code> &mdash; extension members, <code>field</code>,
+  null-conditional assignment, unbound <code>nameof</code>. Zero errors, zero warnings.</p>
+
+  <p>Then you write this, which is ordinary, discard-the-result LINQ:</p>
+
+  <pre><code class="language-csharp">int[] nums = [3, 1, 2];
+
+nums.Reverse();   // a bare statement
+
+Console.WriteLine(string.Join(",", nums));</code></pre>
+
+  <div class="callout callout-verified">
+    <div class="callout-title">Measured: same file, same TFM, same SDK &mdash; only the dial moved</div>
+    <pre><code class="language-output">net8.0 + LangVersion 13.0  -&gt;  [3,1,2]
+net8.0 + LangVersion 14.0  -&gt;  [2,1,3]
+
+  0 Warning(s)
+  0 Error(s)</code></pre>
+    <p>Under C# 13 this is a lazy <code>Enumerable.Reverse</code> whose result is discarded &mdash; a
+    no-op. Under C# 14 the array converts to <code>Span&lt;int&gt;</code> and binds to
+    <code>MemoryExtensions.Reverse</code>, which <strong>mutates in place and returns void</strong>.
+    The caller's array is reversed. Nothing is reported.</p>
+  </div>
+
+  <div class="callout callout-breaking">
+    <div class="callout-title">Why <code>net10.0</code> is safe and <code>net8.0</code> is not</div>
+    <p>The mitigation for this shipped in the <strong>.NET 10 BCL</strong>, as compensating overloads
+    that keep array receivers on the LINQ operators. A new compiler against an old BCL is the one
+    combination where the guard rail is missing. It is not that C# 14 is dangerous &mdash; it is that
+    C# 14 <em>without .NET 10</em> is.</p>
+  </div>
+
+  <div class="callout callout-gotcha">
+    <div class="callout-title">And Microsoft does not support it anyway</div>
+    <p>The <em>Configure the language version</em> documentation states plainly that setting a
+    language version newer than the target framework's default is unsupported and is not an upgrade
+    path. So the answer in the room is: <strong>retarget to <code>net10.0</code> to get C# 14.</strong>
+    If a library genuinely must stay on <code>net8.0</code>, pin
+    <code>&lt;LangVersion&gt;13.0&lt;/LangVersion&gt;</code> explicitly rather than leaving it to a default.</p>
+  </div>
+
+  <div class="notes">
+    <p>This is the demo to run live if you run only one in module 2. Two builds, one line of output each, and the audience watches an array change contents with no diagnostic. It also closes the loop on the previous slide: the reassurance was real, but it was conditional on the BCL, and nobody reads release notes that carefully.</p>
+    <p>If someone insists on the shortcut, the deliverable is an audit of every <code>.Reverse()</code>, <code>.Contains()</code> and array-to-span-adjacent call site. That usually ends the conversation.</p>
+  </div>
 </section>
 
     <section class="slide" id="d1-cs14-null" data-module-title="2 &middot; C# 14">
@@ -1250,9 +1306,12 @@ if (!MLKem.IsSupported)
 }
 
 using MLKem recipient = MLKem.GenerateKey(MLKemAlgorithm.MLKem768);
-byte[] spki = recipient.ExportSubjectPublicKeyInfo();
 
+#pragma warning disable SYSLIB5006 // Key serialisation is still experimental.
+byte[] spki = recipient.ExportSubjectPublicKeyInfo();
 using MLKem sender = MLKem.ImportSubjectPublicKeyInfo(spki);
+#pragma warning restore SYSLIB5006
+
 sender.Encapsulate(out byte[] ciphertext, out byte[] senderSecret);
 
 byte[] recipientSecret = recipient.Decapsulate(ciphertext);
@@ -1260,7 +1319,10 @@ byte[] recipientSecret = recipient.Decapsulate(ciphertext);
 
   <div class="callout callout-verified">
     <div class="callout-title">Measured ML-KEM-768 round trip</div>
-    <p>On the workshop machine, this shape produced a 1206-byte SPKI public key, a 1088-byte ciphertext and a 32-byte shared secret. Both sides derived an identical secret.</p>
+    <p>This shape produced a 1206-byte SPKI public key, a 1088-byte ciphertext and a 32-byte shared
+    secret, and both sides derived an identical secret. <strong>The two <code>#pragma</code> lines
+    are not decoration:</strong> without them this exact sample fails to build with two
+    <code>SYSLIB5006</code> errors. The next slide explains why.</p>
   </div>
 
   <div class="notes">
@@ -1277,15 +1339,20 @@ byte[] recipientSecret = recipient.Decapsulate(ciphertext);
     <thead><tr><th>Measured item</th><th>Size</th><th>Design implication</th></tr></thead>
     <tbody>
       <tr><td>ML-KEM-768 SPKI public key</td><td><strong>1206 bytes</strong></td><td>Against 32 bytes for an X25519 public key, or 64 for an uncompressed P-256 one</td></tr>
+      <tr><td>ML-KEM-768 raw encapsulation key</td><td><strong>1184 bytes</strong></td><td>The FIPS 203 format, without the 22 bytes of ASN.1 wrapper &mdash; and it is the <em>stable</em> API</td></tr>
       <tr><td>ML-KEM-768 ciphertext</td><td><strong>1088 bytes</strong></td><td>Every encapsulation carries a visible bandwidth cost</td></tr>
       <tr><td>ML-KEM shared secret</td><td><strong>32 bytes</strong></td><td>The output is compact because it is intended for symmetric cryptography</td></tr>
+      <tr><td>ML-DSA-65 signature</td><td><strong>3309 bytes</strong></td><td>Against 64 for Ed25519 &mdash; this is the number that breaks JWTs and QR codes</td></tr>
     </tbody>
   </table>
   </div>
 
   <div class="callout callout-verified">
     <div class="callout-title">Measure before you commit a wire format</div>
-    <p>The size numbers above were measured on .NET 10.0.12 using <code>MLKemAlgorithm.MLKem768</code>. They are why PQC migration is also a protocol and storage migration.</p>
+    <p>Measured on .NET 10.0.12 with <code>MLKemAlgorithm.MLKem768</code> and
+    <code>MLDsaAlgorithm.MLDsa65</code>. They are why PQC migration is also a protocol and storage
+    migration &mdash; and why a <strong>3309-byte signature</strong> deserves a slide of its own in any
+    design review that involves a bearer token.</p>
   </div>
 
   <div class="notes">
@@ -1326,33 +1393,66 @@ PlatformNotSupportedException: Algorithm 'SlhDsa' is not supported on this platf
 
     <section class="slide" id="d1-pqc-experimental-boundary" data-module-title="3 &middot; Libraries">
   <h2 data-toc="PQC experimental boundary">"PQC is experimental" is too coarse</h2>
-  <p>In .NET 10, the useful distinction is not only type-by-type. Some members are stable while neighbouring members require an explicit experimental opt-in.</p>
+  <p>The boundary does not run around the types. It runs <em>through</em> them. On <code>MLKem</code> and
+  <code>MLDsa</code>, <code>SYSLIB5006</code> is applied per member &mdash; so the same class gives you
+  members that compile silently and members that stop the build.</p>
 
   <div class="grid grid-2">
     <div class="card">
-      <div class="card-kicker">Stable member</div>
-      <pre><code class="language-csharp">using MLKem key = MLKem.GenerateKey(MLKemAlgorithm.MLKem768);</code></pre>
-      <p>Measured compilation: zero diagnostics.</p>
+      <div class="card-kicker">Stable &mdash; the cryptography</div>
+      <pre><code class="language-csharp">MLKem.GenerateKey(...);
+key.Encapsulate(out ct, out secret);
+key.Decapsulate(ct);
+key.ExportEncapsulationKey();
+
+MLDsa.GenerateKey(...);
+signer.SignData(data);
+signer.VerifyData(data, sig);</code></pre>
+      <p>Measured: <strong>zero diagnostics</strong>, no suppression.</p>
     </div>
     <div class="card">
-      <div class="card-kicker">Experimental types</div>
-      <pre><code class="language-csharp">bool available = SlhDsa.IsSupported;</code></pre>
-      <p>Touching <code>SlhDsa</code> or <code>CompositeMLDsa</code> produces <code>SYSLIB5006</code>.</p>
+      <div class="card-kicker">Experimental &mdash; the serialisation</div>
+      <pre><code class="language-csharp">key.ExportSubjectPublicKeyInfo();
+MLKem.ImportSubjectPublicKeyInfo(spki);
+// ...and the PEM / PKCS#8 / X.509 paths
+
+bool ok = SlhDsa.IsSupported;   // whole type
+CompositeMLDsa.GenerateKey(...); // whole type</code></pre>
+      <p>Measured: <code>SYSLIB5006</code>, reported as an <strong>error</strong>.</p>
     </div>
   </div>
 
   <div class="callout callout-verified">
     <div class="callout-title">Measured compiler boundary</div>
-    <p><code>MLKem.GenerateKey(MLKemAlgorithm.MLKem768)</code> compiles cleanly. <code>SlhDsa</code> and <code>CompositeMLDsa</code> are experimental at type level, and <code>SYSLIB5006</code> is reported as an error until you suppress it.</p>
+    <pre><code class="language-output">error SYSLIB5006: 'MLKem.ExportSubjectPublicKeyInfo()' is for evaluation
+purposes only and is subject to change or removal in future updates.
+error SYSLIB5006: 'MLKem.ImportSubjectPublicKeyInfo(byte[])' is for evaluation
+purposes only and is subject to change or removal in future updates.
+
+  0 Warning(s)
+  2 Error(s)</code></pre>
+    <p>Generate, encapsulate, decapsulate, sign and verify built clean in the same project.
+    <code>SlhDsa</code> and <code>CompositeMLDsa</code> are experimental at <em>type</em> level, so even
+    reading <code>IsSupported</code> on them is an error.</p>
   </div>
 
   <div class="callout callout-focus">
-    <div class="callout-title">What to tell a design review</div>
-    <p>You can ship stable ML-KEM usage where platform support exists. You should treat experimental algorithms and experimental members as explicit risk acceptances, with narrow suppressions and a revisit date.</p>
+    <div class="callout-title">What this actually tells you</div>
+    <p>Read the split as a roadmap signal rather than a nuisance. The <strong>algorithms</strong> are
+    final &mdash; FIPS 203, 204 and 205 are published. What is still moving is how .NET
+    <strong>encodes keys on the wire and on disk</strong>. So the risk in adopting PQC today is not
+    that your ciphertext becomes invalid; it is that your <em>stored key format</em> does.</p>
+  </div>
+
+  <div class="callout callout-gotcha">
+    <div class="callout-title">Suppress narrowly, and never project-wide</div>
+    <p>A <code>&lt;NoWarn&gt;SYSLIB5006&lt;/NoWarn&gt;</code> in the csproj hides exactly the call sites you
+    will need to revisit at the next major upgrade. Scope <code>#pragma warning disable</code> to the
+    serialisation lines so the compiler can hand you the list later.</p>
   </div>
 
   <div class="notes">
-    <p>Expect someone to ask whether all PQC is preview. Answer with the measured split. Keep suppressions narrow if you show them; a project-wide NoWarn hides exactly the change you want teams to notice.</p>
+    <p>Expect someone to ask whether all PQC is preview. Answer with the measured split: the maths is stable, the encodings are not. If they push further, the honest line is that <code>CompositeMLDsa</code>'s wire format changed after RC 2, which is precisely why it is type-level experimental.</p>
   </div>
 </section>
 
@@ -1467,6 +1567,16 @@ JsonSerializerOptions local = new(JsonSerializerDefaults.Strict);</code></pre>
 {
     TypeInfoResolver = MyJsonContext.Default
 };</code></pre>
+
+  <div class="callout callout-note">
+    <div class="callout-title">Be precise about what is actually new</div>
+    <p><code>RespectNullableAnnotations</code> and <code>RespectRequiredConstructorParameters</code>
+    both shipped in <strong>.NET 9</strong>, and almost nobody turned them on. What .NET 10 adds is
+    <code>JsonSerializerDefaults.Strict</code> &mdash; a single, named, reviewable switch that enables
+    them together with duplicate-property rejection and unmapped-member rejection. The value is in
+    the default, not in the individual flags. Say so; an experienced room will already know the
+    flags, and claiming them as new costs you credibility for the rest of the module.</p>
+  </div>
 
   <div class="callout callout-gotcha">
     <div class="callout-title">Strict can break bad clients</div>

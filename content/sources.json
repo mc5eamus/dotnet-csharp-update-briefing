@@ -836,6 +836,29 @@
       "writtenAgainst": "C# 14 GA"
     },
     {
+      "id": "learn-csharp-configure-language-version",
+      "title": "Configure language version",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version",
+      "kind": "docs",
+      "origin": "discovered",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "csharp-14",
+        "language",
+        "upgrade"
+      ],
+      "retrieved": "2026-09-14",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "States that a language version newer than the target framework's default is unsupported and is not an upgrade path. This is the first-party basis for telling attendees to retarget rather than reach for LangVersion 14 on net8.0.",
+      "recommended": true,
+      "publisher": "Microsoft",
+      "previewDrift": "none",
+      "writtenAgainst": "C# 14 GA"
+    },
+    {
       "id": "learn-core-release-notes-aspnetcore-10-0",
       "title": "What's new in ASP.NET Core 10.0",
       "url": "https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-10.0",

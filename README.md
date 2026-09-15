@@ -18,7 +18,7 @@ if you are deciding whether to schedule this rather than preparing to deliver it
 | **Covers** | .NET 10 / C# 14 | .NET 11 / C# 15 |
 | **Status** | GA, **LTS** to 14 Nov 2028 | **RC 1**, GA ~Nov 2026, **STS** (24 months, so also ~Nov 2028) |
 | **Modules** | Platform &amp; runtime → C# 14 → Libraries (PQC, System.Text.Json) → ASP.NET Core 10 (OpenAPI 3.1) → EF Core 10 → Wrap-up | Runtime-native async → C# 15 (unions, closed hierarchies) → Libraries → ASP.NET Core 11 (OpenAPI 3.2) → EF Core 11 → .NET 12 outlook |
-| **Length** | 83 slides, **4 h** content + 2 h 10 labs | 37 slides, ~3 h 45 content + 2 h 15 labs |
+| **Length** | 84 slides, **4 h** content + 2 h 10 labs | 37 slides, ~3 h 45 content + 2 h 15 labs |
 
 Day 2's ASP.NET Core and EF Core labs are **upgrades of the Day 1 labs**, so attendees migrate
 their own application from .NET 10 to .NET 11 and hit the OpenAPI 3.1 → 3.2 breaking change
@@ -149,7 +149,7 @@ and all of it has been filtered out here.
 
 ## Sources
 
-Every module links its own *Further reading*, drawn from `content/sources.json` (76 entries).
+Every module links its own *Further reading*, drawn from `content/sources.json` (77 entries).
 Each is tagged with how far it has been verified, what build it was written against, and how far
 we are allowed to reuse it under copyright.
 
@@ -169,7 +169,7 @@ about it. That process found errors in published documentation, in community pos
 own early drafts — including the runtime-async default, the OpenAPI version strings, collection
 expression capacity, overload resolution silently moving from `IEnumerable<T>` to
 `ReadOnlySpan<T>`, and the STS support window. Those corrections are collected in
-**[`FACILITATOR.md`](FACILITATOR.md) § 3** (fifteen findings) and flagged in the deck with a
+**[`FACILITATOR.md`](FACILITATOR.md) § 3** (sixteen findings) and flagged in the deck with a
 ✓ *verified* callout.
 
 Where a finding is worth re-running rather than just reading, the harness ships too — see

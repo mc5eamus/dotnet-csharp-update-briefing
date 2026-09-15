@@ -323,6 +323,29 @@ window.WORKSHOP_SOURCES ={
       "recommended": true
     },
     {
+      "id": "learn-csharp-configure-language-version",
+      "title": "Configure language version",
+      "publisher": "Microsoft",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version",
+      "retrieved": "2026-09-14",
+      "origin": "discovered",
+      "kind": "docs",
+      "modules": [
+        "day1-m2"
+      ],
+      "covers": [
+        "csharp-14",
+        "language",
+        "upgrade"
+      ],
+      "writtenAgainst": "C# 14 GA",
+      "previewDrift": "none",
+      "verification": "verified",
+      "usageTier": 2,
+      "summary": "States that a language version newer than the target framework's default is unsupported and is not an upgrade path. This is the first-party basis for telling attendees to retarget rather than reach for LangVersion 14 on net8.0.",
+      "recommended": true
+    },
+    {
       "id": "learn-whats-new-dotnet-10-overview",
       "title": "What's new in .NET 10",
       "publisher": "Microsoft",

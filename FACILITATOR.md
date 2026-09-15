@@ -132,7 +132,7 @@ a useful day. Several teams in the room should conclude they will **skip .NET 11
 
 ### Timing
 
-Day 1 is **6 modules / 87 slides** (83 content + 4 lab markers): **4 hours of content** plus 2 h 10
+Day 1 is **6 modules / 88 slides** (84 content + 4 lab markers): **4 hours of content** plus 2 h 10
 of labs. Day 2 is 6 modules / 37 slides, about 6 hours including labs. Full timings are on
 `index.html`.
 
@@ -141,11 +141,12 @@ Day 1 module budget:
 | Module | Slides | Minutes |
 |---|---|---|
 | 1 · Platform, runtime & tooling | 13 | 40 |
-| 2 · C# 14 | 18 | 50 |
+| 2 · C# 14 | 19 | 53 |
 | 3 · .NET 10 libraries | 16 | 45 |
 | 4 · ASP.NET Core 10 | 17 | 50 |
 | 5 · EF Core 10 | 16 | 45 |
 | 6 · Wrap-up | 3 | 10 |
+| **Total** | **84** | **243 ≈ 4 h 03** |
 
 That is roughly **three minutes per slide**, which is the pace the material is written for. If you
 are running faster than that you are reading the slides out rather than working them.
@@ -156,7 +157,8 @@ are running faster than that you are reading the slides out rather than working 
 2. The breadth slides at the end of module 3, not the PQC or `Strict` ones.
 3. Module 1's measuring-it-yourself slide, if the room is not performance-minded.
 
-Do **not** cut the span overload-resolution slides (3.11), the `field` shadowing slide (3.12), or
+Do **not** cut the span overload-resolution slides (3.11), the `net8.0` `LangVersion` demo (3.16),
+the `field` shadowing slide (3.12), or
 the OpenAPI before/after diff. Those are the ones attendees cannot get from the release notes, and
 they are the reason the day is worth attending.
 
@@ -188,20 +190,21 @@ say is speculation. Say that plainly; it lands better than hedging.
 
 ## 3. Corrections we found by testing
 
-Every code sample here was compiled and run on the machine that built this workshop. Fifteen
+Every code sample here was compiled and run on the machine that built this workshop. Sixteen
 findings came out of that, and they fall into four groups:
 
 - **Widely-repeated claims that are wrong** — runtime async being on by default (3.1), the cleaner
   stack traces demo (3.2), the OpenAPI version string (3.6), and the panic about `Reverse()`
-  silently becoming a span call (3.11).
+  silently becoming a span call, which is unfounded on `net10.0` and entirely real on `net8.0`
+  (3.11, 3.16).
 - **Things the docs state correctly but nobody reads carefully** — `CS8509` being only a warning
   (3.3), the per-member PQC experimental boundary (3.4), the support arithmetic (3.5), unions
   serializing happily while never deserializing (3.9), `CS9258` also being only a warning (3.12),
   and exactly what `JsonSerializerDefaults.Strict` does and does not change (3.13).
 - **Silent behaviour changes that produce no diagnostic at all** — overload resolution moving to
-  spans, which can turn a thrown exception into a silent no-op (3.11), enums disappearing from
-  OpenAPI documents (3.14), and an allocation optimisation that comes and goes between runs of the
-  same binary (3.15).
+  spans, which can turn a thrown exception into a silent no-op (3.11), an array reversing itself in
+  place on `net8.0` with zero warnings (3.16), enums disappearing from OpenAPI documents (3.14), and
+  an allocation optimisation that comes and goes between runs of the same binary (3.15).
 - **Slides we got wrong ourselves and fixed by measuring** — collection-expression capacity (3.7),
   the extension-operator receiver and instance `operator +=` (3.8), and placeholder text shipping
   as expected output (3.10).
@@ -282,7 +285,28 @@ The split inside `MLKem` and `MLDsa` is perfectly consistent:
 interchange the keys without opting into an unstable API — and key storage and distribution is
 exactly where a migration project integrates.
 
-`SYSLIB5006` is emitted as an **error**, not a warning, so suppression must be deliberate.
+`SYSLIB5006` is emitted as an **error**, not a warning, so suppression must be deliberate. Compiled
+with no suppression at all, this is what a team adding an ML-KEM key exchange actually sees:
+
+```text
+error SYSLIB5006: 'MLKem.ExportSubjectPublicKeyInfo()' is for evaluation purposes only...
+error SYSLIB5006: 'MLKem.ImportSubjectPublicKeyInfo(byte[])' is for evaluation purposes only...
+  0 Warning(s)
+  2 Error(s)
+```
+
+`GenerateKey`, `Encapsulate`, `Decapsulate`, `ExportEncapsulationKey`, `SignData` and `VerifyData`
+all built clean in that same project. It is a broken build, not a squiggle.
+
+**The reframing that makes this land.** The algorithms are finished — FIPS 203, 204 and 205 are
+published standards. What is still moving is how .NET **encodes keys on the wire and on disk**;
+`CompositeMLDsa`'s format changed *after RC 2*. So the honest design-review answer is not "wait,
+it's experimental", it is: **use it, but do not persist .NET-encoded PQC keys yet.** Those are very
+different pieces of advice, and only one of them is actionable.
+
+Tell people to scope `#pragma warning disable SYSLIB5006` to the serialisation lines. A
+project-wide `<NoWarn>` hides exactly the call sites they will need to find again at the next major
+upgrade.
 
 ### 3.5 Support windows: the arithmetic changed
 
@@ -471,14 +495,16 @@ nothing. If that method was "delete the records I give you" the failure mode is 
 
 **Two reassurances, also measured**, because the internet is confidently wrong about both:
 
-- `int[].Reverse()` does **not** silently switch to a span overload. It still binds to
-  `Enumerable.Reverse` and still returns a lazy `ReverseIterator`; the array is not mutated in
-  place. The widely repeated fear is unfounded.
+- `int[].Reverse()` does **not** silently switch to a span overload **on `net10.0`**. It still binds
+  to `Enumerable.Reverse` and still returns a lazy `ReverseIterator`; the array is not mutated in
+  place. The widely repeated fear is unfounded *in the configuration almost everyone will be in*.
 - An exact `T[]` overload still beats `ReadOnlySpan<T>` under **both** language versions. Only the
   `IEnumerable<T>` case moves.
 
 So the search you actually want, before upgrading, is for API pairs that offer `IEnumerable<T>`
 *and* `ReadOnlySpan<T>` — not for every call to a span-capable method.
+
+**But read the first reassurance's qualifier again — it is load-bearing.** See 3.16.
 
 ### 3.12 The `field` keyword can shadow a real member — and it is only a warning
 
@@ -579,6 +605,45 @@ going home, writing a micro-benchmark, seeing 40 bytes and concluding the worksh
 > runtimes and prints the table above live. Doing this on the projector is worth more than the
 > slide, and it re-validates the claim against whatever SDK you are standing on — which is the
 > whole argument of section 3.
+
+### 3.16 `LangVersion 14` on `net8.0` compiles, and silently reverses your arrays
+
+Someone always asks whether they can have C# 14 without retargeting. Target framework and language
+version *are* separate dials, and every C# 14 feature tested — extension members, `field`,
+null-conditional assignment, unbound `nameof` — compiles and runs on `net8.0` with
+`<LangVersion>14.0</LangVersion>`, with zero errors and zero warnings.
+
+Then this happens. Same source, same TFM, same SDK; only the dial moved:
+
+```text
+int[] nums = [3, 1, 2];
+nums.Reverse();          // bare statement, result discarded
+
+net8.0 + LangVersion 13.0  ->  [3,1,2]
+net8.0 + LangVersion 14.0  ->  [2,1,3]
+
+  0 Warning(s)
+  0 Error(s)
+```
+
+Under C# 13 that is lazy `Enumerable.Reverse` with the result thrown away — a no-op. Under C# 14 the
+array converts to `Span<int>` and binds to `MemoryExtensions.Reverse`, which **mutates in place and
+returns `void`**. No diagnostic of any kind.
+
+**Why `net10.0` escapes it.** The compensating overloads that keep array receivers on the LINQ
+operators shipped in the **.NET 10 BCL**. New compiler + old BCL is precisely the unguarded
+combination. C# 14 is not dangerous; C# 14 *without .NET 10* is.
+
+Assigning the result is the lucky case — `var x = nums.Reverse();` fails with
+`error CS0815: Cannot assign void to an implicitly-typed variable`, which at least stops the build.
+It is the discarded-result statement that goes through silently.
+
+**The answer to give:** retarget to `net10.0` to get C# 14. Microsoft's *Configure the language
+version* page states that a language version newer than the TFM default is unsupported and is not
+an upgrade path, so this is not even a trade-off. If a library must stay on `net8.0`, pin
+`<LangVersion>13.0</LangVersion>` explicitly instead of relying on the default.
+
+This is the best two-build demo in the workshop, and it takes ninety seconds. Run it live.
 
 ---
 
