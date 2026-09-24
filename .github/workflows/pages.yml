@@ -1,0 +1,62 @@
+# The deck is built to run from file:// first. This workflow publishes a
+# hosted copy for casual reading and link-sharing; the offline copy from
+# tools/publish-local.ps1 or the release zip is still the one to present
+# from, because it cannot be taken out by a network.
+
+name: Publish deck to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The same gates that run locally. A broken deck should never reach the
+      # hosted copy just because the push succeeded.
+      - name: Check pages
+        run: node tools/check-pages.mjs
+
+      - name: Check for unrun output blocks
+        run: node tools/find-placeholder-output.mjs
+
+      - name: Test highlighter
+        run: node tools/test-highlighter.mjs
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
