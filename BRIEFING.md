@@ -103,12 +103,11 @@ straight from disk or a USB stick. `N` toggles speaker notes, `P` enters present
 
 `pwsh tools/publish-local.ps1` installs the deck to `%LOCALAPPDATA%\dotnet-csharp-update-briefing\`
 and adds a **.NET 10-11 Workshop** Start Menu entry — one click, offline, no repo needed. The
-`workshop-deck.zip` on the [latest release](https://github.com/magro_microsoft/dotnet-csharp-update-briefing/releases/latest)
+`workshop-deck.zip` on the [latest release](https://github.com/mc5eamus/dotnet-csharp-update-briefing/releases/latest)
 does the same job on any other machine: unzip, open `index.html`.
 
-There is no hosted URL by design. GitHub Pages is not available for private repositories on this
-account's plan, and the repository stays private because this is customer material. Building the
-deck to run from `file://` was the point.
+Building the deck to run from `file://` was the point: the offline copy is the one to present
+from, because it cannot be taken out by a network.
 
 ## Sourcing
 

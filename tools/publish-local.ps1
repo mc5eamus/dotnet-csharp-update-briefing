@@ -3,9 +3,10 @@
     in the Start Menu, so the workshop can be opened any time without the repo,
     without a build step and without a network.
 
-    Why not GitHub Pages? See "Opening the deck" in README.md: Pages is not
-    available for a private repository on this account's plan, and this is
-    customer engagement material, so the repository stays private.
+    The installed copy is offline and snapshot-based, which is still the most
+    reliable way to present: no network, no hosting, no live dependency. A
+    hosted copy also exists on GitHub Pages for casual reading, but do not
+    rely on it in a room with bad wifi.
 
     The installed copy is a snapshot. Re-run this script after changing any
     slide content to refresh it.

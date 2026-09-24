@@ -65,12 +65,11 @@ It records `installed.json` with the commit it came from, so a copy found later 
 back. Removing it is a matter of deleting that folder and the shortcut.
 
 On a machine without the repo, download `workshop-deck.zip` from the
-[latest release](https://github.com/magro_microsoft/dotnet-csharp-update-briefing/releases/latest),
+[latest release](https://github.com/mc5eamus/dotnet-csharp-update-briefing/releases/latest),
 unzip anywhere and open `index.html`.
 
-There is deliberately no hosted version. GitHub Pages is not offered for private repositories on
-this account's plan, and the repository stays private because this is customer engagement
-material. The deck was built to work from `file://` precisely so that hosting is not required.
+The deck was built to work from `file://` first, so hosting is never required. That property is
+what makes it presentable on a locked-down machine, on a USB stick, or on conference wifi.
 
 ## Prerequisites for running the labs
 
