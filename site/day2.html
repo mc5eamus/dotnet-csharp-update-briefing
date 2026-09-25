@@ -199,7 +199,7 @@ Deep3 has AsyncStateMachineAttribute: False</code></pre>
       </div>
 
       <div class="notes">
-        <p>If the customer has analytics, image processing or model-scoring code, ask for one hot
+        <p>If the room has analytics, image processing or model-scoring code, ask for one hot
         loop they recognise. Otherwise keep this short and move back to the broadly visible async
         and tooling changes.</p>
       </div>
@@ -320,7 +320,7 @@ static bool HasAsyncAttribute(MethodInfo method) =&gt;
     <p>The safe workshop message is “explicitly opt in and verify the artefact”. If the default changes by GA, that sentence still protects teams from silently assuming the wrong binary shape.</p>
   </div>
 
-  <div class="notes"><p>Use a library example from the customer if one comes up: retry helpers, SDK clients, data-access abstractions. The question is whether anything downstream inspects implementation details.</p></div>
+  <div class="notes"><p>Use a library example from the room if one comes up: retry helpers, SDK clients, data-access abstractions. The question is whether anything downstream inspects implementation details.</p></div>
 </section>
 
     <section class="slide" id="d2-runtime-async-diagnostics" data-module-title="1 &middot; Runtime">
@@ -353,7 +353,7 @@ static bool HasAsyncAttribute(MethodInfo method) =&gt;
     <p>If a tool relied on generated state-machine names, the runtime-async build may not look like the code it was trained to recognise. That is a tooling compatibility check, not an application bug.</p>
   </div>
 
-  <div class="notes"><p>This is where operations teams usually engage. Ask what they use for profiling, tracing and coverage. Avoid saying any named tool is broken unless the customer has measured it.</p></div>
+  <div class="notes"><p>This is where operations teams usually engage. Ask what they use for profiling, tracing and coverage. Avoid saying any named tool is broken unless someone in the room has measured it.</p></div>
 </section>
 
     <section class="slide" id="d2-runtime-async-workload-test" data-module-title="1 &middot; Runtime">
@@ -377,7 +377,7 @@ static bool HasAsyncAttribute(MethodInfo method) =&gt;
     <p>Adopt when the measured gain on a real path is worth the extra RC-era verification. If the path is cold, leave it boring and spend the upgrade budget elsewhere.</p>
   </div>
 
-  <div class="notes"><p>Emphasise that “no invented numbers” is a discipline, not a limitation. The customer should leave with a measurement recipe they can run next week on their own service.</p></div>
+  <div class="notes"><p>Emphasise that “no invented numbers” is a discipline, not a limitation. Attendees should leave with a measurement recipe they can run next week on their own service.</p></div>
 </section>
 
     <section class="slide" id="d2-runtime-aot-trimming-checks" data-module-title="1 &middot; Runtime">
@@ -418,7 +418,7 @@ static bool HasAsyncAttribute(MethodInfo method) =&gt;
     <p>Use .NET 11 RC 1 to gather evidence. Production adoption still needs the same change-control gates as any other runtime upgrade.</p>
   </div>
 
-  <div class="notes"><p>This is the bridge out of module 1. Do not cheerlead. The customer paid for a decision model, and “stay on LTS” is a valid outcome for many estates.</p></div>
+  <div class="notes"><p>This is the bridge out of module 1. Do not cheerlead. Attendees came for a decision model, and “stay on LTS” is a valid outcome for many estates.</p></div>
 </section>
 
     <section class="slide" id="d2-runtime-float-conversions" data-module-title="1 &middot; Runtime">
@@ -1299,8 +1299,8 @@ IReadOnlyList&lt;Pet&gt; pets = rows
   </div>
 
   <div class="notes">
-    <p>If you present only one union constraint, present this one. The survey put EF Core at the top
-    of the list, and this is where the two headline features of the release actually touch.</p>
+    <p>If you present only one union constraint, present this one. EF Core is the module most teams
+    come for, and this is where the two headline features of the release actually touch.</p>
     <p>The framing that lands: this is not a gap waiting to be filled, it is a design boundary.
     An expression tree has to be translatable to SQL, and a union conversion has no SQL meaning.
     Expect a question about whether a future version will lift it &mdash; be honest that we do not
@@ -1421,7 +1421,7 @@ dotnet test</code></pre>
 
       <div class="notes">
         <p>This module is intentionally selective. Do not read the list. Anchor each area to a real
-        customer pain: JSON contract control, sequence reconciliation, validation with I/O.</p>
+        production pain: JSON contract control, sequence reconciliation, validation with I/O.</p>
       </div>
     </section>
 
@@ -1557,7 +1557,7 @@ stricter required-property or unmapped-member constraints.</code></pre>
       </div>
 
       <div class="notes">
-        <p>Keep this slide short unless the customer has compression or financial/numeric code in
+        <p>Keep this slide short unless the room has compression or financial/numeric code in
         scope. The point is awareness, not a deep API walkthrough.</p>
       </div>
     </section>
@@ -1653,7 +1653,7 @@ stricter required-property or unmapped-member constraints.</code></pre>
   </div>
 
   <div class="notes">
-    <p>Ask whether the customer has log shipping, message batches or JSON document stores. If yes, dictionaries are the talking point. Avoid quoting ratios unless you have measured them on their payloads.</p>
+    <p>Ask whether the room has log shipping, message batches or JSON document stores. If yes, dictionaries are the talking point. Avoid quoting ratios unless you have measured them on their payloads.</p>
   </div>
 </section>
 
@@ -1973,7 +1973,7 @@ dotnet test</code></pre>
       </div>
 
       <div class="notes">
-        <p>This module is a customer-interest peak. Keep it anchored in their API estate: contract generation,
+        <p>This module is an attention peak. Keep it anchored in the room's API estate: contract generation,
         client generation, gateway import and validation pipelines. Avoid the Blazor material in the release notes.</p>
       </div>
     </section>
@@ -2270,7 +2270,7 @@ line 9    server URL formatting changed</code></pre>
   </div>
 
   <div class="notes">
-    <p>Ask for the names of the actual tools in the customer's path: NSwag, Kiota, OpenAPI Generator, APIM, Kong, custom governance, partner portals. The slide is a to-do list for those owners.</p>
+    <p>Ask for the names of the actual tools in the room's path: NSwag, Kiota, OpenAPI Generator, APIM, Kong, custom governance, partner portals. The slide is a to-do list for those owners.</p>
   </div>
 </section>
 
@@ -2335,7 +2335,7 @@ app.MapMethods("/search", ["QUERY"], (SearchRequest request) =&gt;
 
   <div class="callout callout-note">
     <div class="callout-title">Documented, not yet measured in this workshop</div>
-    <p>The API names and behaviour on this slide come from Microsoft Learn for ASP.NET Core 11. Treat it as a candidate to validate against the customer's gateway path.</p>
+    <p>The API names and behaviour on this slide come from Microsoft Learn for ASP.NET Core 11. Treat it as a candidate to validate against the audience's own gateway path.</p>
   </div>
 
   <div class="notes">
@@ -2452,7 +2452,7 @@ if (tls?.TryGetChannelBindingBytes(
   </div>
 
   <div class="notes">
-    <p>Keep this grounded in customer scenarios: Kerberos/NTLM, reverse proxies and test suites for account lockout. Do not turn it into a general WebAuthn/passkey lecture.</p>
+    <p>Keep this grounded in real-world scenarios: Kerberos/NTLM, reverse proxies and test suites for account lockout. Do not turn it into a general WebAuthn/passkey lecture.</p>
   </div>
 </section>
 
@@ -2522,7 +2522,7 @@ builder.Services.Configure&lt;ZstandardCompressionProviderOptions&gt;(options =&
 
   <div class="callout callout-note">
     <div class="callout-title">Keep preview risk visible</div>
-    <p>.NET 11 is RC 1 in this workshop. For behaviours not measured here, keep the source as Microsoft Learn plus a customer-specific validation task before GA.</p>
+    <p>.NET 11 is RC 1 in this workshop. For behaviours not measured here, keep the source as Microsoft Learn plus an environment-specific validation task before GA.</p>
   </div>
 
   <div class="notes">
@@ -2562,7 +2562,7 @@ dotnet build</code></pre>
 
     <section class="slide" id="d2-m5-efcore-overview" data-module-title="5 &middot; EF Core">
       <h2 data-toc="EF Core 11">EF Core 11 <span class="badge badge-focus">Top interest</span></h2>
-      <p class="slide-lead">This is the highest-interest customer topic. The through-line is simple:
+      <p class="slide-lead">This is the module most teams come for. The through-line is simple:
       EF Core 10 made complex types the value-object direction; EF Core 11 makes that direction much more complete.</p>
 
       <div class="grid grid-3">
@@ -2581,7 +2581,7 @@ dotnet build</code></pre>
       </div>
 
       <div class="notes">
-        <p>Open by connecting to their survey result. This is where to slow down and invite data-layer questions;
+        <p>Open by connecting to the room's own data layer. This is where to slow down and invite data-layer questions;
         do not rush to the language material.</p>
       </div>
     </section>
@@ -2820,7 +2820,7 @@ executed OK, 2 rows</code></pre>
   </div>
 
   <div class="notes">
-    <p>Do not turn this into "SQLite supports every EF Core 11 join feature". The measured point is narrower: EF generated <code>FULL JOIN</code> and this local SQLite engine executed it. For customer demos, check the deployed engine version first.</p>
+    <p>Do not turn this into "SQLite supports every EF Core 11 join feature". The measured point is narrower: EF generated <code>FULL JOIN</code> and this local SQLite engine executed it. For live demos, check the deployed engine version first.</p>
   </div>
 </section>
 
@@ -2959,7 +2959,7 @@ Console.WriteLine(query.ToQueryString());</code></pre>
 
   <div class="callout callout-note">
     <div class="callout-title">Documented, not yet measured in this deck</div>
-    <p>EF Core 11 documents expanded complex-type support, including indexes over complex members. Treat the exact migration and provider behaviour as something to confirm in the customer's provider before a modelling rewrite.</p>
+    <p>EF Core 11 documents expanded complex-type support, including indexes over complex members. Treat the exact migration and provider behaviour as something to confirm on the audience's own provider before a modelling rewrite.</p>
   </div>
 
   <div class="notes">
@@ -2997,11 +2997,11 @@ Console.WriteLine(query.ToQueryString());</code></pre>
 
   <div class="callout callout-note">
     <div class="callout-title">Documented, not yet measured here</div>
-    <p>The Day 2 deck already flags <code>EF.Functions.JsonPathExists()</code> and SQL Server JSON work as EF Core 11 topics. Before promising behaviour in a customer workshop, run the exact query on the exact provider and engine version.</p>
+    <p>The Day 2 deck already flags <code>EF.Functions.JsonPathExists()</code> and SQL Server JSON work as EF Core 11 topics. Before promising behaviour in a workshop, run the exact query on the exact provider and engine version.</p>
   </div>
 
   <div class="notes">
-    <p>If the customer uses SQL Server, connect this to JSON indexes and native JSON support from the earlier walkthrough. If they use PostgreSQL or SQLite, do not translate the SQL Server story by analogy; ask for provider docs and a measured query.</p>
+    <p>If the room uses SQL Server, connect this to JSON indexes and native JSON support from the earlier walkthrough. If they use PostgreSQL or SQLite, do not translate the SQL Server story by analogy; ask for provider docs and a measured query.</p>
   </div>
 </section>
 
@@ -3093,7 +3093,7 @@ Console.WriteLine(query.ToQueryString());</code></pre>
 
   <div class="callout callout-note">
     <div class="callout-title">Do not benchmark the upgrade in isolation</div>
-    <p>For a real customer workload, compare the generated SQL, command count, returned row count and allocation profile. A translator improvement can be hidden by tracking, over-including, or a missing database index.</p>
+    <p>For a real production workload, compare the generated SQL, command count, returned row count and allocation profile. A translator improvement can be hidden by tracking, over-including, or a missing database index.</p>
   </div>
 
   <div class="notes">
@@ -3112,7 +3112,7 @@ Console.WriteLine(query.ToQueryString());</code></pre>
         <tr><td><code>FullJoin</code></td><td>Measured on SQLite RC 1 setup.</td><td>Requires an engine/provider that accepts <code>FULL JOIN</code>; older SQLite engines do not.</td></tr>
         <tr><td><code>MaxBy</code> / <code>MinBy</code></td><td>Measured on SQLite with server-side ordering and limit.</td><td>Immediate operators need logging to prove translation.</td></tr>
         <tr><td>SQL Server vectors</td><td>Walkthrough unless SQL Server 2025 or Azure SQL is available.</td><td>Vector indexes and search functions are provider features, not general EF promises.</td></tr>
-        <tr><td>JSON predicates and indexes</td><td>Run on the customer's provider before teaching as reusable.</td><td>Syntax, index support and path semantics vary sharply.</td></tr>
+        <tr><td>JSON predicates and indexes</td><td>Run on the audience's own provider before teaching as reusable.</td><td>Syntax, index support and path semantics vary sharply.</td></tr>
         <tr><td>Temporal period mapping</td><td>SQL Server-specific discussion.</td><td>Do not imply SQLite or PostgreSQL have the same temporal model through EF.</td></tr>
       </tbody>
     </table>
@@ -3120,7 +3120,7 @@ Console.WriteLine(query.ToQueryString());</code></pre>
 
   <div class="callout callout-focus">
     <div class="callout-title">The safe demo rule</div>
-    <p>Before a customer workshop, run every provider-sensitive query on the same database engine family the customer uses. If you cannot, label it as a walkthrough and keep the live lab on measured SQLite material.</p>
+    <p>Before delivering this, run every provider-sensitive query on the same database engine family the audience uses. If you cannot, label it as a walkthrough and keep the live lab on measured SQLite material.</p>
   </div>
 
   <div class="notes">
@@ -3323,7 +3323,7 @@ dotnet tool restore</code></pre>
       </div>
 
       <div class="notes">
-        <p>This is the slide to spend time on if the schedule is tight. The customer can read feature
+        <p>This is the slide to spend time on if the schedule is tight. Attendees can read feature
         lists later; they need the decision model now.</p>
         <p>The 24-month correction usually changes the conversation in the room. Teams that arrived
         certain they were "LTS only" discover their policy was built on support arithmetic that no
@@ -3347,7 +3347,7 @@ dotnet tool restore</code></pre>
     <div class="card"><div class="card-kicker">Not safe to say</div><ul><li>Named .NET 12 APIs.</li><li>Preview dates or GA dates.</li><li>Performance promises, compatibility claims or support deadlines.</li></ul></div>
   </div>
 
-  <div class="notes"><p>This slide is the customer-safe answer to the requested “short .NET 12 outlook”. If challenged, repeat: no channel means no facts to quote. That restraint is the value.</p></div>
+  <div class="notes"><p>This slide is the safe answer to the requested “short .NET 12 outlook”. If challenged, repeat: no channel means no facts to quote. That restraint is the value.</p></div>
 </section>
 
     <section class="slide" id="d2-m6-planning-without-roadmap" data-module-title="6 &middot; Outlook">
@@ -3371,7 +3371,7 @@ dotnet tool restore</code></pre>
     <p>A repeatable annual rehearsal beats a speculative roadmap slide. It also makes the next LTS move smaller, because you have already found the boring infrastructure failures.</p>
   </div>
 
-  <div class="notes"><p>Bring the conversation back to the customer's governance process: who approves SDKs, base images, package major versions and compiler changes? Those names matter more than a future feature list.</p></div>
+  <div class="notes"><p>Bring the conversation back to the audience's governance process: who approves SDKs, base images, package major versions and compiler changes? Those names matter more than a future feature list.</p></div>
 </section>
 
     <section class="slide" id="d2-m6-upgrade-cadence-model" data-module-title="6 &middot; Outlook">
@@ -3409,7 +3409,7 @@ dotnet tool restore</code></pre>
     <p>Plan to absorb the next release train. Do not plan around imagined contents of that train.</p>
   </div>
 
-  <div class="notes"><p>Use this as the final customer hand-off. Ask for a single named pilot and a single named owner for generated clients; those two decisions usually expose the real organisational blockers.</p></div>
+  <div class="notes"><p>Use this as the final hand-off. Ask for a single named pilot and a single named owner for generated clients; those two decisions usually expose the real organisational blockers.</p></div>
 </section>
 
     <section class="slide" id="d2-m6-next-30-days" data-module-title="6 &middot; Outlook">

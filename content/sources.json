@@ -283,7 +283,7 @@
       ],
       "verification": "verified",
       "usageTier": 1,
-      "summary": "Takes the built-in .NET 10 OpenAPI generator past hello-world and into versioned APIs, including how document names, transformers and version sets fit together. This is the shape of the problem the customer actually has, not a toy sample.",
+      "summary": "Takes the built-in .NET 10 OpenAPI generator past hello-world and into versioned APIs, including how document names, transformers and version sets fit together. This is the shape of the problem real API teams actually have, not a toy sample.",
       "recommended": true
     },
     {
@@ -806,7 +806,7 @@
       "retrieved": "2026-09-14",
       "verification": "verified",
       "usageTier": 2,
-      "summary": "The library-by-library rundown for .NET 10, including the post-quantum cryptography section the customer linked when scoping this workshop. The canonical follow-up for Day 1 Module 3.",
+      "summary": "The library-by-library rundown for .NET 10, including the post-quantum cryptography section that anchors Day 1 Module 3. The canonical follow-up for that module.",
       "recommended": true,
       "publisher": "Microsoft",
       "previewDrift": "none",

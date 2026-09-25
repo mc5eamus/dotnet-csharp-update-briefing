@@ -149,8 +149,8 @@ before handing the material over.
 
 ## Scope
 
-Driven by the customer's survey. **In focus:** EF Core, ASP.NET Core / OpenAPI, and .NET
-libraries (post-quantum cryptography, System.Text.Json).
+Scoped to server-side and data-access .NET. **In focus:** EF Core, ASP.NET Core / OpenAPI, and
+.NET libraries (post-quantum cryptography, System.Text.Json).
 
 **Deliberately out of scope:** MAUI, Windows Forms, WPF, Blazor, F#, VB.NET. This matters when
 reading the source material — the ASP.NET Core release notes are roughly half Blazor content,

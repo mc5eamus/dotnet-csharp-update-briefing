@@ -47,7 +47,7 @@
           </ul>
         </div>
         <div class="card">
-          <div class="card-kicker">Shaped by your survey</div>
+          <div class="card-kicker">Deliberately scoped</div>
           <p>Weighted towards <strong>EF Core</strong>, <strong>ASP.NET Core</strong> and the
           <strong>.NET libraries</strong>. No MAUI, no Blazor, no F#/VB.NET.</p>
         </div>
@@ -64,7 +64,7 @@
 
     <section class="slide" id="d1-how-today-runs" data-module-title="1 &middot; Platform, runtime &amp; tooling">
       <h2 data-toc="How today runs">How today runs</h2>
-      <p>Five modules. The middle three are the ones your survey asked for, so they get the time.</p>
+      <p>Five modules. The middle three carry the most change for server-side teams, so they get the time.</p>
 
       <div class="table-wrap">
       <table>
@@ -72,7 +72,7 @@
         <tbody>
           <tr><td>1 &middot; Platform, runtime &amp; tooling</td><td>The upgrade decision, and what the runtime does differently underneath you</td></tr>
           <tr><td>2 &middot; C# 14</td><td>Extension members, and the changes that alter behaviour silently</td></tr>
-          <tr><td>3 &middot; Libraries</td><td>Post-quantum cryptography and <code>System.Text.Json</code> &mdash; both named in your survey</td></tr>
+          <tr><td>3 &middot; Libraries</td><td>Post-quantum cryptography, and <code>System.Text.Json</code> changes that alter existing behaviour</td></tr>
           <tr><td>4 &middot; ASP.NET Core</td><td>OpenAPI 3.1 by default, and what it does to your generated clients</td></tr>
           <tr><td>5 &middot; EF Core</td><td>Complex types, query translation changes, and one migration that will surprise you</td></tr>
         </tbody>
@@ -81,8 +81,8 @@
 
       <div class="callout callout-focus">
         <div class="callout-title">Deliberately not covered</div>
-        <p>MAUI, WPF, Windows Forms, Blazor, F# and VB.NET. Your survey said they aren't part of
-        your stack, so the time goes elsewhere. Ask if that turns out to be wrong.</p>
+        <p>MAUI, WPF, Windows Forms, Blazor, F# and VB.NET. This workshop targets server-side and
+        data-access code, so the time goes elsewhere. Say so early if that is wrong for the room.</p>
       </div>
 
       <div class="notes">
@@ -1703,7 +1703,7 @@ Order? order = await JsonSerializer.DeserializeAsync&lt;Order&gt;(
   </div>
 
   <div class="notes">
-    <p>Pick whichever item maps to the customer. Platform teams usually care about certificate lookup and PFX export. Product teams usually care less unless they ship agents, installers or appliances.</p>
+    <p>Pick whichever item maps to the room. Platform teams usually care about certificate lookup and PFX export. Product teams usually care less unless they ship agents, installers or appliances.</p>
   </div>
 </section>
 
@@ -2299,7 +2299,7 @@ patchDoc!.ApplyTo(person, error =&gt;
   </div>
 
   <div class="notes">
-    <p>Keep Blazor out of scope. The product includes APIs; the template UI story is Blazor-specific and this customer marked Blazor as no interest. For MVC or Razor Pages teams, the workshop message is: you build the UI.</p>
+    <p>Keep Blazor out of scope. The product includes APIs; the template UI story is Blazor-specific and Blazor is outside this workshop's scope. For MVC or Razor Pages teams, the workshop message is: you build the UI.</p>
   </div>
 </section>
 
@@ -2360,7 +2360,7 @@ patchDoc!.ApplyTo(person, error =&gt;
   </div>
 
   <div class="notes">
-    <p>Invite quick questions here, then close. If someone wants Blazor, MAUI or desktop items, park them because the customer explicitly marked those as no interest for this workshop.</p>
+    <p>Invite quick questions here, then close. If someone wants Blazor, MAUI or desktop items, park them: they are out of scope by design, and the time is budgeted elsewhere.</p>
   </div>
   <div data-further="day1-m4"></div>
 </section>
@@ -2546,7 +2546,7 @@ customer.Address = customer.Address with { Line1 = "Peacock Lodge" };</code></pr
     <p>EF Core 10 changes complex-type column naming. If you need a zero-DDL cutover, pin existing names with <code>HasColumnName</code> before you change the model shape.</p>
   </div>
 
-  <div class="notes"><p>Turn this into a whiteboard exercise. Pick one owned type from the customer model and walk down the columns. The important outcome is a repeatable rule the team can apply later, not merely remembering the API name.</p></div>
+  <div class="notes"><p>Turn this into a whiteboard exercise. Pick one owned type from the audience's own model and walk down the columns. The important outcome is a repeatable rule the team can apply later, not merely remembering the API name.</p></div>
 </section>
 
     <section class="slide" id="d1-ef-named-query-filters" data-module-title="5 &middot; EF Core">
@@ -2804,7 +2804,7 @@ var nearest = await context.Blogs
     <p>EF Core 10 can express exact k-nearest-neighbour ordering over SQL Server vectors. The indexed version is a Day 2 topic, not an EF Core 10 promise.</p>
   </div>
 
-  <div class="notes"><p>Many customers hear "vector search" and assume production RAG scale. Stop that assumption early. If they used the old external SQL Server vector package, note that EF Core 10 replaces that package-level need.</p></div>
+  <div class="notes"><p>Many teams hear "vector search" and assume production RAG scale. Stop that assumption early. If they used the old external SQL Server vector package, note that EF Core 10 replaces that package-level need.</p></div>
 </section>
 
     <section class="slide" id="d1-ef-split-query-ordering" data-module-title="5 &middot; EF Core">
@@ -2951,7 +2951,7 @@ WHERE [u].[Role] IN (?, ?)</code></pre>
     <p>Many production teams use SQLite in integration tests, desktop apps, mobile apps or local caches. Date/time assertions can change even if SQL Server is the production database.</p>
   </div>
 
-  <div class="notes"><p>Do not let SQL Server customers skip this. Ask whether their CI suite uses SQLite as a cheap relational stand-in. The switch is a temporary compatibility escape hatch, not the recommended final state.</p></div>
+  <div class="notes"><p>Do not let SQL Server teams skip this. Ask whether their CI suite uses SQLite as a cheap relational stand-in. The switch is a temporary compatibility escape hatch, not the recommended final state.</p></div>
 </section>
 
     <section class="slide" id="d1-ef-and-also" data-module-title="5 &middot; EF Core">

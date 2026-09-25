@@ -2,7 +2,7 @@
 
 **Status: complete and verified. Ready to schedule.**
 
-A two-day customer workshop, built to the pre-workshop survey, delivered as an offline
+A two-day workshop for server-side .NET teams, delivered as an offline
 presentation site plus nine hands-on labs. Everything in this repository has been compiled,
 run, or tested on the machine that produced it.
 
@@ -38,16 +38,20 @@ the Day 2 question gets an honest answer.
 A legitimate outcome of Day 2 is that a team decides to **skip .NET 11 and wait for .NET 12**. The
 material is built to support that conclusion rather than to sell against it.
 
-## Survey alignment
+## Scope
 
-| Survey response | How it was handled |
+| Priority | How it was handled |
 |---|---|
-| **High interest** — EF Core, ASP.NET Core (OpenAPI 3.1), .NET libraries (PQC, System.Text.Json) | Carry the weight of both days, including 5 of the 9 labs |
-| **No interest** — MAUI, WinForms, WPF, Blazor, F#, VB.NET | Deliberately absent, zero slides |
+| **In focus** — EF Core, ASP.NET Core (OpenAPI 3.1), .NET libraries (PQC, System.Text.Json) | Carry the weight of both days, including 5 of the 9 labs |
+| **Out of scope** — MAUI, WinForms, WPF, Blazor, F#, VB.NET | Deliberately absent, zero slides |
 | **.NET 12 outlook** (optional) | 15 minutes, directional only, and the first thing to cut if running late |
 
+This split assumes a server-side and data-access audience. It is a deliberate choice, not a
+limitation of the source material — see [FACILITATOR.md](FACILITATOR.md) §2 for the cut order
+if a given room needs a different balance.
+
 On .NET 12: no documentation or preview exists yet. The material says so plainly rather than
-hedging, and the customer's own fallback of a separate 2027 session remains the honest answer.
+hedging, and a separate session once there is something real to teach remains the honest answer.
 
 ---
 

@@ -178,7 +178,8 @@ modules are budgeted against their real slide counts at the same measured pace:
 (Slide counts here are content slides; each of modules 1–5 also carries a lab marker slide, for 93
 sections in the page.) With 2 h 15 of labs, Day 2 is a full day with breaks — slightly heavier than
 Day 1, because it is the day carrying the most measured material. The extra weight went
-disproportionately into **EF Core, ASP.NET Core and C# 15**, which is what the survey asked for.
+disproportionately into **EF Core, ASP.NET Core and C# 15**, which is where this workshop puts
+its weight.
 
 If you are running late on Day 2, the safe cuts are, in order:
 
@@ -196,17 +197,18 @@ Do **not** cut the CS8509 slide, the runtime-async correction, the absent-state 
 boundary, the EF Core `PrimitiveCollection` break, the LINQ-operator-ownership correction, or the
 OpenAPI document diff. They are the parts attendees cannot get from the release notes.
 
-### What the customer asked for
+### The scope this deck was built to
 
-From the pre-workshop survey. This drove the entire content split, so honour it:
+This drove the entire content split, so honour it unless you have deliberately rebalanced for a
+different room:
 
-**High interest — spend the time here:** EF Core, ASP.NET Core (OpenAPI 3.1), .NET libraries
+**In focus — spend the time here:** EF Core, ASP.NET Core (OpenAPI 3.1), .NET libraries
 (post-quantum cryptography, System.Text.Json).
 
-**No interest — deliberately absent:** MAUI, WinForms, WPF, Blazor, F#, VB.NET. If asked, say it
-was scoped out by their own survey rather than improvising coverage.
+**Out of scope — deliberately absent:** MAUI, WinForms, WPF, Blazor, F#, VB.NET. If asked, say it
+was scoped out on purpose rather than improvising coverage you have not prepared or verified.
 
-**.NET 12 outlook** was explicitly optional, with a separate 2027 session as the fallback. Keep it
+**.NET 12 outlook** is optional, with a later dedicated session as the fallback. Keep it
 short and directional — **no .NET 12 documentation or preview exists**, so anything specific you
 say is speculation. Say that plainly; it lands better than hedging.
 
@@ -378,7 +380,7 @@ announcement; show it rather than arguing.
 
 ### 3.6 The OpenAPI version string is wrong everywhere, including when you pin it
 
-OpenAPI was named as a top-interest topic in the customer survey, so this one is worth getting
+OpenAPI is one of this workshop's focus topics, so this one is worth getting
 exactly right. We registered three documents in one minimal API on
 `Microsoft.AspNetCore.OpenApi` 11.0.0-rc.1 and read back what each actually served:
 
@@ -440,7 +442,7 @@ That is the real reason to reach for `with(capacity:)`.
 
 ### 3.9 Unions serialize without a classifier — and then will not deserialize without one
 
-Directly on the customer's System.Text.Json interest, and the most likely of these to cost someone
+Directly on this workshop's System.Text.Json focus, and the most likely of these to cost someone
 a production incident.
 
 With a plain `JsonSerializerOptions`, serializing a `union` **succeeds** and writes the case's own
@@ -994,7 +996,7 @@ early on Day 1, because for some attendees this is the most urgent thing they wi
 
 **"What's in .NET 12?"**
 No documentation and no previews exist. Expected November 2027, expected LTS. Anything more
-specific is speculation — say so. The customer already agreed a separate 2027 session for this.
+specific is speculation — say so. Offer a dedicated session once there is something real to teach.
 
 **"Can we use unions in our public API?"**
 Be careful. C# 15 unions are new, the RC has known gaps versus the original proposal, and
@@ -1048,7 +1050,7 @@ from Previews 1–5, and both union syntax and the memory-safety rules changed b
 attendee cites a blog post that contradicts the slides, check its date before conceding — as
 [section 3](#3-corrections-we-found-by-testing) shows, the slides are the ones that were compiled.
 
-To add a source the customer sends you:
+To add a source an attendee sends you:
 
 ```powershell
 pwsh -NoProfile -File tools/add-source.ps1 -Url '<url>' -Modules day1-m5 -Summary '<why it is worth reading>'

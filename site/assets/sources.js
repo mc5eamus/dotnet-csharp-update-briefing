@@ -122,7 +122,7 @@ window.WORKSHOP_SOURCES ={
       ],
       "verification": "verified",
       "usageTier": 1,
-      "summary": "Takes the built-in .NET 10 OpenAPI generator past hello-world and into versioned APIs, including how document names, transformers and version sets fit together. This is the shape of the problem the customer actually has, not a toy sample.",
+      "summary": "Takes the built-in .NET 10 OpenAPI generator past hello-world and into versioned APIs, including how document names, transformers and version sets fit together. This is the shape of the problem real API teams actually have, not a toy sample.",
       "recommended": true
     },
     {
@@ -450,7 +450,7 @@ window.WORKSHOP_SOURCES ={
       "verification": "verified",
       "verificationNotes": "Accurate, but it does not make the experimental boundary obvious: MLKem and MLDsa are stable types while every standard key-interchange format on them is marked experimental per-member. See facilitator guide section 3.4 - we measured this rather than inferring it.",
       "usageTier": 2,
-      "summary": "The library-by-library rundown for .NET 10, including the post-quantum cryptography section the customer linked when scoping this workshop. The canonical follow-up for Day 1 Module 3.",
+      "summary": "The library-by-library rundown for .NET 10, including the post-quantum cryptography section that anchors Day 1 Module 3. The canonical follow-up for that module.",
       "recommended": true
     },
     {

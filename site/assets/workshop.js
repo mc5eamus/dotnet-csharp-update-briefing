@@ -312,7 +312,7 @@
        an attendee should be able to see why we trusted a third-party post. */
     var prov = [];
     if (s.writtenAgainst) prov.push("written against " + esc(s.writtenAgainst));
-    if (s.origin) prov.push(s.origin === "user-supplied" ? "supplied by the customer" : "found during research");
+    if (s.origin) prov.push(s.origin === "user-supplied" ? "supplied, not found by research" : "found during research");
     if (s.retrieved) prov.push("checked " + esc(s.retrieved));
     if (s.usageTier) prov.push(TIER_LABEL[s.usageTier] || ("tier " + esc(String(s.usageTier))));
     if (prov.length) html += '<div class="src-note">' + prov.join(" &middot; ") + "</div>";
