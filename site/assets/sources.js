@@ -5,7 +5,7 @@
    Loaded as a script (not fetched) so the site works from file:// where
    fetch() is blocked by the browser's origin rules. */
 window.WORKSHOP_SOURCES ={
-  "generated": "2026-09-15",
+  "generated": "2026-09-25",
   "modules": [
     {
       "id": "day1-m1",

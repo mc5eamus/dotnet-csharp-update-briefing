@@ -106,8 +106,11 @@ and adds a **.NET 10-11 Workshop** Start Menu entry — one click, offline, no r
 `workshop-deck.zip` on the [latest release](https://github.com/mc5eamus/dotnet-csharp-update-briefing/releases/latest)
 does the same job on any other machine: unzip, open `index.html`.
 
-Building the deck to run from `file://` was the point: the offline copy is the one to present
-from, because it cannot be taken out by a network.
+For reading and link-sharing there is a hosted copy at
+**<https://mc5eamus.github.io/dotnet-csharp-update-briefing/>**.
+
+Present from the offline copy, not the hosted one. Building the deck to run from `file://` was the
+point: it cannot be taken out by the room's wifi.
 
 ## Sourcing
 

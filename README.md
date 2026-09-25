@@ -68,8 +68,14 @@ On a machine without the repo, download `workshop-deck.zip` from the
 [latest release](https://github.com/mc5eamus/dotnet-csharp-update-briefing/releases/latest),
 unzip anywhere and open `index.html`.
 
-The deck was built to work from `file://` first, so hosting is never required. That property is
-what makes it presentable on a locked-down machine, on a USB stick, or on conference wifi.
+There is also a hosted copy at
+**<https://mc5eamus.github.io/dotnet-csharp-update-briefing/>**, published from `site/` by
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push that touches the deck.
+Use it for reading and link-sharing.
+
+**Do not present from it.** The deck was built to work from `file://` first, and that property is
+what makes it survivable on a locked-down machine, on a USB stick, or on conference wifi. The
+hosted copy adds a network dependency that the offline copy deliberately does not have.
 
 ## Prerequisites for running the labs
 
